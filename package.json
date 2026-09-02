@@ -1,0 +1,24 @@
+{
+  "name": "fithub",
+  "version": "1.0.0",
+  "description": "FITHUB - Gym Management System (MERN Stack)",
+  "main": "index.js",
+  "scripts": {
+    "install-all": "npm install && npm --prefix server install && npm --prefix client install",
+    "seed": "npm --prefix server run seed",
+    "server": "npm --prefix server run dev",
+    "client": "npm --prefix client start",
+    "start": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [
+    "gym",
+    "fitness",
+    "membership",
+    "mern"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

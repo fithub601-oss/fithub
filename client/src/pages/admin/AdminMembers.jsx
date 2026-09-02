@@ -1,0 +1,366 @@
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
+import api from '../../api';
+import { FaSearch, FaEdit, FaTrash, FaPlus, FaUserPlus, FaMoneyBillWave } from 'react-icons/fa';
+
+const AdminMembers = () => {
+  const [members, setMembers] = useState([]);
+  const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(null);
+  const [showMembershipModal, setShowMembershipModal] = useState(null);
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', address: '', emergencyContact: '' });
+  const [membershipForm, setMembershipForm] = useState({
+    subscriptionId: '',
+    startDate: new Date().toISOString().split('T')[0],
+    amountPaid: '',
+    paymentMethod: 'cash',
+    notes: ''
+  });
+
+  useEffect(() => {
+    fetchMembers();
+    api.get('/subscriptions/all').then(res => setSubscriptions(res.data)).catch(() => {});
+  }, []);
+
+  const fetchMembers = async () => {
+    try {
+      const res = await api.get('/members');
+      setMembers(res.data);
+    } catch (error) {
+      toast.error('Failed to load members');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredMembers = members.filter(m =>
+    m.name?.toLowerCase().includes(search.toLowerCase()) ||
+    m.email?.toLowerCase().includes(search.toLowerCase()) ||
+    m.phone?.includes(search)
+  );
+
+  const handleAddMember = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await api.post('/auth/register', form);
+      toast.success(`Member ${res.data.name} created!`);
+      setShowAddModal(false);
+      setForm({ name: '', email: '', phone: '', password: '', address: '', emergencyContact: '' });
+      fetchMembers();
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to create member');
+    }
+  };
+
+  const handleEditMember = async (e) => {
+    e.preventDefault();
+    try {
+      await api.put(`/members/${showEditModal._id}`, showEditModal);
+      toast.success('Member updated!');
+      setShowEditModal(null);
+      fetchMembers();
+    } catch (error) {
+      toast.error('Failed to update member');
+    }
+  };
+
+  const handleDeleteMember = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this member?')) return;
+    try {
+      await api.delete(`/members/${id}`);
+      toast.success('Member deleted');
+      fetchMembers();
+    } catch (error) {
+      toast.error('Failed to delete member');
+    }
+  };
+
+  const handleAssignMembership = async (e) => {
+    e.preventDefault();
+    try {
+      await api.post(`/members/${showMembershipModal._id}/membership`, membershipForm);
+      toast.success('Membership assigned!');
+      setShowMembershipModal(null);
+      setMembershipForm({ subscriptionId: '', startDate: new Date().toISOString().split('T')[0], amountPaid: '', paymentMethod: 'cash', notes: '' });
+      fetchMembers();
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to assign membership');
+    }
+  };
+
+  const modalInputs = 'w-full px-3 py-2 bg-dark-900 border border-white/10 rounded-lg text-white text-sm focus:border-primary-500 focus:outline-none';
+  const modalLabel = 'block text-sm font-medium text-gray-300 mb-1.5';
+
+  return (
+    <div className="min-h-screen pt-16 bg-dark-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <h1 className="font-display text-4xl text-white">MEMBERS <span className="text-primary-500">MANAGEMENT</span></h1>
+            <p className="text-gray-400 mt-1">{members.length} total members</p>
+          </div>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-bold rounded-full hover:opacity-90"
+          >
+            <FaUserPlus /> Add Member
+          </button>
+        </div>
+
+        {/* Search */}
+        <div className="mb-6">
+          <div className="relative">
+            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by name, email, or phone..."
+              className="w-full pl-12 pr-4 py-3 bg-dark-800 border border-white/10 rounded-xl text-white focus:border-primary-500 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        {/* Members Table */}
+        <div className="bg-dark-800 rounded-2xl overflow-hidden border border-white/5">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-white/5">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Member</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Contact</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Membership</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Payment</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {loading ? (
+                  <tr><td colSpan="6" className="px-6 py-10 text-center text-gray-400">Loading...</td></tr>
+                ) : filteredMembers.length === 0 ? (
+                  <tr><td colSpan="6" className="px-6 py-10 text-center text-gray-400">No members found</td></tr>
+                ) : (
+                  filteredMembers.map((member) => {
+                    const mem = member.currentMembership;
+                    return (
+                      <motion.tr key={member._id} className="hover:bg-white/5 transition-colors">
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-neon-pink flex items-center justify-center text-white font-bold shrink-0">
+                              {member.name?.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <p className="text-white font-medium">{member.name}</p>
+                              <p className="text-gray-500 text-xs">Joined {new Date(member.createdAt).toLocaleDateString()}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <p className="text-gray-300 text-sm">{member.email}</p>
+                          <p className="text-gray-500 text-xs">{member.phone}</p>
+                        </td>
+                        <td className="px-6 py-4">
+                          {mem ? (
+                            <div>
+                              <p className="text-white text-sm">{mem.subscription?.name}</p>
+                              <p className="text-gray-500 text-xs">
+                                {new Date(mem.endDate).toLocaleDateString()}
+                              </p>
+                            </div>
+                          ) : (
+                            <span className="text-gray-500 text-sm">No plan</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          {mem ? (
+                            <div className="text-sm">
+                              <p className="text-white">₹{mem.amountPaid} / ₹{mem.totalAmount}</p>
+                              <p className="text-gray-500 text-xs">
+                                {mem.amountRemaining > 0 ? `₹${mem.amountRemaining} due` : 'Fully paid'}
+                              </p>
+                            </div>
+                          ) : (
+                            <span className="text-gray-500 text-sm">-</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                            member.currentMembership?.status === 'active'
+                              ? 'bg-neon-green/20 text-neon-green'
+                              : 'bg-gray-500/20 text-gray-400'
+                          }`}>
+                            {member.currentMembership?.status || 'INACTIVE'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex justify-end gap-2">
+                            <button
+                              onClick={() => setShowMembershipModal(member)}
+                              title="Assign Membership"
+                              className="p-2 rounded-lg hover:bg-neon-green/20 text-neon-green transition-colors"
+                            >
+                              <FaMoneyBillWave />
+                            </button>
+                            <button
+                              onClick={() => setShowEditModal(member)}
+                              title="Edit"
+                              className="p-2 rounded-lg hover:bg-primary-600/20 text-primary-400 transition-colors"
+                            >
+                              <FaEdit />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteMember(member._id)}
+                              title="Delete"
+                              className="p-2 rounded-lg hover:bg-red-500/20 text-red-400 transition-colors"
+                            >
+                              <FaTrash />
+                            </button>
+                          </div>
+                        </td>
+                      </motion.tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Add Member Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-dark-800 rounded-2xl p-6 max-w-md w-full border border-white/10">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-white font-bold text-xl">Add New Member</h2>
+              <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <form onSubmit={handleAddMember} className="space-y-4">
+              <div>
+                <label className={modalLabel}>Full Name</label>
+                <input type="text" required className={modalInputs} value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} placeholder="Member name" />
+              </div>
+              <div>
+                <label className={modalLabel}>Email</label>
+                <input type="email" required className={modalInputs} value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} placeholder="email@example.com" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={modalLabel}>Phone</label>
+                  <input type="tel" required className={modalInputs} value={form.phone} onChange={(e) => setForm({...form, phone: e.target.value})} placeholder="+91..." />
+                </div>
+                <div>
+                  <label className={modalLabel}>Password</label>
+                  <input type="password" required className={modalInputs} value={form.password} onChange={(e) => setForm({...form, password: e.target.value})} placeholder="Min 6 chars" />
+                </div>
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 py-2.5 bg-white/5 text-white rounded-full hover:bg-white/10">Cancel</button>
+                <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-semibold rounded-full">Create Member</button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Edit Member Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-dark-800 rounded-2xl p-6 max-w-md w-full border border-white/10">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-white font-bold text-xl">Edit Member</h2>
+              <button onClick={() => setShowEditModal(null)} className="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <form onSubmit={handleEditMember} className="space-y-4">
+              <div>
+                <label className={modalLabel}>Full Name</label>
+                <input type="text" className={modalInputs} value={showEditModal.name || ''} onChange={(e) => setShowEditModal({...showEditModal, name: e.target.value})} />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={modalLabel}>Email</label>
+                  <input type="email" className={modalInputs} value={showEditModal.email || ''} onChange={(e) => setShowEditModal({...showEditModal, email: e.target.value})} />
+                </div>
+                <div>
+                  <label className={modalLabel}>Phone</label>
+                  <input type="tel" className={modalInputs} value={showEditModal.phone || ''} onChange={(e) => setShowEditModal({...showEditModal, phone: e.target.value})} />
+                </div>
+              </div>
+              <div>
+                <label className={modalLabel}>Address</label>
+                <input type="text" className={modalInputs} value={showEditModal.address || ''} onChange={(e) => setShowEditModal({...showEditModal, address: e.target.value})} />
+              </div>
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <button type="button" onClick={() => setShowEditModal(null)} className="py-2.5 bg-white/5 text-white rounded-full hover:bg-white/10">Cancel</button>
+                <button type="submit" className="py-2.5 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-semibold rounded-full">Save Changes</button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Assign Membership Modal */}
+      {showMembershipModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-dark-800 rounded-2xl p-6 max-w-md w-full border border-white/10">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-white font-bold text-xl">Assign Membership</h2>
+              <button onClick={() => setShowMembershipModal(null)} className="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <p className="text-gray-400 text-sm mb-6">
+              Assigning plan to <span className="text-white font-semibold">{showMembershipModal.name}</span>
+            </p>
+            <form onSubmit={handleAssignMembership} className="space-y-4">
+              <div>
+                <label className={modalLabel}>Subscription Plan</label>
+                <select required className={modalInputs} value={membershipForm.subscriptionId} onChange={(e) => setMembershipForm({...membershipForm, subscriptionId: e.target.value})}>
+                  <option value="">Select plan...</option>
+                  {subscriptions.map(s => (
+                    <option key={s._id} value={s._id}>{s.name} - ₹{s.price}/{s.duration}{s.durationUnit}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={modalLabel}>Start Date</label>
+                  <input type="date" required className={modalInputs} value={membershipForm.startDate} onChange={(e) => setMembershipForm({...membershipForm, startDate: e.target.value})} />
+                </div>
+                <div>
+                  <label className={modalLabel}>Amount Paid (₹)</label>
+                  <input type="number" className={modalInputs} value={membershipForm.amountPaid} onChange={(e) => setMembershipForm({...membershipForm, amountPaid: e.target.value})} placeholder="0" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={modalLabel}>Payment Method</label>
+                  <select className={modalInputs} value={membershipForm.paymentMethod} onChange={(e) => setMembershipForm({...membershipForm, paymentMethod: e.target.value})}>
+                    <option value="cash">Cash</option>
+                    <option value="razorpay">Razorpay</option>
+                    <option value="upi">UPI</option>
+                    <option value="card">Card</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className={modalLabel}>Notes</label>
+                <input type="text" className={modalInputs} value={membershipForm.notes} onChange={(e) => setMembershipForm({...membershipForm, notes: e.target.value})} placeholder="Optional notes" />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button type="button" onClick={() => setShowMembershipModal(null)} className="flex-1 py-2.5 bg-white/5 text-white rounded-full hover:bg-white/10">Cancel</button>
+                <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-neon-green to-green-600 text-dark-900 font-semibold rounded-full">Assign Plan</button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AdminMembers;
