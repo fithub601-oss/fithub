@@ -264,10 +264,13 @@ const sendOTP = async (req, res) => {
     expiresAt
   });
 
-  // Return the OTP directly so the frontend can deliver it via EmailJS
-  // (server-side email may not be configured; EmailJS works from the browser)
-  console.log(`[send-otp] OTP for ${email}: ${otp}`);
-  res.json({ message: 'OTP sent successfully', otp, dev: true });
+  // Send the OTP via Brevo (works to any email from Render)
+  const emailSent = await sendEmailOTP(email, otp);
+  if (!emailSent) {
+    return res.status(500).json({ message: 'Failed to send OTP email. Try again.' });
+  }
+
+  res.json({ message: 'OTP sent successfully' });
 };
 
 // @desc    Verify OTP
