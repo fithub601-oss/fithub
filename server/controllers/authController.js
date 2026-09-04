@@ -2,6 +2,7 @@ const User = require('../models/User');
 const OTP = require('../models/OTP');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -14,8 +15,38 @@ const generateOTP = () => {
 };
 
 const sendEmailOTP = async (email, otp) => {
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 10px;">
+      <h2 style="color: #4F46E5; text-align: center;">FITHUB</h2>
+      <h3 style="text-align: center;">Your Verification Code</h3>
+      <p style="text-align: center; font-size: 32px; font-weight: bold; color: #4F46E5; letter-spacing: 10px; background: #EEF2FF; padding: 15px; border-radius: 8px;">${otp}</p>
+      <p style="text-align: center; color: #6B7280;">This code is valid for 10 minutes.</p>
+      <p style="text-align: center; color: #6B7280; font-size: 12px;">If you didn't request this, please ignore this email.</p>
+    </div>
+  `;
+
+  // Preferred: Resend (HTTPS API - works on Render)
+  if (process.env.RESEND_API_KEY) {
+    try {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      const from = process.env.EMAIL_FROM || 'FITHUB <onboarding@resend.dev>';
+      await resend.emails.send({
+        from,
+        to: email,
+        subject: 'FITHUB - Your OTP Code',
+        html
+      });
+      console.log('OTP email sent via Resend');
+      return true;
+    } catch (error) {
+      console.error('Resend email error:', error.message);
+      return false;
+    }
+  }
+
+  // Fallback: Gmail SMTP (for local dev)
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.error('EMAIL_USER or EMAIL_PASS not configured');
+    console.error('No email provider configured (RESEND_API_KEY or EMAIL_USER/EMAIL_PASS)');
     return false;
   }
 
@@ -38,15 +69,7 @@ const sendEmailOTP = async (email, otp) => {
       from: `"FITHUB" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: 'FITHUB - Your OTP Code',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 10px;">
-          <h2 style="color: #4F46E5; text-align: center;">FITHUB</h2>
-          <h3 style="text-align: center;">Your Verification Code</h3>
-          <p style="text-align: center; font-size: 32px; font-weight: bold; color: #4F46E5; letter-spacing: 10px; background: #EEF2FF; padding: 15px; border-radius: 8px;">${otp}</p>
-          <p style="text-align: center; color: #6B7280;">This code is valid for 10 minutes.</p>
-          <p style="text-align: center; color: #6B7280; font-size: 12px;">If you didn't request this, please ignore this email.</p>
-        </div>
-      `
+      html
     });
     return true;
   } catch (error) {

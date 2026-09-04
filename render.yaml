@@ -21,9 +21,13 @@ services:
         sync: false
       - key: EMAIL_PASS
         sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
       - key: RAZORPAY_KEY_ID
-        value: rzp_live_TY3Ox4TcwIclPV
+        sync: false
       - key: RAZORPAY_KEY_SECRET
-        value: GMpPKHIhj4jzUH3zYu9i31zS
+        sync: false
       - key: CLIENT_URL
         sync: false
