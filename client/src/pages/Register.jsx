@@ -11,11 +11,30 @@ const Register = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', confirmPassword: '', otp: '' });
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
   const { register } = useAuth();
   const navigate = useNavigate();
 
+  const startCooldown = () => {
+    setCooldown(30);
+    const interval = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const sendOtp = async () => {
+    await api.post('/auth/send-otp', { email: form.email, phone: form.phone });
   };
 
   const handleSendOTP = async (e) => {
@@ -31,15 +50,30 @@ const Register = () => {
     setLoading(true);
     try {
       // Backend generates + stores OTP and emails it via Brevo (works to any email)
-      await api.post('/auth/send-otp', { email: form.email, phone: form.phone });
+      await sendOtp();
 
       setOtpSent(true);
       setStep(2);
+      startCooldown();
       toast.success('OTP sent to your email!');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to send OTP');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendOTP = async () => {
+    if (cooldown > 0) return;
+    setResending(true);
+    try {
+      await sendOtp();
+      startCooldown();
+      toast.success('OTP resent to your email!');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to resend OTP');
+    } finally {
+      setResending(false);
     }
   };
 
@@ -201,6 +235,21 @@ const Register = () => {
               >
                 ← Back to edit details
               </button>
+              <div className="text-center text-sm pt-1">
+                <span className="text-gray-400">Didn't receive it? </span>
+                <button
+                  type="button"
+                  onClick={handleResendOTP}
+                  disabled={cooldown > 0 || resending}
+                  className="text-primary-400 hover:text-primary-300 font-medium disabled:text-gray-500 disabled:cursor-not-allowed"
+                >
+                  {resending
+                    ? 'Resending...'
+                    : cooldown > 0
+                      ? `Resend OTP (${cooldown}s)`
+                      : 'Resend OTP'}
+                </button>
+              </div>
             </form>
           )}
 
