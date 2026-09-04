@@ -20,14 +20,17 @@ const sendEmailOTP = async (email, otp) => {
   }
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    requireTLS: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS
     },
-    connectionTimeout: 8000,
-    greetingTimeout: 8000,
-    socketTimeout: 15000
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 20000
   });
 
   try {
@@ -47,7 +50,9 @@ const sendEmailOTP = async (email, otp) => {
     });
     return true;
   } catch (error) {
-    console.error('Email send error:', error);
+    console.error('Email send error (from):', process.env.EMAIL_USER);
+    console.error('Email send error details:', error.message, error.code || '');
+    if (error.response) console.error('SMTP response:', error.response);
     return false;
   }
 };
