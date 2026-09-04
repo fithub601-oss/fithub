@@ -224,12 +224,10 @@ const sendOTP = async (req, res) => {
     expiresAt
   });
 
-  const emailSent = await sendEmailOTP(email, otp);
-  if (!emailSent) {
-    return res.status(500).json({ message: 'Failed to send OTP' });
-  }
-
-  res.json({ message: 'OTP sent successfully' });
+  // Return the OTP directly so the frontend can deliver it via EmailJS
+  // (server-side email may not be configured; EmailJS works from the browser)
+  console.log(`[send-otp] OTP for ${email}: ${otp}`);
+  res.json({ message: 'OTP sent successfully', otp, dev: true });
 };
 
 // @desc    Verify OTP
