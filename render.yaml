@@ -29,6 +29,10 @@ services:
         sync: false
       - key: SENDGRID_FROM
         sync: false
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_FROM
+        sync: false
       - key: RAZORPAY_KEY_ID
         sync: false
       - key: RAZORPAY_KEY_SECRET

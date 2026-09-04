@@ -6,6 +6,40 @@ const { Resend } = require('resend');
 
 const sgMail = require('@sendgrid/mail');
 
+const sendViaBrevo = async (email, subject, html) => {
+  try {
+    const apiKey = process.env.BREVO_API_KEY;
+    if (!apiKey) return false;
+    const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': apiKey,
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        sender: {
+          name: 'FITHUB',
+          email: process.env.BREVO_FROM || 'fithub601@gmail.com'
+        },
+        to: [{ email }],
+        subject,
+        htmlContent: html
+      })
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      console.error('Brevo error response:', res.status, text.slice(0, 500));
+      return false;
+    }
+    console.log('OTP email sent via Brevo');
+    return true;
+  } catch (error) {
+    console.error('Brevo send error:', error.message);
+    return false;
+  }
+};
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE || '7d'
@@ -27,7 +61,13 @@ const sendEmailOTP = async (email, otp) => {
     </div>
   `;
 
-  // 1st choice: SendGrid (HTTPS API, works on Render, sends to any verified recipient)
+  // 1st choice: Brevo (HTTPS API, sends to ANY email, no domain needed, works on Render)
+  if (process.env.BREVO_API_KEY) {
+    const ok = await sendViaBrevo(email, 'FITHUB - Your OTP Code', html);
+    if (ok) return true;
+  }
+
+  // 2nd choice: SendGrid (HTTPS API, works on Render, sends to any verified recipient)
   if (process.env.SENDGRID_API_KEY && (process.env.SENDGRID_FROM || process.env.EMAIL_FROM)) {
     try {
       sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -46,7 +86,7 @@ const sendEmailOTP = async (email, otp) => {
     }
   }
 
-  // 2nd choice: Resend (HTTPS API - works on Render)
+  // 3rd choice: Resend (HTTPS API - works on Render)
   if (process.env.RESEND_API_KEY) {
     try {
       const resend = new Resend(process.env.RESEND_API_KEY);
