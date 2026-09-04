@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const { Resend } = require('resend');
 
+const sgMail = require('@sendgrid/mail');
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE || '7d'
@@ -25,11 +27,30 @@ const sendEmailOTP = async (email, otp) => {
     </div>
   `;
 
-  // Preferred: Resend (HTTPS API - works on Render)
+  // 1st choice: SendGrid (HTTPS API, works on Render, sends to any verified recipient)
+  if (process.env.SENDGRID_API_KEY && (process.env.SENDGRID_FROM || process.env.EMAIL_FROM)) {
+    try {
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      await sgMail.send({
+        to: email,
+        from: process.env.SENDGRID_FROM || process.env.EMAIL_FROM,
+        subject: 'FITHUB - Your OTP Code',
+        html
+      });
+      console.log('OTP email sent via SendGrid');
+      return true;
+    } catch (error) {
+      console.error('SendGrid email error:', error.message);
+      if (error.response) console.error('SendGrid response body:', error.response.body);
+      return false;
+    }
+  }
+
+  // 2nd choice: Resend (HTTPS API - works on Render)
   if (process.env.RESEND_API_KEY) {
     try {
       const resend = new Resend(process.env.RESEND_API_KEY);
-      const from = process.env.EMAIL_FROM || 'FITHUB <onboarding@resend.dev>';
+      const from = process.env.RESEND_FROM || 'FITHUB <onboarding@resend.dev>';
       await resend.emails.send({
         from,
         to: email,
@@ -46,7 +67,7 @@ const sendEmailOTP = async (email, otp) => {
 
   // Fallback: Gmail SMTP (for local dev)
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.error('No email provider configured (RESEND_API_KEY or EMAIL_USER/EMAIL_PASS)');
+    console.error('No email provider configured (SENDGRID_API_KEY or RESEND_API_KEY or EMAIL_USER/EMAIL_PASS)');
     return false;
   }
 
