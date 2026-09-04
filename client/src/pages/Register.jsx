@@ -32,6 +32,7 @@ const Register = () => {
     try {
       await api.post('/auth/send-otp', { email: form.email, phone: form.phone });
       setOtpSent(true);
+      setStep(2);
       toast.success('OTP sent to your email!');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to send OTP');
