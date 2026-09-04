@@ -14,17 +14,25 @@ const generateOTP = () => {
 };
 
 const sendEmailOTP = async (email, otp) => {
-  try {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.error('EMAIL_USER or EMAIL_PASS not configured');
+    return false;
+  }
 
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    },
+    connectionTimeout: 8000,
+    greetingTimeout: 8000,
+    socketTimeout: 15000
+  });
+
+  try {
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: `"FITHUB" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: 'FITHUB - Your OTP Code',
       html: `
