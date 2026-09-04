@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import emailjs from '@emailjs/browser';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
 import FITHUBLogo from '../components/FITHUBLogo';
@@ -31,31 +30,8 @@ const Register = () => {
     }
     setLoading(true);
     try {
-      // 1. Get OTP from backend (stored in DB, returned in response)
-      const { data } = await api.post('/auth/send-otp', { email: form.email, phone: form.phone });
-
-      // 2. Deliver the OTP to any email via EmailJS (browser-side, works where SMTP is blocked)
-      let emailDelivered = false;
-      try {
-        const emailjsResult = await emailjs.send(
-          'service_qsp2krx',
-          'template_ewlfxli',
-          {
-            to_email: form.email,
-            to_name: form.name || 'there',
-            otp: data.otp
-          },
-          'O3rKLNIcLHArorwHm'
-        );
-        emailDelivered = emailjsResult && (emailjsResult.status === 200 || emailjsResult.text === 'OK');
-      } catch (emailErr) {
-        console.error('EmailJS error:', emailErr);
-      }
-
-      if (!emailDelivered) {
-        toast.error('Could not email the OTP. Check the email address.');
-        return;
-      }
+      // Backend generates + stores OTP and emails it via Brevo (works to any email)
+      await api.post('/auth/send-otp', { email: form.email, phone: form.phone });
 
       setOtpSent(true);
       setStep(2);
