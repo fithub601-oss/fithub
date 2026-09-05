@@ -2,15 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../api';
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
+  const { user } = useAuth();
   const [banners, setBanners] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     api.get('/banners').then(res => setBanners(res.data)).catch(() => {});
     api.get('/subscriptions').then(res => setSubscriptions(res.data.slice(0, 3))).catch(() => {});
-  }, []);
+    if (user) {
+      api.get('/orders/me').then(res => setOrders(res.data.slice(0, 3))).catch(() => {});
+    }
+  }, [user]);
 
   const heroBanners = banners.filter(b => b.position === 'hero');
   const midBanners = banners.filter(b => b.position === 'midpage');
@@ -250,6 +256,70 @@ const Home = () => {
               <Link to="/subscriptions" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline inline-flex items-center gap-1">
                 View all plans →
               </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* RECENT ORDERS */}
+      {user && orders.length > 0 && (
+        <section className="bg-slate-50 py-20 border-b border-slate-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-end justify-between mb-10">
+              <div>
+                <span className="kicker">YOUR ACCOUNT</span>
+                <h2 className="font-display text-4xl sm:text-5xl text-slate-900 mb-2 mt-1">
+                  RECENT <span className="text-orange-500">ORDERS</span>
+                </h2>
+                <p className="text-slate-500">Hey {user.name?.split(' ')[0]} — here's what you ordered lately</p>
+              </div>
+              <Link to="/orders" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline inline-flex items-center gap-1 shrink-0">
+                View all →
+              </Link>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {orders.map((order, i) => (
+                <motion.div
+                  key={order._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  viewport={{ once: true }}
+                >
+                  <Link to="/orders" className="block bg-white rounded-3xl border border-slate-100 shadow-soft hover:shadow-card hover:-translate-y-1 transition-all h-full p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="font-display text-slate-900 font-bold">
+                        ORDER <span className="text-orange-500">#{order._id.slice(-6).toUpperCase()}</span>
+                      </p>
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${order.paymentStatus === 'paid' ? 'bg-emerald-100 text-emerald-700' : order.paymentStatus === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-600'}`}>
+                        {order.paymentStatus === 'paid' ? 'PAID' : order.paymentStatus === 'pending' ? 'PENDING' : 'FAILED'}
+                      </span>
+                    </div>
+                    <p className="text-slate-400 text-xs mb-4">
+                      {new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} · {(order.items || []).length} item(s)
+                    </p>
+                    <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+                      <div className="flex -space-x-2">
+                        {(order.items || []).slice(0, 3).map((item, j) => (
+                          <div key={j} className="w-9 h-9 rounded-xl bg-slate-50 border-2 border-white overflow-hidden aspect-square">
+                            {item.image ? (
+                              <img src={item.image} alt={item.name} className="w-full h-full object-cover object-center" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-slate-300 text-xs">🛍</div>
+                            )}
+                          </div>
+                        ))}
+                        {(order.items || []).length > 3 && (
+                          <div className="w-9 h-9 rounded-xl bg-orange-50 border-2 border-white flex items-center justify-center text-orange-600 text-xs font-bold">
+                            +{(order.items || []).length - 3}
+                          </div>
+                        )}
+                      </div>
+                      <p className="font-display text-xl text-slate-900 font-bold">₹{Number(order.totalAmount).toLocaleString('en-IN')}</p>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
