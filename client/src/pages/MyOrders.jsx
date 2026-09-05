@@ -3,12 +3,16 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../api';
-import { FaArrowLeft, FaShoppingBag, FaMapMarkerAlt } from 'react-icons/fa';
+import { useAuth } from '../context/AuthContext';
+import { FaArrowLeft, FaShoppingBag, FaMapMarkerAlt, FaReceipt } from 'react-icons/fa';
 import Stickers from '../components/Stickers';
+import ReceiptModal from '../components/ReceiptModal';
 
 const MyOrders = () => {
+  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [receiptOrder, setReceiptOrder] = useState(null);
 
   useEffect(() => {
     api.get('/orders/me')
@@ -148,6 +152,14 @@ const MyOrders = () => {
                       <p className="font-display text-2xl text-emerald-600 font-bold">₹{Number(order.totalAmount).toLocaleString('en-IN')}</p>
                     </div>
                   </div>
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex justify-end">
+                    <button
+                      onClick={() => setReceiptOrder(order)}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary-600 to-neon-pink text-white text-sm font-bold rounded-full hover:opacity-90 transition-opacity shadow-glow"
+                    >
+                      <FaReceipt /> View / Download Receipt
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -157,6 +169,14 @@ const MyOrders = () => {
       <div className="pb-10 flex justify-center">
         <Stickers count={4} />
       </div>
+
+      <ReceiptModal
+        open={!!receiptOrder}
+        onClose={() => setReceiptOrder(null)}
+        type="order"
+        data={receiptOrder}
+        user={user}
+      />
     </div>
   );
 };

@@ -26,12 +26,14 @@ import AdminPayments from './pages/admin/AdminPayments';
 import AdminTransactions from './pages/admin/AdminTransactions';
 import AdminReviews from './pages/admin/AdminReviews';
 import AdminProtected from './components/AdminProtected';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const PublicLayout = () => (
   <>
     <Navbar />
-    <main className="flex-grow">
-      <Routes>
+    <ErrorBoundary>
+      <main className="flex-grow">
+        <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/checkout/:id" element={<Checkout />} />
@@ -69,6 +71,7 @@ const PublicLayout = () => (
         <Route path="*" element={<Home />} />
       </Routes>
     </main>
+    </ErrorBoundary>
     <Footer />
   </>
 );
@@ -76,19 +79,21 @@ const PublicLayout = () => (
 const AdminLayout = () => (
   <AdminProtected>
     <Navbar />
-    <main className="flex-grow">
-      <Routes>
-        <Route path="/" element={<AdminDashboard />} />
-        <Route path="members" element={<AdminMembers />} />
-        <Route path="subscriptions" element={<AdminSubscriptions />} />
-        <Route path="products" element={<AdminProducts />} />
-        <Route path="banners" element={<AdminBanners />} />
-        <Route path="payments" element={<AdminPayments />} />
-        <Route path="transactions" element={<AdminTransactions />} />
-        <Route path="reviews" element={<AdminReviews />} />
-        <Route path="*" element={<AdminDashboard />} />
-      </Routes>
-    </main>
+    <ErrorBoundary>
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<AdminDashboard />} />
+          <Route path="members" element={<AdminMembers />} />
+          <Route path="subscriptions" element={<AdminSubscriptions />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="banners" element={<AdminBanners />} />
+          <Route path="payments" element={<AdminPayments />} />
+          <Route path="transactions" element={<AdminTransactions />} />
+          <Route path="reviews" element={<AdminReviews />} />
+          <Route path="*" element={<AdminDashboard />} />
+        </Routes>
+      </main>
+    </ErrorBoundary>
     <Footer />
   </AdminProtected>
 );

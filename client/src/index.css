@@ -13,6 +13,50 @@
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Subtle gym-themed background — purely aesthetic, very low contrast  */
+/* ------------------------------------------------------------------ */
+.bg-slate-50 {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23f97316' stroke-opacity='0.06' stroke-width='2'%3E%3Crect x='7' y='26' width='10' height='12' rx='1.5'/%3E%3Crect x='13' y='20' width='8' height='24' rx='1.5'/%3E%3Crect x='47' y='26' width='10' height='12' rx='1.5'/%3E%3Crect x='43' y='20' width='8' height='24' rx='1.5'/%3E%3Crect x='21' y='29' width='22' height='6' rx='3'/%3E%3Crect x='25' y='25' width='4' height='14' rx='1'/%3E%3Crect x='35' y='25' width='4' height='14' rx='1'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 96px 96px;
+  background-repeat: repeat;
+}
+
+body {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23f97316' stroke-opacity='0.05' stroke-width='2'%3E%3Crect x='7' y='26' width='10' height='12' rx='1.5'/%3E%3Crect x='13' y='20' width='8' height='24' rx='1.5'/%3E%3Crect x='47' y='26' width='10' height='12' rx='1.5'/%3E%3Crect x='43' y='20' width='8' height='24' rx='1.5'/%3E%3Crect x='21' y='29' width='22' height='6' rx='3'/%3E%3Crect x='25' y='25' width='4' height='14' rx='1'/%3E%3Crect x='35' y='25' width='4' height='14' rx='1'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 96px 96px;
+  background-repeat: repeat;
+}
+
+/* ------------------------------------------------------------------ */
+/* Receipt printing — only the receipt sheet appears on paper/PDF      */
+/* ------------------------------------------------------------------ */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #receipt-print-area,
+  #receipt-print-area * {
+    visibility: visible;
+  }
+  #receipt-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body {
+    background-image: none;
+  }
+}
+
 .font-display {
   font-family: 'Space Grotesk', system-ui, sans-serif;
   letter-spacing: -0.02em;

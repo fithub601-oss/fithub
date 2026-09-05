@@ -4,13 +4,15 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
-import { FaHistory, FaMoneyBillAlt, FaArrowLeft } from 'react-icons/fa';
+import { FaHistory, FaMoneyBillAlt, FaArrowLeft, FaReceipt } from 'react-icons/fa';
+import ReceiptModal from '../components/ReceiptModal';
 
 const Transactions = () => {
   const { user } = useAuth();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [receiptTx, setReceiptTx] = useState(null);
 
   useEffect(() => {
     if (!user) return;
@@ -28,7 +30,10 @@ const Transactions = () => {
               amount: r.amount,
               method: r.method || m.paymentMethod || 'other',
               membershipId: m._id,
-              status: m.status
+              status: m.status,
+              totalAmount: m.totalAmount,
+              amountPaid: m.amountPaid,
+              amountRemaining: m.amountRemaining
             });
           });
         });
@@ -129,13 +134,14 @@ const Transactions = () => {
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Plan</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Method</th>
                   <th className="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">Amount</th>
+                  <th className="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">Receipt</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
                 {loading ? (
-                  <tr><td colSpan="4" className="px-6 py-12 text-center text-gray-400">Loading...</td></tr>
+                  <tr><td colSpan="5" className="px-6 py-12 text-center text-gray-400">Loading...</td></tr>
                 ) : filtered.length === 0 ? (
-                  <tr><td colSpan="4" className="px-6 py-12 text-center text-gray-400">No transactions yet</td></tr>
+                  <tr><td colSpan="5" className="px-6 py-12 text-center text-gray-400">No transactions yet</td></tr>
                 ) : (
                   filtered.map((t) => (
                     <tr key={t._id} className="hover:bg-white/5 transition-colors">
@@ -149,6 +155,14 @@ const Transactions = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right text-white font-bold">₹{Number(t.amount).toLocaleString('en-IN')}</td>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          onClick={() => setReceiptTx(t)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-primary-600 to-neon-pink text-white text-xs font-bold rounded-full hover:opacity-90 transition-opacity"
+                        >
+                          <FaReceipt /> Receipt
+                        </button>
+                      </td>
                     </tr>
                   ))
                 )}
@@ -157,6 +171,14 @@ const Transactions = () => {
           </div>
         </div>
       </div>
+
+      <ReceiptModal
+        open={!!receiptTx}
+        onClose={() => setReceiptTx(null)}
+        type="membership"
+        data={receiptTx}
+        user={user}
+      />
     </div>
   );
 };
