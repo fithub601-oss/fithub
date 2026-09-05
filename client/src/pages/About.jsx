@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import FITHUBLogo from '../components/FITHUBLogo';
 
 const About = () => {
   return (
@@ -52,9 +51,16 @@ const About = () => {
               viewport={{ once: true }}
               className="flex justify-center"
             >
-              <div className="relative">
-                <div className="w-72 h-72 rounded-full bg-gradient-to-br from-neon-green to-primary-500 opacity-20 blur-3xl absolute inset-0"></div>
-                <FITHUBLogo size={300} theme="dark" />
+              <div className="relative text-center">
+                <div className="w-80 h-80 rounded-full bg-gradient-to-br from-orange-500 to-red-500 opacity-20 blur-3xl absolute inset-0"></div>
+                <div className="relative">
+                  <p className="inline-block px-4 py-1.5 bg-white/10 border border-white/20 text-amber-300 text-xs font-bold rounded-full uppercase tracking-widest mb-6">Est. 2024</p>
+                  <p>
+                    <span className="font-display text-8xl text-white tracking-wider block">FIT</span>
+                    <span className="font-display text-8xl tracking-wider block bg-gradient-to-r from-orange-400 via-red-400 to-amber-300 bg-clip-text text-transparent">HUB</span>
+                  </p>
+                  <p className="text-gray-400 text-sm mt-4">Train Beast Mode. On.</p>
+                </div>
               </div>
             </motion.div>
           </div>

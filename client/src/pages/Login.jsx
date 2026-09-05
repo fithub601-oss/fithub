@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
-import FITHUBLogo from '../components/FITHUBLogo';
 
 const Login = () => {
   const [method, setMethod] = useState('password');
@@ -79,8 +78,8 @@ const Login = () => {
         className="w-full max-w-md px-4"
       >
         <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-card">
-          <div className="flex justify-center mb-6">
-            <FITHUBLogo size={70} theme="light" />
+          <div className="text-center mb-6">
+            <p className="font-display text-4xl tracking-wider text-slate-900">FIT<span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">HUB</span></p>
           </div>
           <h1 className="font-display text-3xl text-slate-900 text-center mb-1">WELCOME BACK!</h1>
           <p className="text-slate-500 text-center text-sm mb-8">Login to your FITHUB account</p>

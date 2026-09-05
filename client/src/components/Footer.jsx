@@ -1,19 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import FITHUBLogo from './FITHUBLogo';
 
 const Footer = () => {
   return (
     <footer className="on-dark bg-slate-900 mt-auto relative">
-      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary-500 via-neon-pink to-neon-yellow"></div>
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-orange-500 via-red-500 to-amber-400"></div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <FITHUBLogo size={40} theme="dark" />
-              <span className="font-display text-xl text-white">
-                FIT<span className="text-primary-400">HUB</span>
-              </span>
+            <div className="flex items-baseline gap-0.5 mb-4">
+              <span className="font-display text-2xl tracking-wider text-white">FIT</span>
+              <span className="font-display text-2xl tracking-wider bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">HUB</span>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
               Your transformation starts here. Train hard, stay consistent, become unstoppable.

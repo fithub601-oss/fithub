@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../api';
-import FITHUBLogo from '../components/FITHUBLogo';
 
 const Home = () => {
   const [banners, setBanners] = useState([]);
@@ -17,23 +16,31 @@ const Home = () => {
   const midBanners = banners.filter(b => b.position === 'midpage');
 
   const features = [
-    { emoji: '💪', title: 'Modern Equipment', desc: 'Top-tier machines and free weights for every workout', color: 'from-primary-500 to-indigo-600' },
-    { emoji: '🧑‍🏫', title: 'Expert Trainers', desc: 'Certified coaches who push you to the next level', color: 'from-neon-pink to-rose-500' },
-    { emoji: '📱', title: 'Easy Management', desc: 'Manage your membership and payments online', color: 'from-neon-green to-emerald-600' },
-    { emoji: '🛍️', title: 'Gym Store', desc: 'Supplements, apparel, and accessories at the gym', color: 'from-neon-yellow to-amber-500' },
-    { emoji: '🎯', title: 'Custom Programs', desc: 'Personalized workout plans for your goals', color: 'from-sky-500 to-blue-600' },
-    { emoji: '🔥', title: 'Community Vibes', desc: 'Join a motivated community that never quits', color: 'from-orange-500 to-red-500' }
+    { emoji: '💪', title: 'Modern Equipment', desc: 'Top-tier machines and free weights for every workout', color: 'from-orange-500 to-amber-500' },
+    { emoji: '🧑‍🏫', title: 'Expert Trainers', desc: 'Certified coaches who push you to the next level', color: 'from-red-500 to-orange-500' },
+    { emoji: '📱', title: 'Easy Management', desc: 'Manage your membership and payments online', color: 'from-amber-500 to-yellow-500' },
+    { emoji: '🛍️', title: 'Gym Store', desc: 'Supplements, apparel, and accessories at the gym', color: 'from-orange-500 to-red-500' },
+    { emoji: '🎯', title: 'Custom Programs', desc: 'Personalized workout plans for your goals', color: 'from-red-600 to-amber-500' },
+    { emoji: '🔥', title: 'Community Vibes', desc: 'Join a motivated community that never quits', color: 'from-amber-400 to-orange-600' }
+  ];
+
+  const workouts = [
+    { name: 'Warm-up · Cardio', info: '10 min', done: true },
+    { name: 'Deadlift', info: '4 × 5 reps', done: false },
+    { name: 'Bench Press', info: '4 × 6 reps', done: false },
+    { name: 'Squat', info: '3 × 8 reps', done: false },
+    { name: 'Core & Stretch', info: '15 min', done: false }
   ];
 
   return (
     <div className="min-h-screen">
       {/* HERO SECTION */}
       <section className="on-dark relative pt-16 overflow-hidden bg-slate-900">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-900/50 via-slate-900 to-neon-pink/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-950/60 via-slate-900 to-red-950/40"></div>
         <div className="absolute inset-0 opacity-40" style={{
-          backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(99,102,241,0.35) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(236,72,153,0.35) 0%, transparent 50%)'
+          backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(249,115,22,0.35) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(239,68,68,0.35) 0%, transparent 50%)'
         }}></div>
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary-600/30 rounded-full blur-3xl"></div>
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-orange-600/30 rounded-full blur-3xl"></div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -50,8 +57,8 @@ const Home = () => {
                 </div>
               )}
               <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-white leading-[1.05] mb-6">
-                TRAIN <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-neon-pink">BEAST</span><br />
-                MODE <span className="text-neon-yellow">ON</span>
+                TRAIN <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">BEAST</span><br />
+                MODE <span className="text-amber-400">ON</span>
               </h1>
               <p className="text-lg text-gray-300 mb-8 max-w-lg leading-relaxed">
                 Join the FITHUB fam where gym vibes meet today's energy. From memberships
@@ -60,7 +67,7 @@ const Home = () => {
               <div className="flex flex-wrap gap-4">
                 <Link
                   to="/register"
-                  className="px-8 py-3 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-bold rounded-full hover:opacity-90 transition-opacity text-lg"
+                  className="px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-full hover:opacity-90 transition-opacity text-lg shadow-glow"
                 >
                   Get Started 💪
                 </Link>
@@ -73,15 +80,15 @@ const Home = () => {
               </div>
               <div className="mt-10 flex items-center gap-6 flex-wrap">
                 <div className="px-5 py-3 bg-white/5 backdrop-blur border border-white/10 rounded-2xl">
-                  <p className="font-display text-3xl text-neon-green">500+</p>
+                  <p className="font-display text-3xl text-orange-400">500+</p>
                   <p className="text-xs text-gray-400 mt-0.5">Active Members</p>
                 </div>
                 <div className="px-5 py-3 bg-white/5 backdrop-blur border border-white/10 rounded-2xl">
-                  <p className="font-display text-3xl text-neon-pink">15+</p>
+                  <p className="font-display text-3xl text-red-400">15+</p>
                   <p className="text-xs text-gray-400 mt-0.5">Expert Trainers</p>
                 </div>
                 <div className="px-5 py-3 bg-white/5 backdrop-blur border border-white/10 rounded-2xl">
-                  <p className="font-display text-3xl text-neon-yellow">24/7</p>
+                  <p className="font-display text-3xl text-amber-400">24/7</p>
                   <p className="text-xs text-gray-400 mt-0.5">Fitness Access</p>
                 </div>
               </div>
@@ -93,9 +100,41 @@ const Home = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="flex justify-center"
             >
-              <div className="relative">
-                <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full bg-gradient-to-br from-primary-600 to-neon-pink opacity-30 blur-3xl absolute inset-0"></div>
-                <FITHUBLogo size={350} theme="dark" />
+              <div className="relative w-full max-w-md">
+                <div className="w-72 h-72 rounded-full bg-gradient-to-br from-orange-500 to-red-500 opacity-25 blur-3xl absolute inset-0 m-auto"></div>
+                <div className="relative bg-white/5 backdrop-blur-xl border border-white/15 rounded-3xl p-6 shadow-2xl">
+                  <div className="flex items-center justify-between mb-5">
+                    <div>
+                      <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Today's Plan</p>
+                      <p className="font-display text-xl text-white">BEAST SESSION 💥</p>
+                    </div>
+                    <span className="px-3 py-1.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full">
+                      GOAL: -5 kg
+                    </span>
+                  </div>
+                  <div className="space-y-3">
+                    {workouts.map((w, i) => (
+                      <div key={i} className="flex items-center gap-3 bg-white/5 rounded-2xl px-4 py-3 border border-white/10">
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${w.done ? 'bg-gradient-to-r from-orange-400 to-red-400 text-white' : 'bg-white/10 text-gray-300'}`}>
+                          {w.done ? '✓' : i + 1}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-white">{w.name}</p>
+                          <p className="text-xs text-gray-400">{w.info}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-5">
+                    <div className="flex justify-between text-xs text-gray-400 mb-1.5">
+                      <span>Progress</span>
+                      <span className="text-amber-300 font-semibold">20%</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                      <div className="h-full w-1/5 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -109,13 +148,13 @@ const Home = () => {
             {midBanners.map((b, i) => (
               <div key={b._id} className="mb-4 last:mb-0">
                 {b.title && (
-                  <div className="on-dark bg-gradient-to-r from-primary-700 to-indigo-800 border border-primary-500/40 rounded-2xl p-6 flex items-center justify-between gap-4 shadow-card">
+                  <div className="on-dark bg-gradient-to-r from-red-700 to-orange-600 border border-red-500/40 rounded-2xl p-6 flex items-center justify-between gap-4 shadow-card">
                     <div>
                       <h3 className="text-white font-bold text-xl">{b.title}</h3>
                       {b.description && <p className="text-gray-300 mt-1">{b.description}</p>}
                     </div>
                     {b.buttonText && (
-                      <Link to={b.buttonLink || '/subscriptions'} className="px-6 py-2.5 bg-neon-green text-slate-900 font-bold rounded-full hover:opacity-90 whitespace-nowrap shadow-soft">
+                      <Link to={b.buttonLink || '/subscriptions'} className="px-6 py-2.5 bg-white text-orange-600 font-bold rounded-full hover:opacity-90 whitespace-nowrap shadow-soft">
                         {b.buttonText}
                       </Link>
                     )}
@@ -132,7 +171,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <span className="kicker">WHY FITHUB</span>
-            <h2 className="font-display text-4xl sm:text-5xl text-slate-900 mb-3">EVERYTHING YOU <span className="text-primary-600">NEED</span></h2>
+            <h2 className="font-display text-4xl sm:text-5xl text-slate-900 mb-3">EVERYTHING YOU <span className="text-orange-500">NEED</span></h2>
             <p className="text-slate-500 max-w-xl mx-auto">We've built the complete fitness experience — gear, plans, and a community that shows up.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -143,7 +182,7 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="group bg-slate-50 rounded-3xl p-7 border border-slate-100 hover:bg-white hover:shadow-card hover:-translate-y-1.5 hover:border-primary-100 transition-all duration-300"
+                className="group bg-slate-50 rounded-3xl p-7 border border-slate-100 hover:bg-white hover:shadow-card hover:-translate-y-1.5 hover:border-orange-100 transition-all duration-300"
               >
                 <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feat.color} flex items-center justify-center text-2xl mb-5 shadow-soft group-hover:scale-110 group-hover:rotate-3 transition-transform`}>
                   {feat.emoji}
@@ -162,7 +201,7 @@ const Home = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
               <span className="kicker">MEMBERSHIP</span>
-              <h2 className="font-display text-4xl sm:text-5xl text-slate-900 mb-3">POPULAR <span className="text-neon-pink">PLANS</span></h2>
+              <h2 className="font-display text-4xl sm:text-5xl text-slate-900 mb-3">POPULAR <span className="text-red-500">PLANS</span></h2>
               <p className="text-slate-500">Start your journey today — upgrade anytime</p>
             </div>
             <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
@@ -175,12 +214,12 @@ const Home = () => {
                   viewport={{ once: true }}
                   className={`relative rounded-3xl p-7 border transition-all duration-300 ${
                     plan.isPopular
-                      ? 'bg-gradient-to-b from-primary-100 to-white border-primary-300 shadow-lift lg:-translate-y-3'
+                      ? 'bg-gradient-to-b from-orange-50 to-white border-orange-200 shadow-lift lg:-translate-y-3'
                       : 'bg-white border-slate-100 shadow-soft hover:shadow-card hover:-translate-y-1'
                   }`}
                 >
                   {plan.isPopular && (
-                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-gradient-to-r from-neon-green to-emerald-500 text-white text-xs font-bold rounded-full shadow-soft flex items-center gap-1">
+                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full shadow-soft flex items-center gap-1">
                       ⭐ MOST POPULAR
                     </span>
                   )}
@@ -200,7 +239,7 @@ const Home = () => {
                   </ul>
                   <Link
                     to={`/subscriptions`}
-                    className="block w-full py-3 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-bold rounded-full text-center hover:opacity-90 transition-opacity"
+                    className="block w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-full text-center hover:opacity-90 transition-opacity"
                   >
                     Choose Plan
                   </Link>
@@ -208,7 +247,7 @@ const Home = () => {
               ))}
             </div>
             <div className="text-center mt-10">
-              <Link to="/subscriptions" className="text-primary-600 hover:text-primary-700 font-semibold hover:underline inline-flex items-center gap-1">
+              <Link to="/subscriptions" className="text-orange-600 hover:text-orange-700 font-semibold hover:underline inline-flex items-center gap-1">
                 View all plans →
               </Link>
             </div>
@@ -217,9 +256,9 @@ const Home = () => {
       )}
 
       {/* CTA */}
-      <section className="on-dark bg-gradient-to-r from-primary-700 via-indigo-700 to-indigo-800 py-20 relative overflow-hidden">
+      <section className="on-dark bg-gradient-to-r from-red-600 via-orange-600 to-orange-500 py-20 relative overflow-hidden">
         <div className="absolute inset-0 opacity-30" style={{
-          backgroundImage: 'radial-gradient(circle at 85% 20%, rgba(236,72,153,0.6) 0%, transparent 45%), radial-gradient(circle at 10% 80%, rgba(34,197,94,0.4) 0%, transparent 45%)'
+          backgroundImage: 'radial-gradient(circle at 85% 20%, rgba(254,215,170,0.5) 0%, transparent 45%), radial-gradient(circle at 10% 80%, rgba(239,68,68,0.5) 0%, transparent 45%)'
         }}></div>
         <div className="relative max-w-4xl mx-auto px-4 text-center">
           <motion.h2
@@ -228,14 +267,14 @@ const Home = () => {
             transition={{ duration: 0.6 }}
             className="font-display text-4xl sm:text-6xl text-white mb-4 leading-tight"
           >
-            READY TO <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-green to-neon-yellow">MAKE CHANGES</span>?
+            READY TO <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-200">MAKE CHANGES</span>?
           </motion.h2>
-          <p className="text-gray-300 mb-8 text-lg">
+          <p className="text-gray-200 mb-8 text-lg">
             Your first step to a stronger you is one click away.
           </p>
           <Link
             to="/register"
-            className="inline-block px-12 py-4 bg-gradient-to-r from-neon-green to-neon-yellow text-slate-900 font-bold text-lg rounded-full hover:opacity-90 transition-opacity shadow-glow"
+            className="inline-block px-12 py-4 bg-white text-orange-600 font-bold text-lg rounded-full hover:opacity-90 transition-opacity shadow-glow"
           >
             Join FITHUB Now 🔥
           </Link>
