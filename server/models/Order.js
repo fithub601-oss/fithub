@@ -37,6 +37,15 @@ const orderSchema = new mongoose.Schema({
     enum: ['placed', 'confirmed', 'cancelled'],
     default: 'placed'
   },
+  shippingAddress: {
+    fullName: String,
+    phone: String,
+    address: String,
+    city: String,
+    state: String,
+    pincode: String,
+    landmark: String
+  },
   createdAt: { type: Date, default: Date.now }
 });
 

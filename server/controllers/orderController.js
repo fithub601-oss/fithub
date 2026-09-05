@@ -25,7 +25,7 @@ const toPublic = (prod) => {
 // @access  Private
 const createProductOrder = async (req, res) => {
   try {
-    const { items } = req.body; // [{productId, quantity}]
+    const { items, shippingAddress } = req.body; // [{productId, quantity}]
 
     if (!items || !items.length) {
       return res.status(400).json({ message: 'Cart is empty' });
@@ -68,7 +68,8 @@ const createProductOrder = async (req, res) => {
       receipt: `order_${Date.now()}`,
       notes: {
         type: 'products',
-        userId: req.user?._id?.toString() || ''
+        userId: req.user?._id?.toString() || '',
+        shippingAddress: shippingAddress ? JSON.stringify(shippingAddress) : ''
       }
     };
 
@@ -98,7 +99,8 @@ const verifyProductPayment = async (req, res) => {
       razorpay_signature,
       items,
       paymentMethod,
-      totalAmount
+      totalAmount,
+      shippingAddress
     } = req.body;
 
     const isOffline = paymentMethod === 'cash' || paymentMethod === 'offline';
@@ -154,6 +156,7 @@ const verifyProductPayment = async (req, res) => {
       paymentStatus: isOffline ? 'pending' : 'paid',
       razorpayOrderId: isOffline ? undefined : razorpay_order_id,
       razorpayPaymentId: isOffline ? undefined : razorpay_payment_id,
+      shippingAddress: shippingAddress || undefined,
       status: 'placed'
     });
 

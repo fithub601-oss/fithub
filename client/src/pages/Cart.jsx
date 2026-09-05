@@ -13,6 +13,38 @@ const Cart = () => {
   const navigate = useNavigate();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
+  const [address, setAddress] = useState({
+    fullName: '',
+    phone: '',
+    address: '',
+    city: '',
+    state: '',
+    pincode: '',
+    landmark: ''
+  });
+
+  const handleAddressChange = (e) => {
+    setAddress({ ...address, [e.target.name]: e.target.value });
+  };
+
+  const validateAddress = () => {
+    const required = ['fullName', 'phone', 'address', 'city', 'state', 'pincode'];
+    const missing = required.find(f => !address[f]?.trim());
+    if (missing) {
+      toast.error('Please fill in all delivery address fields');
+      return false;
+    }
+    if (!/^[6-9]\d{9}$/.test(address.phone)) {
+      toast.error('Enter a valid 10-digit phone number');
+      return false;
+    }
+    if (!/^\d{6}$/.test(address.pincode)) {
+      toast.error('Enter a valid 6-digit pincode');
+      return false;
+    }
+    return true;
+  };
+
   const loadRazorpay = () => {
     return new Promise((resolve) => {
       const script = document.createElement('script');
@@ -31,6 +63,19 @@ const Cart = () => {
     }
     if (cart.length === 0) return;
 
+    if (!address.fullName || !address.phone || !address.address || !address.city || !address.state || !address.pincode) {
+      toast.error('Please fill in your delivery address below');
+      return;
+    }
+    if (!/^[6-9]\d{9}$/.test(address.phone)) {
+      toast.error('Enter a valid 10-digit phone number');
+      return;
+    }
+    if (!/^\d{6}$/.test(address.pincode)) {
+      toast.error('Enter a valid 6-digit pincode');
+      return;
+    }
+
     setCheckoutLoading(true);
     try {
       const items = cart.map(i => ({ productId: i._id, quantity: i.qty }));
@@ -40,14 +85,15 @@ const Cart = () => {
         return;
       }
 
-      const { data } = await api.post('/orders/create-order', { items });
+      const { data } = await api.post('/orders/create-order', { items, shippingAddress: address });
 
       if (!data.key) {
         // Cash fallback
         await api.post('/orders/verify', {
           items,
           paymentMethod: 'cash',
-          totalAmount: data.total
+          totalAmount: data.total,
+          shippingAddress: address
         });
         toast.success('Order placed! Pay at the gym to confirm.');
         clearCart();
@@ -71,7 +117,8 @@ const Cart = () => {
               razorpay_signature: response.razorpay_signature,
               items,
               paymentMethod: 'razorpay',
-              totalAmount: data.total
+              totalAmount: data.total,
+              shippingAddress: address
             });
             toast.success('Payment successful! Order placed 🎉');
             clearCart();
@@ -132,8 +179,92 @@ const Cart = () => {
           </div>
         ) : (
           <div className="grid lg:grid-cols-3 gap-8">
-            {/* Items */}
+            {/* Items + Address */}
             <div className="lg:col-span-2 space-y-4">
+              {/* Delivery Address */}
+              <div className="bg-dark-800 rounded-2xl p-6 border border-white/5">
+                <h2 className="text-white font-bold text-xl mb-4">Delivery Address</h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-gray-400 text-xs mb-1">Full Name *</label>
+                    <input
+                      type="text"
+                      name="fullName"
+                      value={address.fullName}
+                      onChange={handleAddressChange}
+                      placeholder="Your name"
+                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-xs mb-1">Phone *</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={address.phone}
+                      onChange={handleAddressChange}
+                      placeholder="10-digit mobile"
+                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-gray-400 text-xs mb-1">Address (House, Street, Area) *</label>
+                    <input
+                      type="text"
+                      name="address"
+                      value={address.address}
+                      onChange={handleAddressChange}
+                      placeholder="House no, street, area"
+                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-xs mb-1">City *</label>
+                    <input
+                      type="text"
+                      name="city"
+                      value={address.city}
+                      onChange={handleAddressChange}
+                      placeholder="City"
+                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-xs mb-1">State *</label>
+                    <input
+                      type="text"
+                      name="state"
+                      value={address.state}
+                      onChange={handleAddressChange}
+                      placeholder="State"
+                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-xs mb-1">Pincode *</label>
+                    <input
+                      type="text"
+                      name="pincode"
+                      value={address.pincode}
+                      onChange={handleAddressChange}
+                      placeholder="6-digit pincode"
+                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-xs mb-1">Landmark (optional)</label>
+                    <input
+                      type="text"
+                      name="landmark"
+                      value={address.landmark}
+                      onChange={handleAddressChange}
+                      placeholder="Near..."
+                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                    />
+                  </div>
+                </div>
+              </div>
+              {/* Items */}
               {cart.map((item) => (
                 <motion.div
                   key={item._id}
