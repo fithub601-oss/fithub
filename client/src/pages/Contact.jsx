@@ -5,6 +5,7 @@ import { FaEnvelope, FaClock, FaMapMarkerAlt, FaExternalLinkAlt } from 'react-ic
 const Contact = () => {
   const email = 'fithub601@gmail.com';
   const mapsUrl = 'https://maps.app.goo.gl/fepBVnyZzEzjiQuk6';
+  const mapEmbed = 'https://www.google.com/maps?q=place_id:0x3be7b79949cf7ca5:0x98b7d3c4ba39810f&output=embed';
 
   const cards = [
     {
@@ -81,37 +82,42 @@ const Contact = () => {
             ))}
           </div>
 
-          {/* Location banner */}
-          <motion.a
-            href={mapsUrl}
-            target="_blank"
-            rel="noreferrer"
+          {/* Live map */}
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="on-dark block bg-gradient-to-r from-red-700 via-orange-600 to-amber-500 rounded-3xl p-8 relative overflow-hidden shadow-card"
+            className="bg-white rounded-3xl border border-slate-100 shadow-soft overflow-hidden"
           >
-            <div className="absolute inset-0 opacity-30" style={{
-              backgroundImage: 'radial-gradient(circle at 80% 30%, rgba(255,255,255,0.5) 0%, transparent 45%)'
-            }}></div>
-            <div className="relative flex flex-wrap items-center justify-between gap-6">
-              <div className="flex items-center gap-5">
-                <div className="w-16 h-16 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center text-3xl shrink-0">
-                  📍
-                </div>
-                <div>
-                  <h2 className="font-display text-2xl sm:text-3xl text-white font-bold">VISIT US AT THE GYM</h2>
-                  <p className="text-gray-200 text-sm mt-1">
-                    Open Mon–Sat · 6AM to 10PM · Click to open in Google Maps
-                  </p>
-                </div>
+            <div className="p-6 flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <span className="kicker">FIND US</span>
+                <h2 className="font-display text-2xl text-slate-900 mt-1">OUR LOCATION</h2>
+                <p className="text-slate-500 text-sm mt-1">
+                  Samarth Gym · M Ward, Municipal Colony, Sector B, Goregaon East, Mumbai 400065
+                </p>
               </div>
-              <span className="inline-flex items-center gap-2 px-6 py-3 bg-white text-orange-600 font-bold rounded-full shadow-glow">
-                Open in Google Maps <FaExternalLinkAlt />
-              </span>
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-full hover:opacity-90 transition-opacity shadow-glow"
+              >
+                Open in Google Maps <FaExternalLinkAlt className="text-xs" />
+              </a>
             </div>
-          </motion.a>
+            <div className="border-t border-slate-100">
+              <iframe
+                title="FITHUB Gym Location"
+                src={mapEmbed}
+                className="w-full h-[420px]"
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </motion.div>
         </div>
       </section>
     </div>
