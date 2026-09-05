@@ -56,6 +56,10 @@ const membershipSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  emailRemindersSent: {
+    type: [String],
+    default: []
+  },
   createdAt: {
     type: Date,
     default: Date.now
