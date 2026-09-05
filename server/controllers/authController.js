@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const OTP = require('../models/OTP');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
+const bcrypt = require('bcryptjs');
 const { Resend } = require('resend');
 
 const sgMail = require('@sendgrid/mail');
@@ -171,40 +171,8 @@ const sendEmailOTP = async (email, otp) => {
     }
   }
 
-  // Fallback: Gmail SMTP (for local dev)
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.error('No email provider configured (SENDGRID_API_KEY or RESEND_API_KEY or EMAIL_USER/EMAIL_PASS)');
-    return false;
-  }
-
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 20000
-  });
-
-  try {
-    await transporter.sendMail({
-      from: `"FITHUB" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: 'FITHUB - Your OTP Code',
-      html
-    });
-    return true;
-  } catch (error) {
-    console.error('Email send error (from):', process.env.EMAIL_USER);
-    console.error('Email send error details:', error.message, error.code || '');
-    if (error.response) console.error('SMTP response:', error.response);
-    return false;
-  }
+  console.error('No email provider configured (set GMAIL_CLIENT_ID/GMAIL_REFRESH_TOKEN or BREVO_API_KEY or RESEND_API_KEY)');
+  return false;
 };
 
 // @desc    Register user with OTP
@@ -217,17 +185,35 @@ const register = async (req, res) => {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
-  const userExists = await User.findOne({ $or: [{ email }, { phone }] });
+  const trimmedName = String(name).trim();
+  const trimmedEmail = String(email).trim().toLowerCase();
+  const trimmedPhone = String(phone).trim().replace(/[\s-]/g, '');
+  const pwd = String(password);
+
+  if (trimmedName.length < 2 || trimmedName.length > 60) {
+    return res.status(400).json({ message: 'Name must be between 2 and 60 characters' });
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail) || trimmedEmail.length > 100) {
+    return res.status(400).json({ message: 'Enter a valid email address' });
+  }
+  if (!/^(\+91)?[6-9]\d{9}$/.test(trimmedPhone)) {
+    return res.status(400).json({ message: 'Enter a valid 10-digit Indian mobile number' });
+  }
+  if (pwd.length < 8 || pwd.length > 128) {
+    return res.status(400).json({ message: 'Password must be at least 8 characters long' });
+  }
+
+  const userExists = await User.findOne({ $or: [{ email: trimmedEmail }, { phone: trimmedPhone }] });
   if (userExists) {
     return res.status(400).json({ message: 'User already exists with this email or phone' });
   }
 
   try {
     const user = await User.create({
-      name,
-      email,
-      phone,
-      password
+      name: trimmedName,
+      email: trimmedEmail,
+      phone: trimmedPhone,
+      password: pwd
     });
 
     res.status(201).json({
@@ -240,7 +226,7 @@ const register = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -341,7 +327,7 @@ const sendOTP = async (req, res) => {
     res.json({ message: 'OTP sent successfully' });
   } catch (error) {
     console.error('sendOTP error:', error.message);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: 'Server error. Please try again.' });
   }
 };
 
@@ -465,9 +451,8 @@ const resetPassword = async (req, res) => {
     return res.status(404).json({ message: 'User not found' });
   }
 
-  const salt = await bcrypt.genSalt(10);
-  user.password = await require('bcryptjs').hash(newPassword, salt);
-  await user.save();
+  user.password = newPassword;
+  await user.save(); // pre('save') hook hashes the new password
 
   await OTP.deleteOne({ _id: otpRecord._id });
 

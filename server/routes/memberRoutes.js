@@ -10,14 +10,15 @@ const {
   getAllTransactions
 } = require('../controllers/memberController');
 const { protect, admin } = require('../middleware/authMiddleware');
+const { validateObjectId } = require('../middleware/security');
 
 router.get('/', protect, admin, getMembers);
 router.get('/me', protect, getMyMemberships);
 router.get('/all-transactions', protect, admin, getAllTransactions);
-router.get('/:id', protect, admin, getMember);
-router.put('/:id', protect, admin, updateMember);
-router.delete('/:id', protect, admin, deleteMember);
-router.post('/:id/membership', protect, admin, assignMembership);
-router.post('/:id/payment', protect, admin, recordPayment);
+router.get('/:id', protect, admin, validateObjectId, getMember);
+router.put('/:id', protect, admin, validateObjectId, updateMember);
+router.delete('/:id', protect, admin, validateObjectId, deleteMember);
+router.post('/:id/membership', protect, admin, validateObjectId, assignMembership);
+router.post('/:id/payment', protect, admin, validateObjectId, recordPayment);
 
 module.exports = router;

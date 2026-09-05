@@ -1,4 +1,3 @@
-const nodemailer = require('nodemailer');
 const { Resend } = require('resend');
 const sgMail = require('@sendgrid/mail');
 
@@ -124,45 +123,11 @@ const sendViaResend = async (email, subject, html) => {
   }
 };
 
-const sendViaGmailSmtp = async (email, subject, html) => {
-  try {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.error('No email provider configured for reminders (set GMAIL_CLIENT_ID/GMAIL_REFRESH_TOKEN or BREVO_API_KEY or SENDGRID_API_KEY or RESEND_API_KEY)');
-      return false;
-    }
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-      port: Number(process.env.EMAIL_PORT || 587),
-      secure: false,
-      requireTLS: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      },
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 20000
-    });
-    await transporter.sendMail({
-      from: `"FitHub by Samarth Gym" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject,
-      html
-    });
-    console.log('Reminder email sent via Gmail SMTP');
-    return true;
-  } catch (error) {
-    console.error('Email send error:', error.message);
-    return false;
-  }
-};
-
 const sendEmail = async (to, subject, html) => {
   if (await sendViaGmailOAuth(to, subject, html)) return true;
   if (await sendViaBrevo(to, subject, html)) return true;
   if (await sendViaSendGrid(to, subject, html)) return true;
   if (await sendViaResend(to, subject, html)) return true;
-  if (await sendViaGmailSmtp(to, subject, html)) return true;
   return false;
 };
 
