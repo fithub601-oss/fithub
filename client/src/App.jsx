@@ -9,6 +9,7 @@ import Subscriptions from './pages/Subscriptions';
 import Checkout from './pages/Checkout';
 import Products from './pages/Products';
 import Cart from './pages/Cart';
+import MyOrders from './pages/MyOrders';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
@@ -43,6 +44,14 @@ const PublicLayout = () => (
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <MyOrders />
             </ProtectedRoute>
           }
         />

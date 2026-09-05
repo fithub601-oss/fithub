@@ -84,13 +84,22 @@ const Navbar = () => {
                       {isAdmin ? 'Admin Panel' : 'My Dashboard'}
                     </Link>
                     {!isAdmin && (
-                      <Link
-                        to="/transactions"
-                        className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-                        onClick={() => setDropdownOpen(false)}
-                      >
-                        My Transactions
-                      </Link>
+                      <>
+                        <Link
+                          to="/orders"
+                          className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                          onClick={() => setDropdownOpen(false)}
+                        >
+                          My Orders
+                        </Link>
+                        <Link
+                          to="/transactions"
+                          className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                          onClick={() => setDropdownOpen(false)}
+                        >
+                          My Transactions
+                        </Link>
+                      </>
                     )}
                     <div className="my-1 border-t border-slate-100"></div>
                     <button
@@ -167,13 +176,22 @@ const Navbar = () => {
                   {isAdmin ? 'Admin Panel' : 'My Dashboard'}
                 </Link>
                 {!isAdmin && (
-                  <Link
-                    to="/transactions"
-                    onClick={() => setMobileOpen(false)}
-                    className="text-sm text-slate-600"
-                  >
-                    My Transactions
-                  </Link>
+                  <>
+                    <Link
+                      to="/orders"
+                      onClick={() => setMobileOpen(false)}
+                      className="text-sm text-slate-600"
+                    >
+                      My Orders
+                    </Link>
+                    <Link
+                      to="/transactions"
+                      onClick={() => setMobileOpen(false)}
+                      className="text-sm text-slate-600"
+                    >
+                      My Transactions
+                    </Link>
+                  </>
                 )}
                 <button onClick={handleLogout} className="text-sm text-red-500 text-left">
                   Logout
