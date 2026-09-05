@@ -145,12 +145,12 @@ const Contact = () => {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-primary-900/40 to-dark-800 rounded-2xl p-6 border border-primary-500/30">
+              <div className="bg-gradient-to-br from-primary-700 to-indigo-800 rounded-2xl p-6 border border-primary-500/40 on-dark">
                 <h3 className="text-white font-bold mb-2">💪 Free Trial Visit</h3>
                 <p className="text-gray-300 text-sm mb-4">
                   Come for a free day pass and see what we're about!
                 </p>
-                <a href="tel:+911234567890" className="inline-block px-6 py-2 bg-neon-green text-dark-900 font-bold rounded-full hover:opacity-90">
+                <a href="tel:+911234567890" className="inline-block px-6 py-2 bg-neon-green text-slate-900 font-bold rounded-full hover:opacity-90">
                   Book Now
                 </a>
               </div>

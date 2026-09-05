@@ -124,12 +124,12 @@ const Subscriptions = () => {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className={`relative rounded-2xl p-6 border ${
                   plan.isPopular
-                    ? 'bg-gradient-to-b from-primary-900/60 to-dark-800 border-primary-500/40'
-                    : 'bg-dark-800 border-white/5'
+? 'bg-gradient-to-b from-primary-100 to-white border-primary-300'
+                      : 'bg-white border-slate-200'
                 }`}
               >
                 {plan.isPopular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-neon-green text-dark-900 text-xs font-bold rounded-full whitespace-nowrap">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-neon-green text-slate-900 text-xs font-bold rounded-full whitespace-nowrap">
                     ⭐ MOST POPULAR
                   </span>
                 )}

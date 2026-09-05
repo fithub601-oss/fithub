@@ -353,7 +353,7 @@ const AdminMembers = () => {
               </div>
               <div className="flex gap-3 pt-2">
                 <button type="button" onClick={() => setShowMembershipModal(null)} className="flex-1 py-2.5 bg-white/5 text-white rounded-full hover:bg-white/10">Cancel</button>
-                <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-neon-green to-green-600 text-dark-900 font-semibold rounded-full">Assign Plan</button>
+                <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-neon-green to-green-600 text-slate-900 font-semibold rounded-full">Assign Plan</button>
               </div>
             </form>
           </motion.div>

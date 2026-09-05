@@ -83,7 +83,7 @@ const Checkout = () => {
 
               <button
                 onClick={handleCashPayment}
-                className="w-full py-3 bg-neon-green text-dark-900 font-bold rounded-full hover:opacity-90 mb-3"
+                className="w-full py-3 bg-neon-green text-slate-900 font-bold rounded-full hover:opacity-90 mb-3"
               >
                 Pay at Gym / Confirm Order
               </button>

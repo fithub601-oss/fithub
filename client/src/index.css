@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply bg-dark-900 text-gray-100 antialiased;
+    @apply bg-slate-50 text-slate-800 antialiased;
     font-family: 'Poppins', system-ui, sans-serif;
   }
 }
@@ -20,16 +20,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #eef2f7;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4f46e5;
+  background: #6366f1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #4338ca;
+  background: #4f46e5;
 }
 
 .line-clamp-2 {
@@ -43,3 +43,62 @@
   transform: scale(1.06);
   box-shadow: 0 0 22px rgba(99,102,241,0.55);
 }
+
+/* ------------------------------------------------------------------ */
+/* Light theme utility remapping.
+   The site was originally built fully dark, so the shared utility
+   classes below get re-pointed to light equivalents. Dark accent
+   strips opt out via the .on-dark wrapper class. */
+/* ------------------------------------------------------------------ */
+
+.text-white { color: #0f172a; }
+.hover\:text-white:hover { color: #0f172a; }
+.text-gray-300 { color: #475569; }
+.text-gray-400 { color: #64748b; }
+.text-gray-500 { color: #94a3b8; }
+.text-red-400 { color: #ef4444; }
+.text-yellow-400 { color: #eab308; }
+.text-primary-400 { color: #6366f1; }
+.hover\:text-primary-300:hover { color: #4f46e5; }
+
+.border-white\/5 { border-color: #eef2f7; }
+.border-white\/10 { border-color: #e2e8f0; }
+.border-white\/15 { border-color: #e2e8f0; }
+.border-white\/20 { border-color: #cbd5e1; }
+.divide-white\/10 > :not([hidden]) ~ :not([hidden]) { border-color: #e2e8f0; }
+.divide-white\/5 > :not([hidden]) ~ :not([hidden]) { border-color: #eef2f7; }
+
+.bg-white\/5 { background-color: #f1f5f9; }
+.bg-white\/10 { background-color: #f1f5f9; }
+.bg-white\/15 { background-color: #e2e8f0; }
+.bg-white\/20 { background-color: #e2e8f0; }
+.hover\:bg-white\/5:hover { background-color: #f1f5f9; }
+.hover\:bg-white\/10:hover { background-color: #e2e8f0; }
+.hover\:bg-white\/15:hover { background-color: #e2e8f0; }
+.hover\:bg-white\/20:hover { background-color: #cbd5e1; }
+
+/* Colored / gradient buttons keep white text */
+.bg-gradient-to-r.text-white,
+.bg-gradient-to-b.text-white,
+.bg-gradient-to-br.text-white,
+.bg-gradient-to-tr.text-white,
+.bg-primary-600.text-white,
+.bg-primary-700.text-white,
+.bg-indigo-500.text-white,
+.bg-indigo-600.text-white,
+.bg-neon-pink.text-white,
+.bg-neon-green.text-white { color: #ffffff; }
+
+/* Dark accent strips (hero, footer, highlight banners) keep light text */
+.on-dark .text-white { color: #ffffff; }
+.on-dark .hover\:text-white:hover { color: #ffffff; }
+.on-dark .text-gray-300 { color: #cbd5e1; }
+.on-dark .text-gray-400 { color: #94a3b8; }
+.on-dark .text-gray-500 { color: #64748b; }
+.on-dark .text-primary-400 { color: #818cf8; }
+.on-dark .hover\:text-primary-400:hover { color: #a5b4fc; }
+.on-dark .border-white\/5 { border-color: rgba(255,255,255,0.12); }
+.on-dark .border-white\/10 { border-color: rgba(255,255,255,0.15); }
+.on-dark .border-white\/20 { border-color: rgba(255,255,255,0.2); }
+.on-dark .bg-white\/10 { background-color: rgba(255,255,255,0.1); }
+.on-dark .bg-white\/20 { background-color: rgba(255,255,255,0.2); }

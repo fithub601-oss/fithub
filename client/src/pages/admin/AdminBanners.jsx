@@ -98,7 +98,7 @@ const AdminBanners = () => {
           </div>
           <button
             onClick={() => { setEditing(null); resetForm(); setShowModal(true); }}
-            className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-neon-yellow to-yellow-500 text-dark-900 font-bold rounded-full hover:opacity-90"
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-neon-yellow to-yellow-500 text-slate-900 font-bold rounded-full hover:opacity-90"
           >
             <FaPlus /> Add Banner
           </button>
@@ -215,7 +215,7 @@ const AdminBanners = () => {
               </div>
               <div className="flex gap-3 pt-2">
                 <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2.5 bg-white/5 text-white rounded-full hover:bg-white/10">Cancel</button>
-                <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-neon-yellow to-yellow-500 text-dark-900 font-semibold rounded-full">
+                <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-neon-yellow to-yellow-500 text-slate-900 font-semibold rounded-full">
                   {editing ? 'Update Banner' : 'Create Banner'}
                 </button>
               </div>

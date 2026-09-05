@@ -118,7 +118,7 @@ const Register = () => {
       >
         <div className="bg-dark-800 rounded-2xl p-8 border border-white/5">
           <div className="flex justify-center mb-6">
-            <FITHUBLogo size={70} theme="dark" />
+            <FITHUBLogo size={70} theme="light" />
           </div>
           <h1 className="font-display text-3xl text-white text-center mb-1">JOIN FITHUB</h1>
           <p className="text-gray-400 text-center text-sm mb-8">Create your account and start your journey</p>

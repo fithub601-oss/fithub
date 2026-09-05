@@ -82,7 +82,7 @@ const Dashboard = () => {
                   <h2 className="text-white font-bold text-xl mb-6">Your Membership</h2>
 
                   {activeMembership ? (
-                    <div className="bg-gradient-to-br from-primary-900/40 to-dark-800 rounded-xl p-6 border border-primary-500/30">
+                    <div className="bg-gradient-to-br from-primary-700 to-indigo-800 rounded-xl p-6 border border-primary-500/40 on-dark">
                       <div className="flex items-center justify-between mb-4">
                         <span className="text-primary-400 font-semibold text-sm uppercase tracking-wide">
                           Active Membership
@@ -207,7 +207,7 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-primary-900/40 to-dark-800 rounded-2xl p-6 border border-primary-500/30">
+                <div className="bg-gradient-to-br from-primary-700 to-indigo-800 rounded-2xl p-6 border border-primary-500/40 on-dark">
                   <h3 className="text-white font-bold mb-2">💪 Pro Tip</h3>
                   <p className="text-gray-300 text-sm">
                     Stay consistent! Even 30 minutes a day makes a huge difference in the long run.

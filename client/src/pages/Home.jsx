@@ -19,8 +19,8 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* HERO SECTION */}
-      <section className="relative pt-16 overflow-hidden bg-dark-900">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-900/40 via-dark-900 to-neon-pink/20"></div>
+      <section className="on-dark relative pt-16 overflow-hidden bg-slate-900">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-900/40 via-slate-900 to-neon-pink/20"></div>
         <div className="absolute inset-0 opacity-30" style={{
           backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(99,102,241,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(236,72,153,0.3) 0%, transparent 50%)'
         }}></div>
@@ -99,13 +99,13 @@ const Home = () => {
             {midBanners.map((b, i) => (
               <div key={b._id} className="mb-4 last:mb-0">
                 {b.title && (
-                  <div className="bg-gradient-to-r from-primary-900 to-dark-800 border border-primary-700/30 rounded-xl p-6 flex items-center justify-between gap-4">
+                  <div className="on-dark bg-gradient-to-r from-primary-700 to-indigo-800 border border-primary-500/40 rounded-xl p-6 flex items-center justify-between gap-4">
                     <div>
                       <h3 className="text-white font-bold text-xl">{b.title}</h3>
                       {b.description && <p className="text-gray-300 mt-1">{b.description}</p>}
                     </div>
                     {b.buttonText && (
-                      <Link to={b.buttonLink || '/subscriptions'} className="px-6 py-2 bg-neon-green text-dark-900 font-bold rounded-full hover:opacity-90 whitespace-nowrap">
+                      <Link to={b.buttonLink || '/subscriptions'} className="px-6 py-2 bg-neon-green text-slate-900 font-bold rounded-full hover:opacity-90 whitespace-nowrap">
                         {b.buttonText}
                       </Link>
                     )}
@@ -166,14 +166,14 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   viewport={{ once: true }}
-                  className={`rounded-2xl p-6 border ${
+                  className={`rounded-2xl p-6 border shadow-sm ${
                     plan.isPopular
-                      ? 'bg-gradient-to-b from-primary-900/60 to-dark-800 border-primary-500/40 relative'
-                      : 'bg-dark-900 border-white/5'
+                      ? 'bg-gradient-to-b from-primary-100 to-white border-primary-300 relative'
+                      : 'bg-white border-slate-100'
                   }`}
                 >
                   {plan.isPopular && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-neon-green text-dark-900 text-xs font-bold rounded-full">
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-neon-green text-slate-900 text-xs font-bold rounded-full">
                       MOST POPULAR
                     </span>
                   )}
@@ -209,7 +209,7 @@ const Home = () => {
       )}
 
       {/* CTA */}
-      <section className="bg-dark-900 py-20">
+      <section className="on-dark bg-gradient-to-r from-primary-700 to-indigo-800 py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <motion.h2
             initial={{ opacity: 0 }}
@@ -224,7 +224,7 @@ const Home = () => {
           </p>
           <Link
             to="/register"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-neon-green to-neon-yellow text-dark-900 font-bold text-lg rounded-full hover:opacity-90 transition-opacity"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-neon-green to-neon-yellow text-slate-900 font-bold text-lg rounded-full hover:opacity-90 transition-opacity shadow-lg"
           >
             Join FITHUB Now 🔥
           </Link>

@@ -117,8 +117,8 @@ const AdminSubscriptions = () => {
                 transition={{ duration: 0.4, delay: i * 0.05 }}
                 className={`relative rounded-2xl p-6 border ${
                   sub.isPopular
-                    ? 'bg-gradient-to-b from-primary-900/60 to-dark-800 border-primary-500/40'
-                    : 'bg-dark-800 border-white/5'
+? 'bg-gradient-to-b from-primary-100 to-white border-primary-300'
+                      : 'bg-white border-slate-200'
                 }`}
               >
                 <div className="flex items-start justify-between mb-3">

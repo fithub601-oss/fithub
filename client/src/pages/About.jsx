@@ -4,7 +4,7 @@ import FITHUBLogo from '../components/FITHUBLogo';
 
 const About = () => {
   return (
-    <div className="min-h-screen pt-16 bg-dark-900">
+    <div className="on-dark min-h-screen pt-16 bg-slate-900">
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
@@ -32,7 +32,7 @@ const About = () => {
                   {['A', 'B', 'C', 'D'].map((letter, i) => (
                     <div
                       key={i}
-                      className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-neon-pink flex items-center justify-center text-white font-bold border-2 border-dark-900"
+                      className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-neon-pink flex items-center justify-center text-white font-bold border-2 border-slate-900"
                     >
                       {letter}
                     </div>
@@ -71,7 +71,7 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-dark-800 rounded-2xl p-6 border border-white/5 hover:border-primary-500/30 transition-colors"
+                className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:border-primary-400/40 transition-colors"
               >
                 <span className="font-display text-4xl text-primary-500/30">{item.num}</span>
                 <h3 className="text-white font-bold text-xl mt-2 mb-3">{item.title}</h3>
