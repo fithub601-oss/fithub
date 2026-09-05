@@ -38,3 +38,8 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.fithub-logo:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 22px rgba(99,102,241,0.55);
+}
