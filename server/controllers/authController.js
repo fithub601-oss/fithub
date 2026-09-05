@@ -40,6 +40,43 @@ const sendViaBrevo = async (email, subject, html) => {
   }
 };
 
+const sendViaGmailOAuth = async (email, subject, html) => {
+  try {
+    const { google } = require('googleapis');
+    const CLIENT_ID = process.env.GMAIL_CLIENT_ID;
+    const CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET;
+    const REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN;
+    const REDIRECT_URI = 'http://localhost';
+
+    const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+    oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
+    const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
+
+    const raw = Buffer.from(
+      `To: ${email}\r\n` +
+      `From: FITHUB <fithub601@gmail.com>\r\n` +
+      `Subject: ${subject}\r\n` +
+      `Content-Type: text/html; charset=UTF-8\r\n\r\n` +
+      html
+    ).toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+
+    const response = await gmail.users.messages.send({
+      userId: 'me',
+      requestBody: { raw }
+    });
+
+    console.log('OTP email sent via Gmail OAuth:', response.data.id);
+    return true;
+  } catch (error) {
+    console.error('Gmail OAuth send error:', error.message);
+    return false;
+  }
+};
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE || '7d'
@@ -61,13 +98,19 @@ const sendEmailOTP = async (email, otp) => {
     </div>
   `;
 
-  // 1st choice: Brevo (HTTPS API, sends to ANY email, no domain needed, works on Render)
+  // 1st choice: Gmail OAuth (sends to ANY email over HTTPS - reliable on Render)
+  if (process.env.GMAIL_CLIENT_ID && process.env.GMAIL_CLIENT_SECRET && process.env.GMAIL_REFRESH_TOKEN) {
+    const ok = await sendViaGmailOAuth(email, 'FITHUB - Your OTP Code', html);
+    if (ok) return true;
+  }
+
+  // 2nd choice: Brevo (HTTPS API, sends to ANY email, no domain needed, works on Render)
   if (process.env.BREVO_API_KEY) {
     const ok = await sendViaBrevo(email, 'FITHUB - Your OTP Code', html);
     if (ok) return true;
   }
 
-  // 2nd choice: SendGrid (HTTPS API, works on Render, sends to any verified recipient)
+  // 3rd choice: SendGrid (HTTPS API, works on Render, sends to any verified recipient)
   if (process.env.SENDGRID_API_KEY && (process.env.SENDGRID_FROM || process.env.EMAIL_FROM)) {
     try {
       sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -86,7 +129,7 @@ const sendEmailOTP = async (email, otp) => {
     }
   }
 
-  // 3rd choice: Resend (HTTPS API - works on Render)
+  // 4th choice: Resend (HTTPS API - works on Render)
   if (process.env.RESEND_API_KEY) {
     try {
       const resend = new Resend(process.env.RESEND_API_KEY);
