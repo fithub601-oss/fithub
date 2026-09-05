@@ -1,16 +1,103 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { FaTrash, FaShoppingCart, FaArrowLeft, FaShoppingBag } from 'react-icons/fa';
+import api from '../api';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 const Cart = () => {
   const { cart, cartTotal, updateQty, removeFromCart, clearCart } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
-  // Placeholder order flow - replace with real order/checkout if exists
-  const handleCheckout = () => {
-    toast.success('Checkout is coming soon!');
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleCheckout = async () => {
+    if (!user) {
+      toast.error('Please login to checkout');
+      navigate('/login', { state: { from: '/cart' } });
+      return;
+    }
+    if (cart.length === 0) return;
+
+    setCheckoutLoading(true);
+    try {
+      const items = cart.map(i => ({ productId: i._id, quantity: i.qty }));
+      const scriptLoaded = await loadRazorpay();
+      if (!scriptLoaded) {
+        toast.error('Payment gateway failed to load');
+        return;
+      }
+
+      const { data } = await api.post('/orders/create-order', { items });
+
+      if (!data.key) {
+        // Cash fallback
+        await api.post('/orders/verify', {
+          items,
+          paymentMethod: 'cash',
+          totalAmount: data.total
+        });
+        toast.success('Order placed! Pay at the gym to confirm.');
+        clearCart();
+        navigate('/products');
+        return;
+      }
+
+      const options = {
+        key: data.key,
+        amount: data.amount,
+        currency: data.currency,
+        name: 'FITHUB',
+        description: `Store Order - ${items.length} item(s)`,
+        image: '/logo192.png',
+        order_id: data.id,
+        handler: async (response) => {
+          try {
+            await api.post('/orders/verify', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              items,
+              paymentMethod: 'razorpay',
+              totalAmount: data.total
+            });
+            toast.success('Payment successful! Order placed 🎉');
+            clearCart();
+            navigate('/products');
+          } catch (error) {
+            toast.error(error.response?.data?.message || 'Payment verification failed');
+          }
+        },
+        prefill: {
+          name: user.name,
+          email: user.email,
+          contact: user.phone
+        },
+        theme: {
+          color: '#4F46E5'
+        }
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || 'Checkout failed');
+    } finally {
+      setCheckoutLoading(false);
+    }
   };
 
   return (
@@ -129,9 +216,10 @@ const Cart = () => {
               </div>
               <button
                 onClick={handleCheckout}
-                className="w-full mt-6 py-3 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-bold rounded-full hover:opacity-90 transition-opacity"
+                disabled={checkoutLoading}
+                className="w-full mt-6 py-3 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-bold rounded-full hover:opacity-90 transition-opacity disabled:opacity-50"
               >
-                Proceed to Checkout
+                {checkoutLoading ? 'Processing...' : 'Proceed to Checkout'}
               </button>
               <p className="text-gray-500 text-xs text-center mt-3">Free shipping on all orders</p>
             </div>

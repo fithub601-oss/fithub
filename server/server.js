@@ -28,6 +28,7 @@ app.use('/api/subscriptions', require('./routes/subscriptionRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/banners', require('./routes/bannerRoutes'));
 app.use('/api/payment', require('./routes/paymentRoutes'));
+app.use('/api/orders', require('./routes/orderRoutes'));
 
 // Serve React production build (built during deploy) if it exists
 const clientBuild = path.join(__dirname, '..', 'client', 'build');
