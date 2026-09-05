@@ -1,15 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { FaPen, FaTrash, FaPlus, FaCheck } from 'react-icons/fa';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
 import Stickers from '../components/Stickers';
+
+const DEFAULT_PLAN = {
+  goal: 'GOAL: -5 kg',
+  workouts: [
+    { id: 1, name: 'Warm-up · Cardio', info: '10 min', done: true },
+    { id: 2, name: 'Deadlift', info: '4 × 5 reps', done: false },
+    { id: 3, name: 'Bench Press', info: '4 × 6 reps', done: false },
+    { id: 4, name: 'Squat', info: '3 × 8 reps', done: false },
+    { id: 5, name: 'Core & Stretch', info: '15 min', done: false }
+  ]
+};
+
+const cloneDefaultPlan = () => ({
+  goal: DEFAULT_PLAN.goal,
+  workouts: DEFAULT_PLAN.workouts.map(w => ({ ...w }))
+});
 
 const Home = () => {
   const { user } = useAuth();
   const [banners, setBanners] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [plan, setPlan] = useState(cloneDefaultPlan);
+  const [editMode, setEditMode] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newInfo, setNewInfo] = useState('');
+
+  const planKey = user?._id ? `fithub_plan_${user._id}` : 'fithub_plan_guest';
 
   useEffect(() => {
     api.get('/banners').then(res => setBanners(res.data)).catch(() => {});
@@ -18,6 +41,53 @@ const Home = () => {
       api.get('/orders/me').then(res => setOrders(res.data.slice(0, 3))).catch(() => {});
     }
   }, [user]);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(planKey);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setPlan({
+          goal: parsed.goal || DEFAULT_PLAN.goal,
+          workouts: Array.isArray(parsed.workouts) ? parsed.workouts : DEFAULT_PLAN.workouts.slice()
+        });
+      } else {
+        setPlan(cloneDefaultPlan());
+      }
+    } catch {
+      setPlan(cloneDefaultPlan());
+    }
+    setEditMode(false);
+  }, [planKey]);
+
+  useEffect(() => {
+    try { localStorage.setItem(planKey, JSON.stringify(plan)); } catch {}
+  }, [plan, planKey]);
+
+  const toggleDone = (id) =>
+    setPlan(p => ({ ...p, workouts: p.workouts.map(w => w.id === id ? { ...w, done: !w.done } : w) }));
+
+  const updateField = (id, field, value) =>
+    setPlan(p => ({ ...p, workouts: p.workouts.map(w => w.id === id ? { ...w, [field]: value } : w) }));
+
+  const removeWorkout = (id) =>
+    setPlan(p => ({ ...p, workouts: p.workouts.filter(w => w.id !== id) }));
+
+  const addWorkout = (e) => {
+    e.preventDefault();
+    if (!newName.trim()) return;
+    setPlan(p => ({
+      ...p,
+      workouts: [...p.workouts, { id: Date.now(), name: newName.trim(), info: newInfo.trim() || '1 × 10 reps', done: false }]
+    }));
+    setNewName('');
+    setNewInfo('');
+  };
+
+  const resetPlan = () => { setPlan(cloneDefaultPlan()); };
+
+  const doneCount = plan.workouts.filter(w => w.done).length;
+  const progressPct = plan.workouts.length ? Math.round((doneCount / plan.workouts.length) * 100) : 0;
 
   const heroBanners = banners.filter(b => b.position === 'hero');
   const midBanners = banners.filter(b => b.position === 'midpage');
@@ -29,14 +99,6 @@ const Home = () => {
     { emoji: '🛍️', title: 'Gym Store', desc: 'Supplements, apparel, and accessories at the gym', color: 'from-orange-500 to-red-500' },
     { emoji: '🎯', title: 'Custom Programs', desc: 'Personalized workout plans for your goals', color: 'from-red-600 to-amber-500' },
     { emoji: '🔥', title: 'Community Vibes', desc: 'Join a motivated community that never quits', color: 'from-amber-400 to-orange-600' }
-  ];
-
-  const workouts = [
-    { name: 'Warm-up · Cardio', info: '10 min', done: true },
-    { name: 'Deadlift', info: '4 × 5 reps', done: false },
-    { name: 'Bench Press', info: '4 × 6 reps', done: false },
-    { name: 'Squat', info: '3 × 8 reps', done: false },
-    { name: 'Core & Stretch', info: '15 min', done: false }
   ];
 
   return (
@@ -103,8 +165,8 @@ const Home = () => {
                   <p className="text-xs text-slate-500 mt-0.5">Expert Trainers</p>
                 </div>
                 <div className="px-5 py-3 bg-white border border-slate-100 rounded-2xl shadow-soft">
-                  <p className="font-display text-3xl text-amber-500">24/7</p>
-                  <p className="text-xs text-slate-500 mt-0.5">Fitness Access</p>
+                  <p className="font-display text-3xl text-amber-500">6AM–10PM</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Open Mon–Sat</p>
                 </div>
               </div>
             </motion.div>
@@ -119,34 +181,115 @@ const Home = () => {
                 <div className="w-72 h-72 rounded-full bg-gradient-to-br from-orange-400 to-red-500 opacity-15 blur-3xl absolute inset-0 m-auto"></div>
                 <div className="relative bg-white backdrop-blur-xl border border-slate-100 rounded-3xl p-6 shadow-lift">
                   <div className="flex items-center justify-between mb-5">
-                    <div>
-                      <p className="text-xs text-slate-400 uppercase tracking-widest mb-1">Today's Plan</p>
-                      <p className="font-display text-xl text-slate-900">BEAST SESSION 💥</p>
+                    <div className="min-w-0">
+                      <p className="text-xs text-slate-400 uppercase tracking-widest mb-1">
+                        Today's Plan {!editMode && <span className="text-slate-300 normal-case">· {new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric' })}</span>}
+                      </p>
+                      <p className="font-display text-xl text-slate-900 truncate">
+                        BEAST SESSION 💥
+                        {!editMode && plan.goal && (
+                          <span className="ml-2 align-middle px-2.5 py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[10px] font-bold rounded-full whitespace-nowrap">{plan.goal}</span>
+                        )}
+                      </p>
                     </div>
-                    <span className="px-3 py-1.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full">
-                      GOAL: -5 kg
-                    </span>
+                    {editMode ? (
+                      <button onClick={() => setEditMode(false)} className="px-3 py-1.5 bg-emerald-500 text-white text-xs font-bold rounded-full hover:opacity-90 transition-opacity flex items-center gap-1 shrink-0">
+                        <FaCheck className="text-[10px]" /> Done
+                      </button>
+                    ) : (
+                      <button onClick={() => setEditMode(true)} className="px-3 py-1.5 bg-slate-100 text-slate-600 text-xs font-semibold rounded-full hover:bg-slate-200 transition-colors flex items-center gap-1.5 shrink-0">
+                        <FaPen className="text-[10px]" /> Edit
+                      </button>
+                    )}
                   </div>
+
+                  {editMode && (
+                    <div className="mb-4">
+                      <label className="block text-[10px] text-slate-400 uppercase tracking-wide mb-1.5">Goal</label>
+                      <input
+                        value={plan.goal}
+                        onChange={(e) => setPlan(p => ({ ...p, goal: e.target.value }))}
+                        placeholder="e.g. GOAL: -5 kg"
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm outline-none focus:border-orange-400"
+                      />
+                    </div>
+                  )}
+
                   <div className="space-y-3">
-                    {workouts.map((w, i) => (
-                      <div key={i} className="flex items-center gap-3 bg-slate-50 rounded-2xl px-4 py-3 border border-slate-100">
-                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${w.done ? 'bg-gradient-to-r from-orange-400 to-red-400 text-white' : 'bg-slate-200 text-slate-600'}`}>
+                    {plan.workouts.length === 0 && (
+                      <p className="text-center text-slate-400 text-sm py-6">No workouts yet — add one below 💪</p>
+                    )}
+                    {plan.workouts.map((w, i) => (
+                      <div key={w.id} className="flex items-center gap-3 bg-slate-50 rounded-2xl px-4 py-3 border border-slate-100">
+                        <button
+                          onClick={() => toggleDone(w.id)}
+                          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-colors ${w.done ? 'bg-gradient-to-r from-orange-400 to-red-400 text-white' : 'bg-slate-200 text-slate-600 hover:bg-slate-300'}`}
+                          aria-label={w.done ? 'Mark incomplete' : 'Mark complete'}
+                        >
                           {w.done ? '✓' : i + 1}
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-slate-800">{w.name}</p>
-                          <p className="text-xs text-slate-400">{w.info}</p>
-                        </div>
+                        </button>
+                        {editMode ? (
+                          <>
+                            <div className="flex-1 grid grid-cols-2 gap-2 min-w-0">
+                              <input
+                                value={w.name}
+                                onChange={(e) => updateField(w.id, 'name', e.target.value)}
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-slate-800 text-sm outline-none focus:border-orange-400"
+                                placeholder="Exercise"
+                              />
+                              <input
+                                value={w.info}
+                                onChange={(e) => updateField(w.id, 'info', e.target.value)}
+                                className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-slate-800 text-sm outline-none focus:border-orange-400"
+                                placeholder="Sets × Reps"
+                              />
+                            </div>
+                            <button onClick={() => removeWorkout(w.id)} className="text-red-400 hover:text-red-500 p-1.5 shrink-0" aria-label="Remove workout">
+                              <FaTrash className="text-xs" />
+                            </button>
+                          </>
+                        ) : (
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-sm font-medium truncate ${w.done ? 'text-slate-400 line-through' : 'text-slate-800'}`}>{w.name}</p>
+                            <p className="text-xs text-slate-400">{w.info}</p>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
+
+                  {editMode && (
+                    <form onSubmit={addWorkout} className="mt-4">
+                      <div className="flex gap-2">
+                        <input
+                          value={newName}
+                          onChange={(e) => setNewName(e.target.value)}
+                          placeholder="New exercise"
+                          className="flex-1 min-w-0 px-3 py-2 bg-slate-50 border border-dashed border-slate-300 rounded-xl text-slate-800 text-sm outline-none focus:border-orange-400"
+                        />
+                        <input
+                          value={newInfo}
+                          onChange={(e) => setNewInfo(e.target.value)}
+                          placeholder="3 × 10"
+                          className="w-24 px-3 py-2 bg-slate-50 border border-dashed border-slate-300 rounded-xl text-slate-800 text-sm outline-none focus:border-orange-400"
+                        />
+                        <button type="submit" className="px-3 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity shrink-0" aria-label="Add workout">
+                          <FaPlus />
+                        </button>
+                      </div>
+                      <button type="button" onClick={resetPlan} className="mt-3 w-full text-xs text-slate-400 hover:text-red-500 transition-colors">
+                        ↺ Reset to default plan
+                      </button>
+                    </form>
+                  )}
+
                   <div className="mt-5">
                     <div className="flex justify-between text-xs text-slate-400 mb-1.5">
                       <span>Progress</span>
-                      <span className="text-amber-500 font-semibold">20%</span>
+                      <span className="text-amber-500 font-semibold">{progressPct}%</span>
                     </div>
                     <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                      <div className="h-full w-1/5 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"></div>
+                      <div className="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full transition-all duration-500" style={{ width: `${progressPct}%` }}></div>
                     </div>
                   </div>
                 </div>
