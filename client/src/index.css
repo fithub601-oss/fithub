@@ -18,6 +18,25 @@
   letter-spacing: -0.02em;
 }
 
+/* ------------------------------------------------------------------ */
+/* Responsive base rules — no horizontal scroll anywhere               */
+/* ------------------------------------------------------------------ */
+html {
+  scroll-behavior: smooth;
+}
+html, body {
+  overflow-x: hidden;
+}
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+@media (max-width: 640px) {
+  input, select, textarea, button {
+    font-size: 16px;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

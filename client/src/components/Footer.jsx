@@ -8,12 +8,13 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
-            <div className="flex items-baseline gap-0.5 mb-4">
+            <div className="flex items-baseline gap-0.5 mb-1">
               <span className="font-display text-2xl tracking-wider text-slate-900">FIT</span>
               <span className="font-display text-2xl tracking-wider bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">HUB</span>
             </div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-orange-500 mb-4">by Samarth Gym</p>
             <p className="text-sm text-slate-500 leading-relaxed">
-              Your transformation starts here. Train hard, stay consistent, become unstoppable.
+              FitHub by Samarth Gym — where your transformation starts. Train hard, stay consistent, become unstoppable.
             </p>
           </div>
 
@@ -39,6 +40,7 @@ const Footer = () => {
                 <a href="mailto:fithub601@gmail.com" className="hover:text-orange-600 transition-colors break-all">✉️ fithub601@gmail.com</a>
               </li>
               <li>🕐 Mon-Sat: 6AM - 10PM</li>
+              <li className="text-slate-400 text-xs">FitHub by Samarth Gym · Goregaon East, Mumbai</li>
               <li>
                 <a href="https://maps.app.goo.gl/fepBVnyZzEzjiQuk6" target="_blank" rel="noreferrer" className="hover:text-orange-600 transition-colors">📍 View Location on Google Maps</a>
               </li>
@@ -47,7 +49,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-slate-100 mt-10 pt-6 text-center text-sm text-slate-500">
-          © 2026 Fithub. All rights reserved.
+          © 2026 FitHub by Samarth Gym. All rights reserved. · Crafted with 💪 in Goregaon East
         </div>
       </div>
     </footer>

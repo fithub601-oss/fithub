@@ -4,9 +4,19 @@ import { motion } from 'framer-motion';
 import api from '../../api';
 import { useAuth } from '../../context/AuthContext';
 import {
-  FaUsers, FaBoxOpen, FaTag, FaMoneyBillWave, FaUserPlus, FaImage, FaSignOutAlt, FaChartBar, FaHistory
+  FaUsers, FaBoxOpen, FaTag, FaMoneyBillWave, FaUserPlus, FaImage, FaSignOutAlt, FaChartBar, FaHistory, FaStar
 } from 'react-icons/fa';
 import Stickers from '../../components/Stickers';
+
+const getValidity = (m) => {
+  if (!m || !m.endDate) return null;
+  const end = new Date(m.endDate);
+  const now = new Date();
+  const daysRemaining = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+  if (daysRemaining < 0) return { status: 'expired', label: 'Expired', emoji: '🔴', daysRemaining };
+  if (daysRemaining <= 30) return { status: 'expiring', label: 'Expiring Soon', emoji: '🟡', daysRemaining };
+  return { status: 'active', label: 'Active', emoji: '🟢', daysRemaining };
+};
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
@@ -19,6 +29,7 @@ const AdminDashboard = () => {
     revenue: 0
   });
   const [recentMembers, setRecentMembers] = useState([]);
+  const [validityCounts, setValidityCounts] = useState({ active: 0, expiring: 0, expired: 0 });
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -32,6 +43,12 @@ const AdminDashboard = () => {
 
         const revenue = membersRes.data.reduce((sum, m) => sum + (m.currentMembership?.amountPaid || 0), 0);
 
+        const counts = membersRes.data.reduce((acc, m) => {
+          const v = m.membershipValidity || getValidity(m.currentMembership);
+          if (v) acc[v.status] = (acc[v.status] || 0) + 1;
+          return acc;
+        }, { active: 0, expiring: 0, expired: 0 });
+
         setStats({
           members: membersRes.data.length,
           products: productsRes.data.length,
@@ -39,6 +56,7 @@ const AdminDashboard = () => {
           banners: bannersRes.data.length,
           revenue
         });
+        setValidityCounts(counts);
         setRecentMembers(membersRes.data.slice(0, 5));
       } catch (error) {
         console.error(error);
@@ -53,6 +71,7 @@ const AdminDashboard = () => {
     { to: '/admin/subscriptions', label: 'Subscriptions', icon: FaTag },
     { to: '/admin/products', label: 'Products', icon: FaBoxOpen },
     { to: '/admin/banners', label: 'Banners', icon: FaImage },
+    { to: '/admin/reviews', label: 'Reviews', icon: FaStar },
     { to: '/admin/payments', label: 'Payments', icon: FaMoneyBillWave },
     { to: '/admin/transactions', label: 'Transactions', icon: FaHistory }
   ];
@@ -146,35 +165,61 @@ const AdminDashboard = () => {
 
           {/* Recent Members */}
           <div className="bg-white rounded-2xl p-6 border border-white/5">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-2">
               <h2 className="text-white font-bold">RECENT MEMBERS</h2>
               <Link to="/admin/members" className="text-primary-400 text-sm hover:underline">View all</Link>
             </div>
-            <div className="space-y-3">
+            <div className="flex flex-wrap gap-2 mb-4 text-[11px] font-semibold">
+              <span className="px-2.5 py-1 rounded-full bg-neon-green/15 text-neon-green">🟢 {validityCounts.active} Active</span>
+              <span className="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-600">🟡 {validityCounts.expiring} Expiring</span>
+              <span className="px-2.5 py-1 rounded-full bg-red-500/15 text-red-500">🔴 {validityCounts.expired} Expired</span>
+            </div>
+            <div className="space-y-3 max-h-[26rem] overflow-y-auto pr-1">
               {recentMembers.length === 0 ? (
                 <p className="text-gray-500 text-sm text-center py-8">No members yet</p>
               ) : (
-                recentMembers.map((member) => (
-                  <div key={member._id} className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-neon-pink flex items-center justify-center text-white font-bold shrink-0">
-                      {member.name?.charAt(0).toUpperCase()}
+                recentMembers.map((member) => {
+                  const mem = member.currentMembership;
+                  const val = member.membershipValidity || getValidity(mem);
+                  return (
+                    <div key={member._id} className="p-3 bg-white/5 rounded-xl">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-neon-pink flex items-center justify-center text-white font-bold shrink-0">
+                          {member.name?.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-white font-medium truncate">{member.name}</p>
+                          <p className="text-gray-500 text-xs truncate">{member.email || member.phone}</p>
+                        </div>
+                        {val && (
+                          <span className={`shrink-0 px-2 py-0.5 rounded-full text-[11px] font-bold ${
+                            val.status === 'active' ? 'bg-neon-green/15 text-neon-green' :
+                            val.status === 'expiring' ? 'bg-amber-500/15 text-amber-600' : 'bg-red-500/15 text-red-500'
+                          }`}>
+                            {val.emoji} {val.label}
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
+                        <span>
+                          <span className="text-gray-400">Plan:</span>{' '}
+                          <span className="text-white">{mem?.subscription?.name || '—'}</span>
+                        </span>
+                        <span>
+                          <span className="text-gray-400">Joined:</span>{' '}
+                          {new Date(member.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </span>
+                        {mem?.endDate && (
+                          <span>
+                            <span className="text-gray-400">Expires:</span>{' '}
+                            {new Date(mem.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            {val && `${val.daysRemaining < 0 ? '' : ` (${val.daysRemaining}d left)`}`}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-white font-medium truncate">{member.name}</p>
-                      <p className="text-gray-500 text-xs truncate">{member.email}</p>
-                    </div>
-                    <div className="ml-auto flex flex-col items-end">
-                      <span className={`text-xs font-semibold ${
-                        member.currentMembership?.status === 'active' ? 'text-neon-green' : 'text-gray-500'
-                      }`}>
-                        {member.currentMembership?.status || 'No membership'}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {member.currentMembership ? `₹${member.currentMembership.totalAmount}` : '-'}
-                      </span>
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
           </div>

@@ -16,6 +16,7 @@ const Navbar = () => {
     { to: '/', label: 'Home' },
     { to: '/subscriptions', label: 'Subscriptions' },
     { to: '/products', label: 'Products' },
+    { to: '/calendar', label: 'Calendar' },
     { to: '/about', label: 'About' },
     { to: '/contact', label: 'Contact' }
   ];

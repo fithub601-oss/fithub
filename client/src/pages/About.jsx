@@ -14,18 +14,21 @@ const About = () => {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h1 className="font-display text-5xl text-white mb-4">
+              <h1 className="font-display text-5xl text-white mb-2">
                 ABOUT <span className="text-primary-500">FITHUB</span>
               </h1>
+              <p className="inline-block px-4 py-1.5 bg-gradient-to-r from-primary-600 to-neon-pink text-white text-sm font-bold rounded-full uppercase tracking-wide mb-6 shadow-glow">
+                by Samarth Gym
+              </p>
               <p className="text-gray-300 leading-relaxed mb-6">
-                FITHUB isn't just a gym — it's a movement. We believe fitness should be
+                FitHub by Samarth Gym isn't just a gym — it's a movement. We believe fitness should be
                 accessible, fun, and tailored to the modern lifestyle. Whether you're a
                 beginner taking your first steps or a seasoned athlete chasing PRs,
                 we've got the space, the tools, and the community to support you.
               </p>
               <p className="text-gray-300 leading-relaxed mb-8">
-                Our state-of-the-art facility, certified trainers, and vibrant community
-                culture make working out something you'll actually look forward to.
+                Powered by Samarth Gym, Goregaon East, our state-of-the-art facility, certified trainers,
+                and vibrant community culture make working out something you'll actually look forward to.
               </p>
               <div className="flex items-center gap-6">
                 <div className="flex -space-x-4">
@@ -59,6 +62,9 @@ const About = () => {
                   <p>
                     <span className="font-display text-8xl text-white tracking-wider block">FIT</span>
                     <span className="font-display text-8xl tracking-wider block bg-gradient-to-r from-orange-400 via-red-400 to-amber-300 bg-clip-text text-transparent">HUB</span>
+                  </p>
+                  <p className="text-sm mt-3">
+                    <span className="px-3 py-1 bg-white/10 border border-white/20 rounded-full text-gray-200 uppercase tracking-[0.2em] text-[11px] font-bold">by SAMARTH GYM</span>
                   </p>
                   <p className="text-gray-400 text-sm mt-4">Train Beast Mode. On.</p>
                 </div>

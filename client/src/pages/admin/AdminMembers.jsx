@@ -5,6 +5,22 @@ import api from '../../api';
 import Modal from '../../components/Modal';
 import { FaSearch, FaEdit, FaTrash, FaPlus, FaUserPlus, FaMoneyBillWave } from 'react-icons/fa';
 
+const getValidity = (m) => {
+  if (!m || !m.endDate) return null;
+  const end = new Date(m.endDate);
+  const now = new Date();
+  const daysRemaining = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+  if (daysRemaining < 0) return { status: 'expired', label: 'Expired', emoji: '🔴', daysRemaining };
+  if (daysRemaining <= 30) return { status: 'expiring', label: 'Expiring Soon', emoji: '🟡', daysRemaining };
+  return { status: 'active', label: 'Active', emoji: '🟢', daysRemaining };
+};
+
+const toDateInput = (d) => {
+  if (!d) return '';
+  const dt = new Date(d);
+  return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+};
+
 const AdminMembers = () => {
   const [members, setMembers] = useState([]);
   const [search, setSearch] = useState('');
@@ -60,12 +76,17 @@ const AdminMembers = () => {
   const handleEditMember = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/members/${showEditModal._id}`, showEditModal);
+      const { editMembership, ...profile } = showEditModal;
+      const payload = { ...profile };
+      if (editMembership && (editMembership.subscriptionId || editMembership.startDate || editMembership.endDate)) {
+        payload.membership = editMembership;
+      }
+      await api.put(`/members/${showEditModal._id}`, payload);
       toast.success('Member updated!');
       setShowEditModal(null);
       fetchMembers();
     } catch (error) {
-      toast.error('Failed to update member');
+      toast.error(error.response?.data?.message || 'Failed to update member');
     }
   };
 
@@ -148,36 +169,40 @@ const AdminMembers = () => {
                 ) : (
                   filteredMembers.map((member) => {
                     const mem = member.currentMembership;
+                    const val = member.membershipValidity || getValidity(mem);
                     return (
                       <motion.tr key={member._id} className="hover:bg-white/5 transition-colors">
-                        <td className="px-6 py-4">
+                        <td className="px-4 sm:px-6 py-4">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-neon-pink flex items-center justify-center text-white font-bold shrink-0">
                               {member.name?.charAt(0).toUpperCase()}
                             </div>
                             <div>
                               <p className="text-white font-medium">{member.name}</p>
-                              <p className="text-gray-500 text-xs">Joined {new Date(member.createdAt).toLocaleDateString()}</p>
+                              <p className="text-gray-500 text-xs">Joined {new Date(member.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-4 sm:px-6 py-4">
                           <p className="text-gray-300 text-sm">{member.email}</p>
                           <p className="text-gray-500 text-xs">{member.phone}</p>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-4 sm:px-6 py-4">
                           {mem ? (
                             <div>
-                              <p className="text-white text-sm">{mem.subscription?.name}</p>
+                              <p className="text-white text-sm">{mem.subscription?.name || 'Membership'}</p>
                               <p className="text-gray-500 text-xs">
-                                {new Date(mem.endDate).toLocaleDateString()}
+                                Start {new Date(mem.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                              </p>
+                              <p className="text-gray-500 text-xs">
+                                Expires {new Date(mem.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                               </p>
                             </div>
                           ) : (
                             <span className="text-gray-500 text-sm">No plan</span>
                           )}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-4 sm:px-6 py-4">
                           {mem ? (
                             <div className="text-sm">
                               <p className="text-white">₹{mem.amountPaid} / ₹{mem.totalAmount}</p>
@@ -189,14 +214,19 @@ const AdminMembers = () => {
                             <span className="text-gray-500 text-sm">-</span>
                           )}
                         </td>
-                        <td className="px-6 py-4">
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                            member.currentMembership?.status === 'active'
-                              ? 'bg-neon-green/20 text-neon-green'
-                              : 'bg-gray-500/20 text-gray-400'
+                        <td className="px-4 sm:px-6 py-4">
+                          <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
+                            val?.status === 'active' ? 'bg-neon-green/20 text-neon-green' :
+                            val?.status === 'expiring' ? 'bg-amber-500/15 text-amber-600' : 'bg-red-500/15 text-red-400'
                           }`}>
-                            {member.currentMembership?.status || 'INACTIVE'}
+                            {val?.emoji} {val?.label || 'NO MEMBERSHIP'}
                           </span>
+                          {val && val.daysRemaining < 0 && (
+                            <p className="text-red-400 text-xs mt-1">Expired {Math.abs(val.daysRemaining)}d ago</p>
+                          )}
+                          {val && val.daysRemaining >= 0 && val.status !== 'active' && (
+                            <p className="text-amber-600 text-xs mt-1">{val.daysRemaining} day{val.daysRemaining !== 1 ? 's' : ''} left</p>
+                          )}
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex justify-end gap-2">
@@ -208,7 +238,17 @@ const AdminMembers = () => {
                               <FaMoneyBillWave />
                             </button>
                             <button
-                              onClick={() => setShowEditModal(member)}
+                              onClick={() => setShowEditModal({
+                                ...member,
+                                editMembership: member.currentMembership
+                                  ? {
+                                      membershipId: member.currentMembership._id,
+                                      subscriptionId: member.currentMembership.subscription?._id || '',
+                                      startDate: toDateInput(member.currentMembership.startDate),
+                                      endDate: toDateInput(member.currentMembership.endDate)
+                                    }
+                                  : { membershipId: '', subscriptionId: '', startDate: '', endDate: '' }
+                              })}
                               title="Edit"
                               className="p-2 rounded-lg hover:bg-primary-600/20 text-primary-400 transition-colors"
                             >
@@ -293,6 +333,56 @@ const AdminMembers = () => {
               <div>
                 <label className={modalLabel}>Address</label>
                 <input type="text" className={modalInputs} value={showEditModal.address || ''} onChange={(e) => setShowEditModal({...showEditModal, address: e.target.value})} />
+              </div>
+              <div className="border-t border-slate-100 pt-4 mt-1">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">
+                  Membership Details {showEditModal.editMembership?.membershipId ? '' : '(no plan assigned yet)'}
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="col-span-2">
+                    <label className={modalLabel}>Membership Type (Plan)</label>
+                    <select
+                      className={modalInputs}
+                      value={showEditModal.editMembership?.subscriptionId || ''}
+                      onChange={(e) => setShowEditModal({
+                        ...showEditModal,
+                        editMembership: { ...showEditModal.editMembership, subscriptionId: e.target.value }
+                      })}
+                    >
+                      <option value="">Keep current plan...</option>
+                      {subscriptions.map(s => (
+                        <option key={s._id} value={s._id}>{s.name} - ₹{s.price}/{s.duration}{s.durationUnit}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className={modalLabel}>Start Date</label>
+                    <input
+                      type="date"
+                      className={modalInputs}
+                      value={showEditModal.editMembership?.startDate || ''}
+                      onChange={(e) => setShowEditModal({
+                        ...showEditModal,
+                        editMembership: { ...showEditModal.editMembership, startDate: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <div>
+                    <label className={modalLabel}>Expiry Date</label>
+                    <input
+                      type="date"
+                      className={modalInputs}
+                      value={showEditModal.editMembership?.endDate || ''}
+                      onChange={(e) => setShowEditModal({
+                        ...showEditModal,
+                        editMembership: { ...showEditModal.editMembership, endDate: e.target.value }
+                      })}
+                    />
+                  </div>
+                  <p className="col-span-2 text-xs text-slate-400">
+                    Changing the plan but leaving expiry empty recalculates it from the start date.
+                  </p>
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <button type="button" onClick={() => setShowEditModal(null)} className="py-2.5 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors font-medium">Cancel</button>

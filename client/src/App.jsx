@@ -16,6 +16,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
+import Calendar from './pages/Calendar';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminMembers from './pages/admin/AdminMembers';
 import AdminSubscriptions from './pages/admin/AdminSubscriptions';
@@ -23,6 +24,7 @@ import AdminProducts from './pages/admin/AdminProducts';
 import AdminBanners from './pages/admin/AdminBanners';
 import AdminPayments from './pages/admin/AdminPayments';
 import AdminTransactions from './pages/admin/AdminTransactions';
+import AdminReviews from './pages/admin/AdminReviews';
 import AdminProtected from './components/AdminProtected';
 
 const PublicLayout = () => (
@@ -63,6 +65,7 @@ const PublicLayout = () => (
             </ProtectedRoute>
           }
         />
+        <Route path="/calendar" element={<Calendar />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </main>
@@ -82,6 +85,7 @@ const AdminLayout = () => (
         <Route path="banners" element={<AdminBanners />} />
         <Route path="payments" element={<AdminPayments />} />
         <Route path="transactions" element={<AdminTransactions />} />
+        <Route path="reviews" element={<AdminReviews />} />
         <Route path="*" element={<AdminDashboard />} />
       </Routes>
     </main>
