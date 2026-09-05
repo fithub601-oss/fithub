@@ -116,18 +116,18 @@ const Register = () => {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md px-4"
       >
-        <div className="bg-dark-800 rounded-2xl p-8 border border-white/5">
+        <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-card">
           <div className="flex justify-center mb-6">
             <FITHUBLogo size={70} theme="light" />
           </div>
-          <h1 className="font-display text-3xl text-white text-center mb-1">JOIN FITHUB</h1>
-          <p className="text-gray-400 text-center text-sm mb-8">Create your account and start your journey</p>
+          <h1 className="font-display text-3xl text-slate-900 text-center mb-1">JOIN FITHUB</h1>
+          <p className="text-slate-500 text-center text-sm mb-8">Create your account and start your journey</p>
 
           {/* Step indicator */}
           <div className="flex items-center justify-center gap-2 mb-8">
-            <div className={`w-3 h-3 rounded-full ${step === 1 ? 'bg-primary-500' : 'bg-neon-green'}`}></div>
-            <div className="w-12 h-0.5 bg-white/20"></div>
-            <div className={`w-3 h-3 rounded-full ${step === 2 ? 'bg-primary-500' : 'bg-white/20'}`}></div>
+            <div className={`w-3 h-3 rounded-full ${step === 1 ? 'bg-primary-600' : 'bg-emerald-500'}`}></div>
+            <div className="w-12 h-0.5 bg-slate-200"></div>
+            <div className={`w-3 h-3 rounded-full ${step === 2 ? 'bg-primary-600' : 'bg-slate-200'}`}></div>
           </div>
 
           {step === 1 ? (

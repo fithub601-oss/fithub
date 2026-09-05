@@ -2,21 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @layer base {
   body {
     @apply bg-slate-50 text-slate-800 antialiased;
-    font-family: 'Poppins', system-ui, sans-serif;
+    font-family: 'Outfit', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
 .font-display {
-  font-family: 'Bebas Neue', system-ui, sans-serif;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  letter-spacing: -0.02em;
 }
 
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -24,12 +28,20 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #6366f1;
-  border-radius: 4px;
+  background: linear-gradient(180deg, #818cf8, #6366f1);
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #4f46e5;
+}
+
+::-moz-selection {
+  background: rgba(99,102,241,0.22);
+}
+
+::selection {
+  background: rgba(99,102,241,0.22);
 }
 
 .line-clamp-2 {
@@ -42,6 +54,85 @@
 .fithub-logo:hover {
   transform: scale(1.06);
   box-shadow: 0 0 22px rgba(99,102,241,0.55);
+}
+
+/* ------------------------------------------------------------------ */
+/* Modern input + focus rings (site-wide)                              */
+/* ------------------------------------------------------------------ */
+input, textarea, select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.15);
+}
+input::placeholder, textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* ------------------------------------------------------------------ */
+/* Card depth — white cards get a soft modern shadow                   */
+/* ------------------------------------------------------------------ */
+.bg-dark-800 {
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 10px 30px -14px rgba(15,23,42,0.12);
+}
+
+/* ------------------------------------------------------------------ */
+/* Gradient buttons — glow + hover lift                                */
+/* ------------------------------------------------------------------ */
+.bg-gradient-to-r.text-white,
+.bg-gradient-to-b.text-white,
+.bg-gradient-to-br.text-white,
+.bg-gradient-to-tr.text-white {
+  box-shadow: 0 4px 14px -2px rgba(99,102,241,0.4), 0 1px 2px rgba(15,23,42,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+}
+.bg-gradient-to-r.text-white:hover,
+.bg-gradient-to-b.text-white:hover,
+.bg-gradient-to-br.text-white:hover,
+.bg-gradient-to-tr.text-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px -4px rgba(99,102,241,0.5), 0 2px 4px rgba(15,23,42,0.06);
+}
+.bg-gradient-to-r.text-white:active,
+.bg-gradient-to-b.text-white:active,
+.bg-gradient-to-br.text-white:active,
+.bg-gradient-to-tr.text-white:active {
+  transform: translateY(0);
+}
+
+/* ------------------------------------------------------------------ */
+/* Chips / overline labels                                             */
+/* ------------------------------------------------------------------ */
+.chip {
+  @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold;
+}
+.kicker {
+  @apply inline-block text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-2;
+}
+
+/* ------------------------------------------------------------------ */
+/* Modal overlay blur                                                  */
+/* ------------------------------------------------------------------ */
+.bg-black\/70 {
+  background-color: rgba(2,6,23,0.55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.bg-black\/90 {
+  background-color: rgba(2,6,23,0.72);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* ------------------------------------------------------------------ */
+/* Mobile spacing for display headlines                                */
+/* ------------------------------------------------------------------ */
+@media (max-width: 640px) {
+  .font-display {
+    letter-spacing: -0.01em;
+  }
 }
 
 /* ------------------------------------------------------------------ */

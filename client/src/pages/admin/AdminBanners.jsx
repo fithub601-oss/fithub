@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../../api';
+import Modal from '../../components/Modal';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 
 const AdminBanners = () => {
@@ -85,8 +86,8 @@ const AdminBanners = () => {
     });
   };
 
-  const modalInputs = 'w-full px-3 py-2 bg-dark-900 border border-white/10 rounded-lg text-white text-sm focus:border-primary-500 focus:outline-none';
-  const modalLabel = 'block text-sm font-medium text-gray-300 mb-1.5';
+  const modalInputs = 'w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm placeholder:text-slate-400';
+  const modalLabel = 'block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5';
 
   return (
     <div className="min-h-screen pt-16 bg-dark-900">
@@ -166,14 +167,15 @@ const AdminBanners = () => {
       </div>
 
       {/* Create/Edit Modal */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-dark-800 rounded-2xl p-6 max-w-lg w-full border border-white/10 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-white font-bold text-xl">{editing ? 'Edit Banner' : 'Create Banner'}</h2>
-              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-white text-2xl">&times;</button>
-            </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
+      <Modal
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        title={editing ? 'Edit Banner' : 'Create Banner'}
+        subtitle={editing ? 'Update the promotional banner' : 'Add a new promotional banner'}
+        icon={<FaPlus />}
+        size="lg"
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className={modalLabel}>Banner Title</label>
                 <input type="text" required className={modalInputs} value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} placeholder="e.g. Summer Special Discount!" />
@@ -214,15 +216,13 @@ const AdminBanners = () => {
                 </div>
               </div>
               <div className="flex gap-3 pt-2">
-                <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2.5 bg-white/5 text-white rounded-full hover:bg-white/10">Cancel</button>
+                <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2.5 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors font-medium">Cancel</button>
                 <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-neon-yellow to-yellow-500 text-slate-900 font-semibold rounded-full">
                   {editing ? 'Update Banner' : 'Create Banner'}
                 </button>
               </div>
             </form>
-          </motion.div>
-        </div>
-      )}
+      </Modal>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../../api';
+import Modal from '../../components/Modal';
 import { FaSearch, FaEdit, FaTrash, FaPlus, FaUserPlus, FaMoneyBillWave } from 'react-icons/fa';
 
 const AdminMembers = () => {
@@ -92,8 +93,8 @@ const AdminMembers = () => {
     }
   };
 
-  const modalInputs = 'w-full px-3 py-2 bg-dark-900 border border-white/10 rounded-lg text-white text-sm focus:border-primary-500 focus:outline-none';
-  const modalLabel = 'block text-sm font-medium text-gray-300 mb-1.5';
+  const modalInputs = 'w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm placeholder:text-slate-400';
+  const modalLabel = 'block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5';
 
   return (
     <div className="min-h-screen pt-16 bg-dark-900">
@@ -233,14 +234,14 @@ const AdminMembers = () => {
       </div>
 
       {/* Add Member Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-dark-800 rounded-2xl p-6 max-w-md w-full border border-white/10">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-white font-bold text-xl">Add New Member</h2>
-              <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-white text-2xl">&times;</button>
-            </div>
-            <form onSubmit={handleAddMember} className="space-y-4">
+      <Modal
+        open={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        title="Add New Member"
+        subtitle="Create a member account in one step"
+        icon={<FaUserPlus />}
+      >
+        <form onSubmit={handleAddMember} className="space-y-4">
               <div>
                 <label className={modalLabel}>Full Name</label>
                 <input type="text" required className={modalInputs} value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} placeholder="Member name" />
@@ -260,23 +261,21 @@ const AdminMembers = () => {
                 </div>
               </div>
               <div className="flex gap-3 pt-2">
-                <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 py-2.5 bg-white/5 text-white rounded-full hover:bg-white/10">Cancel</button>
+                <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 py-2.5 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors font-medium">Cancel</button>
                 <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-semibold rounded-full">Create Member</button>
               </div>
             </form>
-          </motion.div>
-        </div>
-      )}
+      </Modal>
 
       {/* Edit Member Modal */}
-      {showEditModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-dark-800 rounded-2xl p-6 max-w-md w-full border border-white/10">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-white font-bold text-xl">Edit Member</h2>
-              <button onClick={() => setShowEditModal(null)} className="text-gray-400 hover:text-white text-2xl">&times;</button>
-            </div>
-            <form onSubmit={handleEditMember} className="space-y-4">
+      <Modal
+        open={!!showEditModal}
+        onClose={() => setShowEditModal(null)}
+        title="Edit Member"
+        subtitle="Update account details"
+        icon={<FaEdit />}
+      >
+        <form onSubmit={handleEditMember} className="space-y-4">
               <div>
                 <label className={modalLabel}>Full Name</label>
                 <input type="text" className={modalInputs} value={showEditModal.name || ''} onChange={(e) => setShowEditModal({...showEditModal, name: e.target.value})} />
@@ -296,26 +295,22 @@ const AdminMembers = () => {
                 <input type="text" className={modalInputs} value={showEditModal.address || ''} onChange={(e) => setShowEditModal({...showEditModal, address: e.target.value})} />
               </div>
               <div className="grid grid-cols-2 gap-3 pt-2">
-                <button type="button" onClick={() => setShowEditModal(null)} className="py-2.5 bg-white/5 text-white rounded-full hover:bg-white/10">Cancel</button>
+                <button type="button" onClick={() => setShowEditModal(null)} className="py-2.5 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors font-medium">Cancel</button>
                 <button type="submit" className="py-2.5 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-semibold rounded-full">Save Changes</button>
               </div>
             </form>
-          </motion.div>
-        </div>
-      )}
+      </Modal>
 
       {/* Assign Membership Modal */}
-      {showMembershipModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-dark-800 rounded-2xl p-6 max-w-md w-full border border-white/10">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-white font-bold text-xl">Assign Membership</h2>
-              <button onClick={() => setShowMembershipModal(null)} className="text-gray-400 hover:text-white text-2xl">&times;</button>
-            </div>
-            <p className="text-gray-400 text-sm mb-6">
-              Assigning plan to <span className="text-white font-semibold">{showMembershipModal.name}</span>
-            </p>
-            <form onSubmit={handleAssignMembership} className="space-y-4">
+      <Modal
+        open={!!showMembershipModal}
+        onClose={() => setShowMembershipModal(null)}
+        title="Assign Membership"
+        subtitle={`Assign a plan to ${showMembershipModal?.name || 'member'}`}
+        icon={<FaMoneyBillWave />}
+        iconBg="bg-gradient-to-br from-neon-green to-emerald-600"
+      >
+        <form onSubmit={handleAssignMembership} className="space-y-4">
               <div>
                 <label className={modalLabel}>Subscription Plan</label>
                 <select required className={modalInputs} value={membershipForm.subscriptionId} onChange={(e) => setMembershipForm({...membershipForm, subscriptionId: e.target.value})}>
@@ -352,13 +347,11 @@ const AdminMembers = () => {
                 <input type="text" className={modalInputs} value={membershipForm.notes} onChange={(e) => setMembershipForm({...membershipForm, notes: e.target.value})} placeholder="Optional notes" />
               </div>
               <div className="flex gap-3 pt-2">
-                <button type="button" onClick={() => setShowMembershipModal(null)} className="flex-1 py-2.5 bg-white/5 text-white rounded-full hover:bg-white/10">Cancel</button>
-                <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-neon-green to-green-600 text-slate-900 font-semibold rounded-full">Assign Plan</button>
+                <button type="button" onClick={() => setShowMembershipModal(null)} className="flex-1 py-2.5 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors font-medium">Cancel</button>
+                <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-neon-green to-emerald-600 text-white font-semibold rounded-full">Assign Plan</button>
               </div>
             </form>
-          </motion.div>
-        </div>
-      )}
+      </Modal>
     </div>
   );
 };

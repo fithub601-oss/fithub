@@ -182,84 +182,86 @@ const Cart = () => {
             {/* Items + Address */}
             <div className="lg:col-span-2 space-y-4">
               {/* Delivery Address */}
-              <div className="bg-dark-800 rounded-2xl p-6 border border-white/5">
-                <h2 className="text-white font-bold text-xl mb-4">Delivery Address</h2>
+              <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-soft">
+                <h2 className="font-display text-xl text-slate-900 mb-4">
+                  <span className="text-primary-600 mr-2">📍</span>Delivery Address
+                </h2>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-gray-400 text-xs mb-1">Full Name *</label>
+                    <label className="block text-slate-500 text-xs mb-1">Full Name *</label>
                     <input
                       type="text"
                       name="fullName"
                       value={address.fullName}
                       onChange={handleAddressChange}
                       placeholder="Your name"
-                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-xs mb-1">Phone *</label>
+                    <label className="block text-slate-500 text-xs mb-1">Phone *</label>
                     <input
                       type="tel"
                       name="phone"
                       value={address.phone}
                       onChange={handleAddressChange}
                       placeholder="10-digit mobile"
-                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm outline-none"
                     />
                   </div>
                   <div className="sm:col-span-2">
-                    <label className="block text-gray-400 text-xs mb-1">Address (House, Street, Area) *</label>
+                    <label className="block text-slate-500 text-xs mb-1">Address (House, Street, Area) *</label>
                     <input
                       type="text"
                       name="address"
                       value={address.address}
                       onChange={handleAddressChange}
                       placeholder="House no, street, area"
-                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-xs mb-1">City *</label>
+                    <label className="block text-slate-500 text-xs mb-1">City *</label>
                     <input
                       type="text"
                       name="city"
                       value={address.city}
                       onChange={handleAddressChange}
                       placeholder="City"
-                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-xs mb-1">State *</label>
+                    <label className="block text-slate-500 text-xs mb-1">State *</label>
                     <input
                       type="text"
                       name="state"
                       value={address.state}
                       onChange={handleAddressChange}
                       placeholder="State"
-                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-xs mb-1">Pincode *</label>
+                    <label className="block text-slate-500 text-xs mb-1">Pincode *</label>
                     <input
                       type="text"
                       name="pincode"
                       value={address.pincode}
                       onChange={handleAddressChange}
                       placeholder="6-digit pincode"
-                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-xs mb-1">Landmark (optional)</label>
+                    <label className="block text-slate-500 text-xs mb-1">Landmark (optional)</label>
                     <input
                       type="text"
                       name="landmark"
                       value={address.landmark}
                       onChange={handleAddressChange}
                       placeholder="Near..."
-                      className="w-full px-4 py-2.5 bg-dark-900 border border-white/10 rounded-lg text-white text-sm outline-none focus:border-primary-500"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm outline-none"
                     />
                   </div>
                 </div>
@@ -269,45 +271,45 @@ const Cart = () => {
                 <motion.div
                   key={item._id}
                   layout
-                  className="bg-dark-800 rounded-2xl p-4 border border-white/5 flex items-center gap-4"
+                  className="bg-white rounded-3xl p-4 border border-slate-100 shadow-soft flex items-center gap-4"
                 >
-                  <div className="w-24 h-24 bg-gradient-to-br from-dark-700 to-dark-800 rounded-xl overflow-hidden flex items-center justify-center shrink-0 border border-white/5">
+                  <div className="w-24 h-24 rounded-2xl overflow-hidden flex items-center justify-center shrink-0 bg-slate-50 aspect-square">
                     {item.image ? (
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                      <img src={item.image} alt={item.name} className="w-full h-full object-cover object-center" />
                     ) : (
-                      <FaShoppingBag className="text-3xl text-gray-600" />
+                      <FaShoppingBag className="text-3xl text-slate-300" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-semibold truncate">{item.name}</h3>
-                    <p className="text-neon-green font-bold mt-1">₹{item.price}</p>
+                    <h3 className="text-slate-900 font-semibold truncate">{item.name}</h3>
+                    <p className="text-emerald-600 font-bold mt-1">₹{item.price}</p>
                     <div className="flex items-center gap-3 mt-3">
-                      <div className="flex items-center bg-white/5 rounded-full">
+                      <div className="flex items-center bg-slate-100 rounded-full">
                         <button
                           onClick={() => updateQty(item._id, item.qty - 1)}
-                          className="w-8 h-8 text-white hover:bg-white/10 rounded-full"
+                          className="w-8 h-8 text-slate-700 hover:bg-slate-200 rounded-full transition-colors"
                         >
                           −
                         </button>
-                        <span className="w-8 text-center text-white font-medium">{item.qty}</span>
+                        <span className="w-8 text-center text-slate-800 font-medium">{item.qty}</span>
                         <button
                           onClick={() => updateQty(item._id, item.qty + 1)}
-                          className="w-8 h-8 text-white hover:bg-white/10 rounded-full"
+                          className="w-8 h-8 text-slate-700 hover:bg-slate-200 rounded-full transition-colors"
                         >
                           +
                         </button>
                       </div>
-                      <span className="text-gray-500 text-xs">Stock: {item.stockQuantity}</span>
+                      <span className="text-slate-400 text-xs">Stock: {item.stockQuantity}</span>
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-white font-bold">₹{(item.price * item.qty).toLocaleString('en-IN')}</p>
+                    <p className="text-slate-900 font-bold">₹{(item.price * item.qty).toLocaleString('en-IN')}</p>
                     <button
                       onClick={() => {
                         removeFromCart(item._id);
                         toast.success(`${item.name} removed`);
                       }}
-                      className="mt-2 text-red-400 hover:text-red-300 text-sm"
+                      className="mt-2 text-red-500 hover:text-red-400 text-sm"
                     >
                       <FaTrash className="inline mr-1" /> Remove
                     </button>
@@ -317,7 +319,7 @@ const Cart = () => {
               <div className="flex justify-end">
                 <button
                   onClick={clearCart}
-                  className="px-4 py-2 text-red-400 text-sm font-medium hover:text-red-300"
+                  className="px-4 py-2 text-red-500 text-sm font-medium hover:text-red-400"
                 >
                   Clear Cart
                 </button>
@@ -325,34 +327,34 @@ const Cart = () => {
             </div>
 
             {/* Summary */}
-            <div className="bg-dark-800 rounded-2xl p-6 border border-white/5 h-fit sticky top-24">
-              <h2 className="text-white font-bold text-xl mb-4">Order Summary</h2>
+            <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-card h-fit sticky top-24">
+              <h2 className="font-display text-xl text-slate-900 mb-4">Order Summary</h2>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-400">Items</span>
-                  <span className="text-white">{cart.reduce((s, i) => s + i.qty, 0)}</span>
+                  <span className="text-slate-500">Items</span>
+                  <span className="text-slate-900">{cart.reduce((s, i) => s + i.qty, 0)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400">Subtotal</span>
-                  <span className="text-white font-medium">₹{cartTotal.toLocaleString('en-IN')}</span>
+                  <span className="text-slate-500">Subtotal</span>
+                  <span className="text-slate-900 font-medium">₹{cartTotal.toLocaleString('en-IN')}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400">Shipping</span>
-                  <span className="text-neon-green">Free</span>
+                  <span className="text-slate-500">Shipping</span>
+                  <span className="text-emerald-600">Free</span>
                 </div>
-                <div className="border-t border-white/10 pt-3 flex justify-between">
-                  <span className="text-white font-bold">Total</span>
-                  <span className="text-neon-green font-bold text-xl">₹{cartTotal.toLocaleString('en-IN')}</span>
+                <div className="border-t border-slate-100 pt-3 flex justify-between">
+                  <span className="text-slate-900 font-bold">Total</span>
+                  <span className="text-emerald-600 font-bold text-xl">₹{cartTotal.toLocaleString('en-IN')}</span>
                 </div>
               </div>
               <button
                 onClick={handleCheckout}
                 disabled={checkoutLoading}
-                className="w-full mt-6 py-3 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-bold rounded-full hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="w-full mt-6 py-3 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-bold rounded-full hover:opacity-90 transition-opacity disabled:opacity-50 shadow-glow"
               >
                 {checkoutLoading ? 'Processing...' : 'Proceed to Checkout'}
               </button>
-              <p className="text-gray-500 text-xs text-center mt-3">Free shipping on all orders</p>
+              <p className="text-slate-400 text-xs text-center mt-3">Free shipping on all orders</p>
             </div>
           </div>
         )}

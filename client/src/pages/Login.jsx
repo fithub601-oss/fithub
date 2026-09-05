@@ -78,18 +78,18 @@ const Login = () => {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md px-4"
       >
-        <div className="bg-dark-800 rounded-2xl p-8 border border-white/5">
+        <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-card">
           <div className="flex justify-center mb-6">
             <FITHUBLogo size={70} theme="light" />
           </div>
-          <h1 className="font-display text-3xl text-white text-center mb-1">WELCOME BACK!</h1>
-          <p className="text-gray-400 text-center text-sm mb-8">Login to your FITHUB account</p>
+          <h1 className="font-display text-3xl text-slate-900 text-center mb-1">WELCOME BACK!</h1>
+          <p className="text-slate-500 text-center text-sm mb-8">Login to your FITHUB account</p>
 
-          <div className="flex bg-dark-900 rounded-full p-1 mb-8">
+          <div className="flex bg-slate-100 rounded-full p-1 mb-8">
             <button
               onClick={() => { setMethod('password'); setOtpSent(false); }}
               className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
-                method === 'password' ? 'bg-gradient-to-r from-primary-600 to-neon-pink text-white' : 'text-gray-400'
+                method === 'password' ? 'bg-white text-primary-600 shadow-soft' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               Email & Password
@@ -97,7 +97,7 @@ const Login = () => {
             <button
               onClick={() => { setMethod('phone'); setOtpSent(false); }}
               className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
-                method === 'phone' ? 'bg-gradient-to-r from-primary-600 to-neon-pink text-white' : 'text-gray-400'
+                method === 'phone' ? 'bg-white text-primary-600 shadow-soft' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               Phone & OTP

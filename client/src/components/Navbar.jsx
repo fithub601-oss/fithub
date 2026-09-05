@@ -37,15 +37,15 @@ const Navbar = () => {
             </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-1.5 bg-slate-100/80 rounded-full p-1.5">
             {links.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
-                className={`text-sm font-medium transition-colors ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   location.pathname === link.to
-                    ? 'text-primary-600'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-primary-600 shadow-soft'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
                 }`}
               >
                 {link.label}

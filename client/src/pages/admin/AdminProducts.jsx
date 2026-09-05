@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../../api';
+import Modal from '../../components/Modal';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 
 const AdminProducts = () => {
@@ -93,8 +94,8 @@ const AdminProducts = () => {
     }
   };
 
-  const modalInputs = 'w-full px-3 py-2 bg-dark-900 border border-white/10 rounded-lg text-white text-sm focus:border-primary-500 focus:outline-none';
-  const modalLabel = 'block text-sm font-medium text-gray-300 mb-1.5';
+  const modalInputs = 'w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm placeholder:text-slate-400';
+  const modalLabel = 'block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5';
 
   const catEmoji = { supplement: '💊', equipment: '🏋️', apparel: '👕', accessory: '🎒', other: '📦' };
 
@@ -174,22 +175,26 @@ const AdminProducts = () => {
       {/* Image Preview Modal */}
       {imageModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4" onClick={() => setImageModal(null)}>
-          <div className="max-w-3xl w-full">
-            <img src={imageModal.image} alt={imageModal.name} className="w-full rounded-2xl" />
-            <p className="text-center text-white mt-4 font-semibold">{imageModal.name}</p>
+          <div className="max-w-3xl w-full relative">
+            <img src={imageModal.image} alt={imageModal.name} className="w-full rounded-3xl shadow-2xl" />
+            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-5 py-2 bg-white rounded-full shadow-lift font-medium text-slate-900 whitespace-nowrap">
+              {imageModal.name}
+            </div>
           </div>
         </div>
       )}
 
       {/* Create/Edit Modal */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-dark-800 rounded-2xl p-6 max-w-lg w-full border border-white/10">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-white font-bold text-xl">{editing ? 'Edit Product' : 'Add Product'}</h2>
-              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-white text-2xl">&times;</button>
-            </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
+      <Modal
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        title={editing ? 'Edit Product' : 'Add Product'}
+        subtitle={editing ? 'Update product details' : 'List a new store item'}
+        icon={<FaPlus />}
+        iconBg="bg-gradient-to-br from-neon-pink to-pink-600"
+        size="lg"
+      >
+        <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div className="col-span-2">
                   <label className={modalLabel}>Product Name</label>
@@ -229,15 +234,13 @@ const AdminProducts = () => {
                 </div>
               </div>
               <div className="flex gap-3 pt-2">
-                <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2.5 bg-white/5 text-white rounded-full hover:bg-white/10">Cancel</button>
+                <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-2.5 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors font-medium">Cancel</button>
                 <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-neon-pink to-pink-600 text-white font-semibold rounded-full">
                   {editing ? 'Update Product' : 'Add Product'}
                 </button>
               </div>
             </form>
-          </motion.div>
-        </div>
-      )}
+      </Modal>
     </div>
   );
 };

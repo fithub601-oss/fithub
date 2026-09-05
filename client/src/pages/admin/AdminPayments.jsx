@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import api from '../../api';
+import Modal from '../../components/Modal';
 import { FaMoneyBillWave } from 'react-icons/fa';
 
 const AdminPayments = () => {
@@ -54,8 +55,8 @@ const AdminPayments = () => {
   const totalCollected = members.reduce((sum, m) => sum + (m.currentMembership?.amountPaid || 0), 0);
   const totalDue = members.reduce((sum, m) => sum + (m.currentMembership?.amountRemaining || 0), 0);
 
-  const modalInputs = 'w-full px-3 py-2 bg-dark-900 border border-white/10 rounded-lg text-white text-sm focus:border-primary-500 focus:outline-none';
-  const modalLabel = 'block text-sm font-medium text-gray-300 mb-1.5';
+  const modalInputs = 'w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm placeholder:text-slate-400';
+  const modalLabel = 'block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5';
 
   return (
     <div className="min-h-screen pt-16 bg-dark-900">
@@ -186,20 +187,26 @@ const AdminPayments = () => {
       </div>
 
       {/* Record Payment Modal */}
-      {showPaymentModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="bg-dark-800 rounded-2xl p-6 max-w-sm w-full border border-white/10">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-white font-bold text-xl">Record Payment</h2>
-              <button onClick={() => setShowPaymentModal(null)} className="text-gray-400 hover:text-white text-2xl">&times;</button>
-            </div>
-            <div className="bg-white/5 rounded-xl p-4 mb-6">
-              <p className="text-gray-400 text-sm">Plan: <span className="text-white">{showPaymentModal.subscription?.name}</span></p>
-              <p className="text-gray-400 text-sm">Total: <span className="text-white font-semibold">₹{showPaymentModal.totalAmount}</span></p>
-              <p className="text-gray-400 text-sm">Paid: <span className="text-neon-green font-semibold">₹{showPaymentModal.amountPaid}</span></p>
-              <p className="text-gray-400 text-sm">Remaining: <span className="text-neon-yellow font-semibold">₹{showPaymentModal.amountRemaining}</span></p>
-            </div>
-            <form onSubmit={handleRecordPayment} className="space-y-4">
+      <Modal
+        open={!!showPaymentModal}
+        onClose={() => setShowPaymentModal(null)}
+        title="Record Payment"
+        subtitle="Log an installment received"
+        icon={<FaMoneyBillWave />}
+        iconBg="bg-gradient-to-br from-neon-green to-emerald-600"
+        size="sm"
+      >
+        <div className="bg-gradient-to-br from-primary-50 to-slate-100 rounded-2xl p-4 mb-6 grid grid-cols-2 gap-2 text-sm">
+          <p className="text-slate-500">Plan</p>
+          <p className="text-slate-800 font-semibold text-right">{showPaymentModal?.subscription?.name}</p>
+          <p className="text-slate-500">Total</p>
+          <p className="text-slate-800 font-semibold text-right">₹{showPaymentModal?.totalAmount}</p>
+          <p className="text-slate-500">Already paid</p>
+          <p className="text-neon-green font-semibold text-right">₹{showPaymentModal?.amountPaid}</p>
+          <p className="text-slate-500">Remaining</p>
+          <p className="text-neon-yellow font-semibold text-right">₹{showPaymentModal?.amountRemaining}</p>
+        </div>
+        <form onSubmit={handleRecordPayment} className="space-y-4">
               <div>
                 <label className={modalLabel}>Amount to Record (₹)</label>
                 <input
@@ -223,13 +230,11 @@ const AdminPayments = () => {
                 </select>
               </div>
               <div className="flex gap-3 pt-2">
-                <button type="button" onClick={() => setShowPaymentModal(null)} className="flex-1 py-2.5 bg-white/5 text-white rounded-full hover:bg-white/10">Cancel</button>
-                <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-neon-green to-green-600 text-slate-900 font-semibold rounded-full">Record</button>
+                <button type="button" onClick={() => setShowPaymentModal(null)} className="flex-1 py-2.5 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors font-medium">Cancel</button>
+                <button type="submit" className="flex-1 py-2.5 bg-gradient-to-r from-neon-green to-emerald-600 text-white font-semibold rounded-full">Record</button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+      </Modal>
     </div>
   );
 };
