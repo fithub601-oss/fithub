@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
+import { FaShoppingCart, FaCheck } from 'react-icons/fa';
 import api from '../api';
+import { useCart } from '../context/CartContext';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState('all');
   const [loading, setLoading] = useState(true);
+  const [justAdded, setJustAdded] = useState(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     api.get('/products')
@@ -13,6 +18,13 @@ const Products = () => {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
+
+  const handleAddToCart = (product) => {
+    addToCart(product, 1);
+    setJustAdded(product._id);
+    toast.success(`${product.name} added to cart! 🛒`);
+    setTimeout(() => setJustAdded(null), 1200);
+  };
 
   const categories = ['all', 'supplement', 'equipment', 'apparel', 'accessory', 'other'];
   const filtered = category === 'all' ? products : products.filter(p => p.category === category);
@@ -85,9 +97,16 @@ const Products = () => {
                     </div>
                     <button
                       disabled={product.stockQuantity <= 0}
-                      className="w-full mt-4 py-2 bg-gradient-to-r from-primary-600 to-neon-pink text-white text-sm font-semibold rounded-full hover:opacity-90 transition-opacity disabled:opacity-40"
+                      onClick={() => handleAddToCart(product)}
+                      className="w-full mt-4 py-2 bg-gradient-to-r from-primary-600 to-neon-pink text-white text-sm font-semibold rounded-full hover:opacity-90 transition-opacity disabled:opacity-40 flex items-center justify-center gap-2"
                     >
-                      {product.stockQuantity > 0 ? 'Add to Cart' : 'Unavailable'}
+                      {product.stockQuantity <= 0 ? (
+                        'Unavailable'
+                      ) : justAdded === product._id ? (
+                        <><FaCheck /> Added!</>
+                      ) : (
+                        <><FaShoppingCart /> Add to Cart</>
+                      )}
                     </button>
                   </div>
                 </motion.div>

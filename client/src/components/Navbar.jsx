@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { FaShoppingCart } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import FITHUBLogo from './FITHUBLogo';
 
 const Navbar = () => {
   const { user, isAdmin, logout } = useAuth();
+  const { cartCount } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -51,6 +54,14 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
+            <Link to="/cart" className="relative text-gray-300 hover:text-white transition-colors" aria-label="Cart">
+              <FaShoppingCart className="text-xl" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-gradient-to-r from-primary-600 to-neon-pink text-white text-xs font-bold flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
             {user ? (
               <div className="relative">
                 <button
@@ -135,6 +146,15 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="pt-3 border-t border-white/10 flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <Link
+                to="/cart"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center gap-2 text-sm text-primary-400"
+              >
+                <FaShoppingCart /> Cart {cartCount > 0 && <span className="text-neon-pink font-bold">({cartCount})</span>}
+              </Link>
+            </div>
             {user ? (
               <>
                 <Link

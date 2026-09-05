@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Subscriptions from './pages/Subscriptions';
 import Checkout from './pages/Checkout';
 import Products from './pages/Products';
+import Cart from './pages/Cart';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
@@ -32,6 +33,7 @@ const PublicLayout = () => (
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/checkout/:id" element={<Checkout />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
