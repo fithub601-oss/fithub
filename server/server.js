@@ -1,5 +1,13 @@
 require('./dns-patch');
 require('dotenv').config();
+
+process.on('unhandledRejection', (reason) => {
+  console.error('UNHANDLED REJECTION:', reason);
+});
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION:', err.message);
+});
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');

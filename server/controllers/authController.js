@@ -308,35 +308,42 @@ const loginWithPhone = async (req, res) => {
 // @route   POST /api/auth/send-otp
 // @access  Public
 const sendOTP = async (req, res) => {
-  const { email, phone } = req.body;
+  try {
+    const { email, phone } = req.body;
 
-  if (!email) {
-    return res.status(400).json({ message: 'Email is required' });
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+
+    const query = { email };
+    if (phone) query.phone = phone;
+    const userExists = await User.findOne({ $or: [{ email }, phone ? { phone } : {}] });
+    if (userExists) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    const otp = generateOTP();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    await OTP.create({
+      email,
+      phone: phone || '',
+      otp,
+      purpose: 'register',
+      expiresAt
+    });
+
+    // Send the OTP via Gmail OAuth (works to any email from Render)
+    const emailSent = await sendEmailOTP(email, otp);
+    if (!emailSent) {
+      return res.status(500).json({ message: 'Failed to send OTP email. Try again.' });
+    }
+
+    res.json({ message: 'OTP sent successfully' });
+  } catch (error) {
+    console.error('sendOTP error:', error.message);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
-
-  const userExists = await User.findOne({ $or: [{ email }, { phone }] });
-  if (userExists) {
-    return res.status(400).json({ message: 'User already exists' });
-  }
-
-  const otp = generateOTP();
-  const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
-
-  await OTP.create({
-    email,
-    phone: phone || '',
-    otp,
-    purpose: 'register',
-    expiresAt
-  });
-
-  // Send the OTP via Brevo (works to any email from Render)
-  const emailSent = await sendEmailOTP(email, otp);
-  if (!emailSent) {
-    return res.status(500).json({ message: 'Failed to send OTP email. Try again.' });
-  }
-
-  res.json({ message: 'OTP sent successfully' });
 };
 
 // @desc    Verify OTP
