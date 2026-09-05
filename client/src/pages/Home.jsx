@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
+import Stickers from '../components/Stickers';
 
 const Home = () => {
   const { user } = useAuth();
@@ -41,12 +42,11 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* HERO SECTION */}
-      <section className="on-dark relative pt-16 overflow-hidden bg-slate-900">
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-950/60 via-slate-900 to-red-950/40"></div>
-        <div className="absolute inset-0 opacity-40" style={{
-          backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(249,115,22,0.35) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(239,68,68,0.35) 0%, transparent 50%)'
+      <section className="relative pt-16 overflow-hidden bg-gradient-to-br from-orange-50 via-white to-amber-50">
+        <div className="absolute inset-0 opacity-60" style={{
+          backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(249,115,22,0.18) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(239,68,68,0.15) 0%, transparent 50%)'
         }}></div>
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-orange-600/30 rounded-full blur-3xl"></div>
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-orange-300/20 rounded-full blur-3xl"></div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -57,45 +57,54 @@ const Home = () => {
             >
               {heroBanners.length > 0 && (
                 <div className="mb-5">
-                  <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur border border-white/20 text-white text-sm font-semibold rounded-full">
+                  <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-orange-200 text-orange-600 text-sm font-semibold rounded-full shadow-soft">
                     🔥 {heroBanners[0].title}
                   </span>
                 </div>
               )}
-              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-white leading-[1.05] mb-6">
-                TRAIN <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">BEAST</span><br />
-                MODE <span className="text-amber-400">ON</span>
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-slate-900 leading-[1.05] mb-6">
+                TRAIN <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">BEAST</span><br />
+                MODE <span className="text-amber-500">ON</span>
               </h1>
-              <p className="text-lg text-gray-300 mb-8 max-w-lg leading-relaxed">
+              <p className="text-lg text-slate-600 mb-8 max-w-lg leading-relaxed">
                 Join the FITHUB fam where gym vibes meet today's energy. From memberships
                 to merch — everything you need to level up, all in one place.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link
-                  to="/register"
-                  className="px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-full hover:opacity-90 transition-opacity text-lg shadow-glow"
-                >
-                  Get Started 💪
-                </Link>
+                {user ? (
+                  <Link
+                    to="/dashboard"
+                    className="px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-full hover:opacity-90 transition-opacity text-lg shadow-glow"
+                  >
+                    My Dashboard 💪
+                  </Link>
+                ) : (
+                  <Link
+                    to="/register"
+                    className="px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-full hover:opacity-90 transition-opacity text-lg shadow-glow"
+                  >
+                    Get Started 💪
+                  </Link>
+                )}
                 <Link
                   to="/subscriptions"
-                  className="px-8 py-3 bg-white/10 backdrop-blur text-white font-bold rounded-full hover:bg-white/20 transition-colors text-lg border border-white/20"
+                  className="px-8 py-3 bg-white text-slate-700 font-bold rounded-full hover:bg-slate-50 transition-colors text-lg border border-slate-200 shadow-soft"
                 >
                   View Plans
                 </Link>
               </div>
-              <div className="mt-10 flex items-center gap-6 flex-wrap">
-                <div className="px-5 py-3 bg-white/5 backdrop-blur border border-white/10 rounded-2xl">
-                  <p className="font-display text-3xl text-orange-400">500+</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Active Members</p>
+              <div className="mt-10 flex items-center gap-4 sm:gap-6 flex-wrap">
+                <div className="px-5 py-3 bg-white border border-slate-100 rounded-2xl shadow-soft">
+                  <p className="font-display text-3xl text-orange-500">500+</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Active Members</p>
                 </div>
-                <div className="px-5 py-3 bg-white/5 backdrop-blur border border-white/10 rounded-2xl">
-                  <p className="font-display text-3xl text-red-400">15+</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Expert Trainers</p>
+                <div className="px-5 py-3 bg-white border border-slate-100 rounded-2xl shadow-soft">
+                  <p className="font-display text-3xl text-red-500">15+</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Expert Trainers</p>
                 </div>
-                <div className="px-5 py-3 bg-white/5 backdrop-blur border border-white/10 rounded-2xl">
-                  <p className="font-display text-3xl text-amber-400">24/7</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Fitness Access</p>
+                <div className="px-5 py-3 bg-white border border-slate-100 rounded-2xl shadow-soft">
+                  <p className="font-display text-3xl text-amber-500">24/7</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Fitness Access</p>
                 </div>
               </div>
             </motion.div>
@@ -107,12 +116,12 @@ const Home = () => {
               className="flex justify-center"
             >
               <div className="relative w-full max-w-md">
-                <div className="w-72 h-72 rounded-full bg-gradient-to-br from-orange-500 to-red-500 opacity-25 blur-3xl absolute inset-0 m-auto"></div>
-                <div className="relative bg-white/5 backdrop-blur-xl border border-white/15 rounded-3xl p-6 shadow-2xl">
+                <div className="w-72 h-72 rounded-full bg-gradient-to-br from-orange-400 to-red-500 opacity-15 blur-3xl absolute inset-0 m-auto"></div>
+                <div className="relative bg-white backdrop-blur-xl border border-slate-100 rounded-3xl p-6 shadow-lift">
                   <div className="flex items-center justify-between mb-5">
                     <div>
-                      <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Today's Plan</p>
-                      <p className="font-display text-xl text-white">BEAST SESSION 💥</p>
+                      <p className="text-xs text-slate-400 uppercase tracking-widest mb-1">Today's Plan</p>
+                      <p className="font-display text-xl text-slate-900">BEAST SESSION 💥</p>
                     </div>
                     <span className="px-3 py-1.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold rounded-full">
                       GOAL: -5 kg
@@ -120,29 +129,34 @@ const Home = () => {
                   </div>
                   <div className="space-y-3">
                     {workouts.map((w, i) => (
-                      <div key={i} className="flex items-center gap-3 bg-white/5 rounded-2xl px-4 py-3 border border-white/10">
-                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${w.done ? 'bg-gradient-to-r from-orange-400 to-red-400 text-white' : 'bg-white/10 text-gray-300'}`}>
+                      <div key={i} className="flex items-center gap-3 bg-slate-50 rounded-2xl px-4 py-3 border border-slate-100">
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${w.done ? 'bg-gradient-to-r from-orange-400 to-red-400 text-white' : 'bg-slate-200 text-slate-600'}`}>
                           {w.done ? '✓' : i + 1}
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-white">{w.name}</p>
-                          <p className="text-xs text-gray-400">{w.info}</p>
+                          <p className="text-sm font-medium text-slate-800">{w.name}</p>
+                          <p className="text-xs text-slate-400">{w.info}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                   <div className="mt-5">
-                    <div className="flex justify-between text-xs text-gray-400 mb-1.5">
+                    <div className="flex justify-between text-xs text-slate-400 mb-1.5">
                       <span>Progress</span>
-                      <span className="text-amber-300 font-semibold">20%</span>
+                      <span className="text-amber-500 font-semibold">20%</span>
                     </div>
-                    <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                    <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
                       <div className="h-full w-1/5 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"></div>
                     </div>
                   </div>
                 </div>
               </div>
             </motion.div>
+          </div>
+
+          {/* Stickers */}
+          <div className="mt-14 flex justify-center gap-3">
+            <Stickers count={6} />
           </div>
         </div>
       </section>
@@ -326,9 +340,9 @@ const Home = () => {
       )}
 
       {/* CTA */}
-      <section className="on-dark bg-gradient-to-r from-red-600 via-orange-600 to-orange-500 py-20 relative overflow-hidden">
+      <section className="bg-gradient-to-r from-orange-500 via-red-500 to-orange-400 py-20 relative overflow-hidden">
         <div className="absolute inset-0 opacity-30" style={{
-          backgroundImage: 'radial-gradient(circle at 85% 20%, rgba(254,215,170,0.5) 0%, transparent 45%), radial-gradient(circle at 10% 80%, rgba(239,68,68,0.5) 0%, transparent 45%)'
+          backgroundImage: 'radial-gradient(circle at 85% 20%, rgba(255,237,213,0.5) 0%, transparent 45%), radial-gradient(circle at 10% 80%, rgba(239,68,68,0.5) 0%, transparent 45%)'
         }}></div>
         <div className="relative max-w-4xl mx-auto px-4 text-center">
           <motion.h2
@@ -339,15 +353,24 @@ const Home = () => {
           >
             READY TO <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-200">MAKE CHANGES</span>?
           </motion.h2>
-          <p className="text-gray-200 mb-8 text-lg">
-            Your first step to a stronger you is one click away.
+          <p className="text-orange-50 mb-8 text-lg">
+            {user ? 'Your transformation is already underway — keep going!' : 'Your first step to a stronger you is one click away.'}
           </p>
-          <Link
-            to="/register"
-            className="inline-block px-12 py-4 bg-white text-orange-600 font-bold text-lg rounded-full hover:opacity-90 transition-opacity shadow-glow"
-          >
-            Join FITHUB Now 🔥
-          </Link>
+          {user ? (
+            <Link
+              to="/products"
+              className="inline-block px-12 py-4 bg-white text-orange-600 font-bold text-lg rounded-full hover:opacity-90 transition-opacity shadow-glow"
+            >
+              Shop Gym Gear 🛒
+            </Link>
+          ) : (
+            <Link
+              to="/register"
+              className="inline-block px-12 py-4 bg-white text-orange-600 font-bold text-lg rounded-full hover:opacity-90 transition-opacity shadow-glow"
+            >
+              Join FITHUB Now 🔥
+            </Link>
+          )}
         </div>
       </section>
     </div>

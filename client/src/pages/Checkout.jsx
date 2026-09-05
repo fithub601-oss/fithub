@@ -40,16 +40,16 @@ const Checkout = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-16 flex items-center justify-center bg-dark-900">
+      <div className="min-h-screen pt-16 flex items-center justify-center bg-slate-50">
         <div className="text-white">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pt-16 bg-dark-900 py-16">
+    <div className="min-h-screen pt-16 bg-slate-50 py-16">
       <div className="max-w-2xl mx-auto px-4">
-        <div className="bg-dark-800 rounded-2xl p-8 border border-white/5">
+        <div className="bg-white rounded-2xl p-8 border border-white/5">
           <h1 className="font-display text-4xl text-white mb-6 text-center">CHECKOUT</h1>
           {plan && user && (
             <>

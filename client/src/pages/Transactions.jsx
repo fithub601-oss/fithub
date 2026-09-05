@@ -58,7 +58,7 @@ const Transactions = () => {
   const methodLabel = (m) => m ? m.charAt(0).toUpperCase() + m.slice(1) : 'Other';
 
   return (
-    <div className="min-h-screen pt-16 pb-16 bg-dark-900">
+    <div className="min-h-screen pt-16 pb-16 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -120,7 +120,7 @@ const Transactions = () => {
           ))}
         </div>
 
-        <div className="bg-dark-800 rounded-2xl overflow-hidden border border-white/5">
+        <div className="bg-white rounded-2xl overflow-hidden border border-white/5">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>

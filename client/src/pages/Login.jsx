@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
+import Stickers from '../components/Stickers';
 
 const Login = () => {
   const [method, setMethod] = useState('password');
@@ -70,7 +71,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen pt-16 bg-dark-900 flex items-center justify-center py-16">
+    <div className="min-h-screen pt-16 bg-slate-50 flex items-center justify-center py-16">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -113,7 +114,7 @@ const Login = () => {
                   required
                   value={form.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
                   placeholder="you@email.com"
                 />
               </div>
@@ -125,7 +126,7 @@ const Login = () => {
                   required
                   value={form.password}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
                   placeholder="••••••••"
                 />
               </div>
@@ -148,7 +149,7 @@ const Login = () => {
                   value={form.phone}
                   onChange={handleChange}
                   disabled={otpSent}
-                  className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors disabled:opacity-50"
+                  className="w-full px-4 py-3 bg-slate-50 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors disabled:opacity-50"
                   placeholder="+91 12345 67890"
                 />
               </div>
@@ -162,7 +163,7 @@ const Login = () => {
                     value={form.otp}
                     onChange={handleChange}
                     maxLength="6"
-                    className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors text-center text-2xl tracking-widest"
+                    className="w-full px-4 py-3 bg-slate-50 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors text-center text-2xl tracking-widest"
                     placeholder="••••••"
                   />
                   <p className="text-xs text-gray-400 mt-2">Check your registered email for the OTP</p>
@@ -195,6 +196,9 @@ const Login = () => {
           </div>
         </div>
       </motion.div>
+      <div className="pb-10 flex justify-center">
+        <Stickers count={4} />
+      </div>
     </div>
   );
 };

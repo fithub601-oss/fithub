@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
+import Stickers from '../components/Stickers';
 
 const Register = () => {
   const [step, setStep] = useState(1);
@@ -108,7 +109,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen pt-16 bg-dark-900 flex items-center justify-center py-16">
+    <div className="min-h-screen pt-16 bg-slate-50 flex items-center justify-center py-16">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -139,7 +140,7 @@ const Register = () => {
                   required
                   value={form.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
                   placeholder="Your name"
                 />
               </div>
@@ -151,7 +152,7 @@ const Register = () => {
                   required
                   value={form.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
                   placeholder="you@email.com"
                 />
               </div>
@@ -163,7 +164,7 @@ const Register = () => {
                   required
                   value={form.phone}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-slate-50 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
                   placeholder="+91 12345 67890"
                 />
               </div>
@@ -176,7 +177,7 @@ const Register = () => {
                     required
                     value={form.password}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-slate-50 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
                     placeholder="Min 6 chars"
                   />
                 </div>
@@ -188,7 +189,7 @@ const Register = () => {
                     required
                     value={form.confirmPassword}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-slate-50 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
                     placeholder="Repeat password"
                   />
                 </div>
@@ -216,7 +217,7 @@ const Register = () => {
                   value={form.otp}
                   onChange={handleChange}
                   maxLength="6"
-                  className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors text-center text-2xl tracking-widest"
+                  className="w-full px-4 py-3 bg-slate-50 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors text-center text-2xl tracking-widest"
                   placeholder="••••••"
                 />
               </div>
@@ -260,6 +261,9 @@ const Register = () => {
           </div>
         </div>
       </motion.div>
+      <div className="pb-10 flex justify-center">
+        <Stickers count={4} />
+      </div>
     </div>
   );
 };

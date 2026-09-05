@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { FaShoppingCart, FaCheck } from 'react-icons/fa';
 import api from '../api';
 import { useCart } from '../context/CartContext';
+import Stickers from '../components/Stickers';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -36,7 +37,7 @@ const Products = () => {
   const filtered = category === 'all' ? products : products.filter(p => p.category === category);
 
   return (
-    <div className="min-h-screen pt-16 bg-dark-900">
+    <div className="min-h-screen pt-16 bg-slate-50">
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -157,6 +158,9 @@ const Products = () => {
           )}
         </div>
       </section>
+      <div className="pb-10 flex justify-center">
+        <Stickers count={4} />
+      </div>
     </div>
   );
 };

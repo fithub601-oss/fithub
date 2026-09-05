@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import api from '../api';
 import { FaArrowLeft, FaShoppingBag, FaMapMarkerAlt } from 'react-icons/fa';
+import Stickers from '../components/Stickers';
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -152,6 +153,9 @@ const MyOrders = () => {
             ))}
           </div>
         )}
+      </div>
+      <div className="pb-10 flex justify-center">
+        <Stickers count={4} />
       </div>
     </div>
   );

@@ -108,7 +108,7 @@ category: 'supplement', image: '', sizes: '', isAvailable: true
   const catEmoji = { supplement: '💊', equipment: '🏋️', apparel: '👕', accessory: '🎒', other: '📦' };
 
   return (
-    <div className="min-h-screen pt-16 bg-dark-900">
+    <div className="min-h-screen pt-16 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -135,7 +135,7 @@ category: 'supplement', image: '', sizes: '', isAvailable: true
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
-                className={`bg-dark-800 rounded-2xl overflow-hidden border ${p.isAvailable ? 'border-white/5' : 'border-red-500/30'}`}
+                className={`bg-white rounded-2xl overflow-hidden border ${p.isAvailable ? 'border-white/5' : 'border-red-500/30'}`}
               >
                 <div className="h-40 bg-slate-50 p-2 flex items-center justify-center">
                   {p.image ? (

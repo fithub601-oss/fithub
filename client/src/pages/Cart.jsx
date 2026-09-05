@@ -6,6 +6,7 @@ import { FaTrash, FaShoppingCart, FaArrowLeft, FaShoppingBag } from 'react-icons
 import api from '../api';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import Stickers from '../components/Stickers';
 
 const Cart = () => {
   const { cart, cartTotal, updateQty, removeFromCart, clearCart } = useCart();
@@ -148,7 +149,7 @@ const Cart = () => {
   };
 
   return (
-    <div className="min-h-screen pt-16 pb-16 bg-dark-900">
+    <div className="min-h-screen pt-16 pb-16 bg-slate-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -166,7 +167,7 @@ const Cart = () => {
         </div>
 
         {cart.length === 0 ? (
-          <div className="text-center py-24 bg-dark-800 rounded-2xl border border-white/5">
+          <div className="text-center py-24 bg-white rounded-2xl border border-white/5">
             <div className="text-6xl mb-4 flex justify-center"><FaShoppingCart className="text-gray-600" /></div>
             <h3 className="text-white font-bold text-xl mb-2">Your cart is empty</h3>
             <p className="text-gray-400 mb-6">Browse our store and add some gear!</p>
@@ -363,6 +364,9 @@ const Cart = () => {
             </div>
           </div>
         )}
+      </div>
+      <div className="pb-10 flex justify-center">
+        <Stickers count={4} />
       </div>
     </div>
   );

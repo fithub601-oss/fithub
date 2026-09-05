@@ -5,8 +5,18 @@ import toast from 'react-hot-toast';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
 import { FaTrash, FaPlus } from 'react-icons/fa';
+import Stickers from '../components/Stickers';
 
 const todayStr = () => new Date().toISOString().split('T')[0];
+
+const reviews = [
+  { id: 1, name: 'Rohit Sharma', role: 'Gold Member', rating: 5, date: 'Aug 2026', text: 'Best gym in the area! The trainers actually care and the equipment is top-notch. My strength has doubled since joining.' },
+  { id: 2, name: 'Priya Patel', role: 'Diamond Member', rating: 5, date: 'Jul 2026', text: 'Love the 6AM–10PM timing and the clean vibe. The progress tracker on the app keeps me accountable every week. Highly recommend!' },
+  { id: 3, name: 'Aman Verma', role: 'Silver Member', rating: 4, date: 'Jun 2026', text: 'Great community and modern machines. Walks you through everything if you are new — the membership plans are super flexible too.' },
+  { id: 4, name: 'Neha Gupta', role: 'Gold Member', rating: 5, date: 'May 2026', text: 'The gym store is a bonus — supplements and gear right there. Plus the online payments make everything hassle-free. 5 stars!' },
+  { id: 5, name: 'Karan Singh', role: 'Diamond Member', rating: 5, date: 'Apr 2026', text: 'Spectacular trainers and a real family atmosphere. After 6 months I have never felt stronger. The best decision I made this year!' },
+  { id: 6, name: "Sneha Iyer", role: 'Silver Member', rating: 4, date: 'Mar 2026', text: 'Clean, spacious and never too crowded. The app reminders for membership renewal are a thoughtful touch. Keep up the great work!' }
+];
 
 const WeightChart = ({ entries }) => {
   const points = entries
@@ -481,6 +491,48 @@ const Dashboard = () => {
             </div>
           )}
         </div>
+
+        {/* CUSTOMER REVIEWS */}
+        <section className="mt-12">
+          <div className="mb-8 text-center">
+            <span className="kicker">REVIEWS</span>
+            <h2 className="font-display text-3xl sm:text-4xl text-slate-900 mt-1">WHAT OUR <span className="text-orange-500">MEMBERS</span> SAY</h2>
+            <p className="text-slate-500 mt-2">Real feedback from the FITHUB family</p>
+          </div>
+
+          <div className="flex justify-center mb-8">
+            <Stickers count={4} />
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {reviews.map((r, i) => (
+              <motion.div
+                key={r.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: i * 0.08 }}
+                viewport={{ once: true }}
+                className="bg-white rounded-3xl p-6 border border-slate-100 shadow-soft flex flex-col"
+              >
+                <div className="flex items-center gap-1 mb-3">
+                  {[...Array(5)].map((_, s) => (
+                    <span key={s} className={`text-base ${s < r.rating ? 'text-amber-400' : 'text-slate-200'}`}>★</span>
+                  ))}
+                </div>
+                <p className="text-sm text-slate-600 leading-relaxed flex-1">"{r.text}"</p>
+                <div className="flex items-center gap-3 mt-5 pt-4 border-t border-slate-100">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white font-bold shrink-0">
+                    {r.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-slate-900 font-semibold text-sm">{r.name}</p>
+                    <p className="text-xs text-slate-400">{r.role} · {r.date}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
       </section>
     </div>
   );

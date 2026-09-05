@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import Stickers from '../components/Stickers';
 
 const Subscriptions = () => {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -100,14 +101,14 @@ const Subscriptions = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-16 flex items-center justify-center bg-dark-900">
+      <div className="min-h-screen pt-16 flex items-center justify-center bg-slate-50">
         <div className="text-white">Loading plans...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pt-16 bg-dark-900">
+    <div className="min-h-screen pt-16 bg-slate-50">
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -161,6 +162,9 @@ const Subscriptions = () => {
           </div>
         </div>
       </section>
+      <div className="pb-10 flex justify-center">
+        <Stickers count={4} />
+      </div>
     </div>
   );
 };

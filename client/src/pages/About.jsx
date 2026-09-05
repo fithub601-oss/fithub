@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Stickers from '../components/Stickers';
 
 const About = () => {
   return (
-    <div className="on-dark min-h-screen pt-16 bg-slate-900">
+    <div className="min-h-screen pt-16 bg-slate-50">
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
@@ -99,7 +100,7 @@ const About = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className={`bg-dark-800 rounded-2xl p-6 text-center border ${s.border}`}
+                className={`bg-white rounded-2xl p-6 text-center border ${s.border}`}
               >
                 <p className="font-display text-4xl text-white mb-1">{s.stat}</p>
                 <p className="text-gray-400 text-sm">{s.label}</p>
@@ -108,6 +109,9 @@ const About = () => {
           </div>
         </div>
       </section>
+      <div className="pb-10 flex justify-center">
+        <Stickers count={4} />
+      </div>
     </div>
   );
 };

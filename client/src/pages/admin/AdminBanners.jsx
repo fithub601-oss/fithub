@@ -90,7 +90,7 @@ const AdminBanners = () => {
   const modalLabel = 'block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5';
 
   return (
-    <div className="min-h-screen pt-16 bg-dark-900">
+    <div className="min-h-screen pt-16 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -117,7 +117,7 @@ const AdminBanners = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="bg-dark-800 rounded-2xl overflow-hidden border border-white/5"
+                className="bg-white rounded-2xl overflow-hidden border border-white/5"
               >
                 <div className="flex flex-col md:flex-row">
                   <div className="md:w-1/3 h-48 md:h-auto bg-gradient-to-br from-dark-700 to-dark-800 flex items-center justify-center">

@@ -6,6 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import {
   FaUsers, FaBoxOpen, FaTag, FaMoneyBillWave, FaUserPlus, FaImage, FaSignOutAlt, FaChartBar, FaHistory
 } from 'react-icons/fa';
+import Stickers from '../../components/Stickers';
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
@@ -64,7 +65,7 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-16 bg-dark-900">
+    <div className="min-h-screen pt-16 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -100,7 +101,7 @@ const AdminDashboard = () => {
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Navigation */}
-          <div className="bg-dark-800 rounded-2xl p-4 border border-white/5">
+          <div className="bg-white rounded-2xl p-4 border border-white/5">
             <h2 className="text-white font-bold px-4 py-3 mb-2">MANAGE</h2>
             <nav className="space-y-1">
               {navItems.map((item) => (
@@ -121,7 +122,7 @@ const AdminDashboard = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-dark-800 rounded-2xl p-6 border border-white/5">
+          <div className="bg-white rounded-2xl p-6 border border-white/5">
             <h2 className="text-white font-bold mb-4">QUICK ACTIONS</h2>
             <div className="space-y-3">
               <Link to="/admin/members" className="flex items-center gap-3 px-4 py-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
@@ -144,7 +145,7 @@ const AdminDashboard = () => {
           </div>
 
           {/* Recent Members */}
-          <div className="bg-dark-800 rounded-2xl p-6 border border-white/5">
+          <div className="bg-white rounded-2xl p-6 border border-white/5">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-white font-bold">RECENT MEMBERS</h2>
               <Link to="/admin/members" className="text-primary-400 text-sm hover:underline">View all</Link>
@@ -178,6 +179,9 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="pb-8 flex justify-center">
+        <Stickers count={4} />
       </div>
     </div>
   );

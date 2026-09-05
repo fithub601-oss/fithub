@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaEnvelope, FaClock, FaMapMarkerAlt, FaExternalLinkAlt } from 'react-icons/fa';
+import Stickers from '../components/Stickers';
 
 const Contact = () => {
   const email = 'fithub601@gmail.com';
@@ -120,6 +121,9 @@ const Contact = () => {
           </motion.div>
         </div>
       </section>
+      <div className="pb-10 flex justify-center">
+        <Stickers count={4} />
+      </div>
     </div>
   );
 };

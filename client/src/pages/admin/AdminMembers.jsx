@@ -97,7 +97,7 @@ const AdminMembers = () => {
   const modalLabel = 'block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5';
 
   return (
-    <div className="min-h-screen pt-16 bg-dark-900">
+    <div className="min-h-screen pt-16 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -121,13 +121,13 @@ const AdminMembers = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by name, email, or phone..."
-              className="w-full pl-12 pr-4 py-3 bg-dark-800 border border-white/10 rounded-xl text-white focus:border-primary-500 focus:outline-none"
+              className="w-full pl-12 pr-4 py-3 bg-white border border-white/10 rounded-xl text-white focus:border-primary-500 focus:outline-none"
             />
           </div>
         </div>
 
         {/* Members Table */}
-        <div className="bg-dark-800 rounded-2xl overflow-hidden border border-white/5">
+        <div className="bg-white rounded-2xl overflow-hidden border border-white/5">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>

@@ -48,7 +48,7 @@ const AdminTransactions = () => {
   const methodLabel = (m) => m ? m.charAt(0).toUpperCase() + m.slice(1) : 'Other';
 
   return (
-    <div className="min-h-screen pt-16 bg-dark-900">
+    <div className="min-h-screen pt-16 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="font-display text-4xl text-white">
@@ -82,7 +82,7 @@ const AdminTransactions = () => {
             placeholder="Search member, phone or plan..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 px-4 py-2.5 bg-dark-800 border border-white/10 rounded-lg text-white text-sm focus:border-primary-500 focus:outline-none"
+            className="flex-1 px-4 py-2.5 bg-white border border-white/10 rounded-lg text-white text-sm focus:border-primary-500 focus:outline-none"
           />
           <div className="flex flex-wrap gap-2">
             <button
@@ -111,7 +111,7 @@ const AdminTransactions = () => {
           </div>
         </div>
 
-        <div className="bg-dark-800 rounded-2xl overflow-hidden border border-white/5">
+        <div className="bg-white rounded-2xl overflow-hidden border border-white/5">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
