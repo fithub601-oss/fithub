@@ -4,6 +4,8 @@ const CartContext = createContext();
 
 const STORAGE_KEY = 'fithub_cart';
 
+const itemKey = (product, size) => `${product._id}${size ? `-${size}` : ''}`;
+
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
@@ -24,26 +26,27 @@ export const CartProvider = ({ children }) => {
     }
   }, [cart]);
 
-  const addToCart = (product, qty = 1) => {
+  const addToCart = (product, qty = 1, size) => {
     setCart((prev) => {
-      const existing = prev.find((i) => i._id === product._id);
+      const key = itemKey(product, size);
+      const existing = prev.find((i) => i.key === key);
       if (existing) {
         return prev.map((i) =>
-          i._id === product._id ? { ...i, qty: Math.min(i.qty + qty, product.stockQuantity) } : i
+          i.key === key ? { ...i, qty: Math.min(i.qty + qty, product.stockQuantity) } : i
         );
       }
-      return [...prev, { ...product, qty: Math.min(qty, product.stockQuantity) }];
+      return [...prev, { ...product, qty: Math.min(qty, product.stockQuantity), size: size || '', key }];
     });
   };
 
-  const removeFromCart = (id) => {
-    setCart((prev) => prev.filter((i) => i._id !== id));
+  const removeFromCart = (key) => {
+    setCart((prev) => prev.filter((i) => i.key !== key));
   };
 
-  const updateQty = (id, qty) => {
+  const updateQty = (key, qty) => {
     setCart((prev) =>
       prev.map((i) =>
-        i._id === id ? { ...i, qty: Math.max(1, Math.min(qty, i.stockQuantity)) } : i
+        i.key === key ? { ...i, qty: Math.max(1, Math.min(qty, i.stockQuantity)) } : i
       )
     );
   };

@@ -105,9 +105,9 @@ const MyOrders = () => {
                   <div className="space-y-3">
                     {(order.items || []).map((item) => (
                       <div key={item._id || `${order._id}-${item.name}`} className="flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-2xl bg-slate-50 overflow-hidden shrink-0 aspect-square">
+                        <div className="w-16 h-16 rounded-2xl bg-slate-50 overflow-hidden shrink-0 aspect-square p-1">
                           {item.image ? (
-                            <img src={item.image} alt={item.name} className="w-full h-full object-cover object-center" />
+                            <img src={item.image} alt={item.name} className="w-full h-full object-contain object-center" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
                               <FaShoppingBag className="text-slate-300" />
@@ -118,6 +118,7 @@ const MyOrders = () => {
                           <p className="text-slate-900 font-medium truncate">{item.name}</p>
                           <p className="text-slate-400 text-xs mt-0.5">
                             ₹{item.price} × {item.quantity}
+                            {item.size ? `  ·  Size: ${item.size}` : ''}
                           </p>
                         </div>
                         <p className="text-slate-900 font-bold shrink-0">₹{(item.price * item.quantity).toLocaleString('en-IN')}</p>

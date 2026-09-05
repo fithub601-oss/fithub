@@ -301,9 +301,9 @@ const Home = () => {
                     <div className="flex items-center justify-between border-t border-slate-100 pt-4">
                       <div className="flex -space-x-2">
                         {(order.items || []).slice(0, 3).map((item, j) => (
-                          <div key={j} className="w-9 h-9 rounded-xl bg-slate-50 border-2 border-white overflow-hidden aspect-square">
+                          <div key={j} className="w-9 h-9 rounded-xl bg-slate-50 border-2 border-white overflow-hidden aspect-square p-0.5">
                             {item.image ? (
-                              <img src={item.image} alt={item.name} className="w-full h-full object-cover object-center" />
+                              <img src={item.image} alt={item.name} className="w-full h-full object-contain object-center" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-slate-300 text-xs">🛍</div>
                             )}

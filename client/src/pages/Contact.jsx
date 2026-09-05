@@ -1,161 +1,117 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import toast from 'react-hot-toast';
+import { FaEnvelope, FaClock, FaMapMarkerAlt, FaExternalLinkAlt } from 'react-icons/fa';
 
 const Contact = () => {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
-  const [submitting, setSubmitting] = useState(false);
+  const email = 'fithub601@gmail.com';
+  const mapsUrl = 'https://maps.app.goo.gl/fepBVnyZzEzjiQuk6';
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      toast.success('Message sent! We will get back to you soon.');
-      setForm({ name: '', email: '', phone: '', subject: '', message: '' });
-    }, 1000);
-  };
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const cards = [
+    {
+      icon: <FaEnvelope />,
+      title: 'Email Us',
+      desc: 'Drop us a mail anytime — we reply fast',
+      value: email,
+      href: `mailto:${email}`,
+      cta: 'Send an Email',
+      color: 'from-orange-500 to-red-500'
+    },
+    {
+      icon: <FaClock />,
+      title: 'Working Hours',
+      desc: 'Open every day of the week',
+      value: '6AM - 10PM',
+      sub: 'MONDAY - SATURDAY',
+      href: null,
+      color: 'from-red-500 to-amber-500'
+    },
+    {
+      icon: <FaMapMarkerAlt />,
+      title: 'Find the Gym',
+      desc: 'Tap to open the location on Google Maps',
+      value: 'FITHUB Gymnasium',
+      href: mapsUrl,
+      cta: 'Open in Google Maps',
+      color: 'from-amber-500 to-orange-600'
+    }
+  ];
 
   return (
-    <div className="min-h-screen pt-16 bg-dark-900">
+    <div className="min-h-screen pt-16 bg-slate-50">
       <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h1 className="font-display text-5xl text-white mb-3">GET IN <span className="text-neon-green">TOUCH</span></h1>
-            <p className="text-gray-400">Have questions? We'd love to hear from you.</p>
+            <span className="kicker">CONTACT US</span>
+            <h1 className="font-display text-5xl text-slate-900 mt-2 mb-3">
+              GET IN <span className="text-orange-500">TOUCH</span>
+            </h1>
+            <p className="text-slate-500">Reach out, drop in, or find us on the map</p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-            >
-              <form onSubmit={handleSubmit} className="bg-dark-800 rounded-2xl p-8 border border-white/5 space-y-5">
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      value={form.name}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
-                      placeholder="Your name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      value={form.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
-                      placeholder="you@email.com"
-                    />
-                  </div>
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            {cards.map((card, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white rounded-3xl border border-slate-100 shadow-soft hover:shadow-card hover:-translate-y-1 transition-all p-7 flex flex-col"
+              >
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${card.color} flex items-center justify-center text-2xl text-white mb-5 shadow-glow`}>
+                  {card.icon}
                 </div>
-
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={form.phone}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
-                      placeholder="+91 12345 67890"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Subject</label>
-                    <select
-                      name="subject"
-                      value={form.subject}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors"
+                <h3 className="text-slate-900 font-bold text-lg mb-1.5">{card.title}</h3>
+                <p className="text-slate-500 text-sm mb-4">{card.desc}</p>
+                <div className="mt-auto">
+                  <p className="font-display text-xl text-slate-900 break-all">{card.value}</p>
+                  {card.sub && <p className="text-xs font-bold text-orange-500 tracking-widest mt-1">{card.sub}</p>}
+                  {card.href && (
+                    <a
+                      href={card.href}
+                      target={card.href.startsWith('http') ? '_blank' : undefined}
+                      rel="noreferrer"
+                      className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold rounded-full hover:opacity-90 transition-opacity"
                     >
-                      <option value="">Select type</option>
-                      <option value="membership">Membership</option>
-                      <option value="products">Products</option>
-                      <option value="training">Personal Training</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
+                      {card.cta} <FaExternalLinkAlt className="text-xs" />
+                    </a>
+                  )}
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Message</label>
-                  <textarea
-                    name="message"
-                    required
-                    rows="4"
-                    value={form.message}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 bg-dark-900 border border-white/10 rounded-lg text-white focus:border-primary-500 focus:outline-none transition-colors resize-none"
-                    placeholder="How can we help you?"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full py-3 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-bold rounded-full hover:opacity-90 transition-opacity disabled:opacity-50"
-                >
-                  {submitting ? 'Sending...' : 'Send Message'}
-                </button>
-              </form>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="space-y-6"
-            >
-              <div className="bg-dark-800 rounded-2xl p-6 border border-white/5">
-                <h3 className="text-white font-bold mb-4 text-lg">Contact Information</h3>
-                <div className="space-y-4">
-                  {[
-                    { icon: '📍', title: 'Visit Us', desc: '123 Fitness Street, Your City, Your Country' },
-                    { icon: '📞', title: 'Call Us', desc: '+91 12345 67890' },
-                    { icon: '✉️', title: 'Email Us', desc: 'info@fithub.com' },
-                    { icon: '🕐', title: 'Working Hours', desc: 'Mon - Sat: 6:00 AM - 10:00 PM\\nSun: Closed' }
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-600 to-neon-pink/50 flex items-center justify-center text-lg shrink-0">
-                        {item.icon}
-                      </div>
-                      <div>
-                        <p className="text-white font-medium">{item.title}</p>
-                        <p className="text-gray-400 text-sm">{item.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-br from-primary-700 to-indigo-800 rounded-2xl p-6 border border-primary-500/40 on-dark">
-                <h3 className="text-white font-bold mb-2">💪 Free Trial Visit</h3>
-                <p className="text-gray-300 text-sm mb-4">
-                  Come for a free day pass and see what we're about!
-                </p>
-                <a href="tel:+911234567890" className="inline-block px-6 py-2 bg-neon-green text-slate-900 font-bold rounded-full hover:opacity-90">
-                  Book Now
-                </a>
-              </div>
-            </motion.div>
+              </motion.div>
+            ))}
           </div>
+
+          {/* Location banner */}
+          <motion.a
+            href={mapsUrl}
+            target="_blank"
+            rel="noreferrer"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="on-dark block bg-gradient-to-r from-red-700 via-orange-600 to-amber-500 rounded-3xl p-8 relative overflow-hidden shadow-card"
+          >
+            <div className="absolute inset-0 opacity-30" style={{
+              backgroundImage: 'radial-gradient(circle at 80% 30%, rgba(255,255,255,0.5) 0%, transparent 45%)'
+            }}></div>
+            <div className="relative flex flex-wrap items-center justify-between gap-6">
+              <div className="flex items-center gap-5">
+                <div className="w-16 h-16 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center text-3xl shrink-0">
+                  📍
+                </div>
+                <div>
+                  <h2 className="font-display text-2xl sm:text-3xl text-white font-bold">VISIT US AT THE GYM</h2>
+                  <p className="text-gray-200 text-sm mt-1">
+                    Open Mon–Sat · 6AM to 10PM · Click to open in Google Maps
+                  </p>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-2 px-6 py-3 bg-white text-orange-600 font-bold rounded-full shadow-glow">
+                Open in Google Maps <FaExternalLinkAlt />
+              </span>
+            </div>
+          </motion.a>
         </div>
       </section>
     </div>

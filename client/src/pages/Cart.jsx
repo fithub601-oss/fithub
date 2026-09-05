@@ -78,7 +78,7 @@ const Cart = () => {
 
     setCheckoutLoading(true);
     try {
-      const items = cart.map(i => ({ productId: i._id, quantity: i.qty }));
+      const items = cart.map(i => ({ productId: i._id, quantity: i.qty, size: i.size || undefined }));
       const scriptLoaded = await loadRazorpay();
       if (!scriptLoaded) {
         toast.error('Payment gateway failed to load');
@@ -269,31 +269,36 @@ const Cart = () => {
               {/* Items */}
               {cart.map((item) => (
                 <motion.div
-                  key={item._id}
+                  key={item.key || item._id}
                   layout
                   className="bg-white rounded-3xl p-4 border border-slate-100 shadow-soft flex items-center gap-4"
                 >
-                  <div className="w-24 h-24 rounded-2xl overflow-hidden flex items-center justify-center shrink-0 bg-slate-50 aspect-square">
+                  <div className="w-24 h-24 rounded-2xl overflow-hidden flex items-center justify-center shrink-0 bg-slate-50 aspect-square p-1.5">
                     {item.image ? (
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover object-center" />
+                      <img src={item.image} alt={item.name} className="w-full h-full object-contain object-center" />
                     ) : (
                       <FaShoppingBag className="text-3xl text-slate-300" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-slate-900 font-semibold truncate">{item.name}</h3>
+                    {item.size && (
+                      <p className="text-slate-400 text-xs mt-0.5">
+                        Size: <span className="font-semibold text-slate-600">{item.size}</span>
+                      </p>
+                    )}
                     <p className="text-emerald-600 font-bold mt-1">₹{item.price}</p>
                     <div className="flex items-center gap-3 mt-3">
                       <div className="flex items-center bg-slate-100 rounded-full">
                         <button
-                          onClick={() => updateQty(item._id, item.qty - 1)}
+                          onClick={() => updateQty(item.key || item._id, item.qty - 1)}
                           className="w-8 h-8 text-slate-700 hover:bg-slate-200 rounded-full transition-colors"
                         >
                           −
                         </button>
                         <span className="w-8 text-center text-slate-800 font-medium">{item.qty}</span>
                         <button
-                          onClick={() => updateQty(item._id, item.qty + 1)}
+                          onClick={() => updateQty(item.key || item._id, item.qty + 1)}
                           className="w-8 h-8 text-slate-700 hover:bg-slate-200 rounded-full transition-colors"
                         >
                           +
@@ -306,7 +311,7 @@ const Cart = () => {
                     <p className="text-slate-900 font-bold">₹{(item.price * item.qty).toLocaleString('en-IN')}</p>
                     <button
                       onClick={() => {
-                        removeFromCart(item._id);
+                        removeFromCart(item.key || item._id);
                         toast.success(`${item.name} removed`);
                       }}
                       className="mt-2 text-red-500 hover:text-red-400 text-sm"

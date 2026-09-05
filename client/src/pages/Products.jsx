@@ -10,6 +10,7 @@ const Products = () => {
   const [category, setCategory] = useState('all');
   const [loading, setLoading] = useState(true);
   const [justAdded, setJustAdded] = useState(null);
+  const [selectedSize, setSelectedSize] = useState({});
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -19,10 +20,15 @@ const Products = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleAddToCart = (product) => {
-    addToCart(product, 1);
+  const isTShirt = (product) =>
+    (product.sizes && product.sizes.length > 0) ||
+    product.category === 'apparel' ||
+    /t-?shirt|tee/i.test(product.name || '');
+
+  const handleAddToCart = (product, size) => {
+    addToCart(product, 1, size);
     setJustAdded(product._id);
-    toast.success(`${product.name} added to cart! 🛒`);
+    toast.success(size ? `${product.name} (${size}) added to cart! 🛒` : `${product.name} added to cart! 🛒`);
     setTimeout(() => setJustAdded(null), 1200);
   };
 
@@ -70,13 +76,13 @@ const Products = () => {
                   viewport={{ once: true }}
                   className="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-soft hover:shadow-lift hover:-translate-y-1 transition-all duration-300 group"
                 >
-                  <div className="relative aspect-[4/3] bg-slate-100 overflow-hidden">
+                  <div className="relative aspect-square bg-slate-50 overflow-hidden p-3">
                     {product.image ? (
                       <img
                         src={product.image}
                         alt={product.name}
                         loading="lazy"
-                        className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                        className="absolute inset-0 w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
@@ -107,13 +113,37 @@ const Products = () => {
                         <span className="text-xs font-semibold text-red-500 bg-red-50 px-2.5 py-1 rounded-full">Out of Stock</span>
                       )}
                     </div>
+                    {isTShirt(product) && (
+                      <div className="mb-4">
+                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
+                          Select Size {isTShirt(product) && !selectedSize[product._id] && <span className="text-red-500 normal-case tracking-normal">(required)</span>}
+                        </p>
+                        <div className="grid grid-cols-4 gap-2">
+                          {(product.sizes && product.sizes.length ? product.sizes : ['S', 'M', 'L', 'XL']).map((s) => (
+                            <button
+                              key={s}
+                              onClick={() => setSelectedSize({ ...selectedSize, [product._id]: s })}
+                              className={`py-2 rounded-xl border text-sm font-bold transition-all ${
+                                selectedSize[product._id] === s
+                                  ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white border-transparent shadow-glow'
+                                  : 'bg-white text-slate-600 border-slate-200 hover:border-orange-300 hover:text-orange-600'
+                              }`}
+                            >
+                              {s}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                     <button
-                      disabled={product.stockQuantity <= 0}
-                      onClick={() => handleAddToCart(product)}
-                      className="w-full py-2.5 bg-gradient-to-r from-primary-600 to-neon-pink text-white text-sm font-semibold rounded-full hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      disabled={product.stockQuantity <= 0 || (isTShirt(product) && !selectedSize[product._id])}
+                      onClick={() => handleAddToCart(product, selectedSize[product._id])}
+                      className="w-full py-2.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-semibold rounded-full hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                       {product.stockQuantity <= 0 ? (
                         'Unavailable'
+                      ) : isTShirt(product) && !selectedSize[product._id] ? (
+                        'Select a Size'
                       ) : justAdded === product._id ? (
                         <><FaCheck /> Added!</>
                       ) : (

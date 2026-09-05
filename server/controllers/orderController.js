@@ -47,7 +47,8 @@ const createProductOrder = async (req, res) => {
         name: product.name,
         price: product.price,
         quantity: item.quantity,
-        image: product.image
+        image: product.image,
+        size: item.size || undefined
       };
     });
 
@@ -134,7 +135,8 @@ const verifyProductPayment = async (req, res) => {
         name: product.name,
         price: product.price,
         quantity: qty,
-        image: product.image
+        image: product.image,
+        size: item.size || undefined
       };
     });
 

@@ -33,7 +33,14 @@ const AdminProducts = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = { ...form, price: Number(form.price), stockQuantity: Number(form.stockQuantity) };
+    const data = {
+      ...form,
+      price: Number(form.price),
+      stockQuantity: Number(form.stockQuantity),
+      sizes: typeof form.sizes === 'string'
+        ? form.sizes.split(',').map(s => s.trim().toUpperCase()).filter(Boolean)
+        : (form.sizes || [])
+    };
     try {
       if (editing) {
         await api.put(`/products/${editing._id}`, data);
@@ -71,6 +78,7 @@ const AdminProducts = () => {
       stockQuantity: p.stockQuantity,
       category: p.category,
       image: p.image || '',
+      sizes: (p.sizes || []).join(', '),
       isAvailable: p.isAvailable
     });
     setShowModal(true);
@@ -79,7 +87,7 @@ const AdminProducts = () => {
   const resetForm = () => {
     setForm({
       name: '', description: '', price: '', stockQuantity: '',
-      category: 'supplement', image: '', isAvailable: true
+category: 'supplement', image: '', sizes: '', isAvailable: true
     });
   };
 
@@ -129,10 +137,10 @@ const AdminProducts = () => {
                 transition={{ duration: 0.4, delay: i * 0.05 }}
                 className={`bg-dark-800 rounded-2xl overflow-hidden border ${p.isAvailable ? 'border-white/5' : 'border-red-500/30'}`}
               >
-                <div className="h-40 bg-gradient-to-br from-dark-700 to-dark-800 flex items-center justify-center">
+                <div className="h-40 bg-slate-50 p-2 flex items-center justify-center">
                   {p.image ? (
                     <button onClick={() => setImageModal(p)} className="w-full h-full p-0 border-0">
-                      <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                      <img src={p.image} alt={p.name} className="w-full h-full object-contain" />
                     </button>
                   ) : (
                     <span className="text-5xl opacity-30">{catEmoji[p.category]}</span>
@@ -227,7 +235,11 @@ const AdminProducts = () => {
                   <input type="text" className={modalInputs} value={form.image} onChange={(e) => setForm({...form, image: e.target.value})} placeholder="https://..." />
                 </div>
                 <div className="col-span-2">
-                  <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+                  <label className={modalLabel}>Sizes (comma-separated, leave empty if none)</label>
+                  <input type="text" className={modalInputs} value={form.sizes || ''} onChange={(e) => setForm({...form, sizes: e.target.value})} placeholder="S, M, L, XL" />
+                </div>
+                <div className="col-span-2">
+                  <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
                     <input type="checkbox" checked={form.isAvailable} onChange={(e) => setForm({...form, isAvailable: e.target.checked})} className="accent-primary-500" />
                     Show on website
                   </label>
