@@ -315,9 +315,8 @@ const sendOTP = async (req, res) => {
       return res.status(400).json({ message: 'Email is required' });
     }
 
-    const query = { email };
-    if (phone) query.phone = phone;
-    const userExists = await User.findOne({ $or: [{ email }, phone ? { phone } : {}] });
+    const query = phone ? { $or: [{ email }, { phone }] } : { email };
+    const userExists = await User.findOne(query);
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
     }
