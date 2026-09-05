@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import api from '../../api';
-import { FaMoneyBillWave, FaUserFriends, FaHistory } from 'react-icons/fa';
+import { FaMoneyBillWave, FaUserFriends, FaHistory, FaReceipt } from 'react-icons/fa';
+import ReceiptModal from '../../components/ReceiptModal';
 
 const AdminTransactions = () => {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
+  const [receiptTx, setReceiptTx] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -121,13 +123,14 @@ const AdminTransactions = () => {
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Method</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Date</th>
                   <th className="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">Amount (₹)</th>
+                  <th className="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">Receipt</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
                 {loading ? (
-                  <tr><td colSpan="5" className="px-6 py-12 text-center text-gray-400">Loading...</td></tr>
+                  <tr><td colSpan="6" className="px-6 py-12 text-center text-gray-400">Loading...</td></tr>
                 ) : filtered.length === 0 ? (
-                  <tr><td colSpan="5" className="px-6 py-12 text-center text-gray-400">No transactions found</td></tr>
+                  <tr><td colSpan="6" className="px-6 py-12 text-center text-gray-400">No transactions found</td></tr>
                 ) : (
                   filtered.map((t) => (
                     <tr key={t._id} className="hover:bg-white/5 transition-colors">
@@ -150,6 +153,14 @@ const AdminTransactions = () => {
                       </td>
                       <td className="px-6 py-4 text-gray-400 text-sm">{formatDate(t.date)}</td>
                       <td className="px-6 py-4 text-right text-white font-bold">₹{Number(t.amount).toLocaleString('en-IN')}</td>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          onClick={() => setReceiptTx(t)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-primary-600 to-neon-pink text-white text-xs font-bold rounded-full hover:opacity-90 transition-opacity"
+                        >
+                          <FaReceipt /> Receipt
+                        </button>
+                      </td>
                     </tr>
                   ))
                 )}
@@ -158,6 +169,14 @@ const AdminTransactions = () => {
           </div>
         </div>
       </div>
+
+      <ReceiptModal
+        open={!!receiptTx}
+        onClose={() => setReceiptTx(null)}
+        type="membership"
+        data={receiptTx}
+        user={receiptTx ? { name: receiptTx.memberName, email: receiptTx.memberEmail, phone: receiptTx.memberPhone } : null}
+      />
     </div>
   );
 };

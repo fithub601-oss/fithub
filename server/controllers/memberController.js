@@ -265,12 +265,21 @@ const recordPayment = async (req, res) => {
       return res.status(404).json({ message: 'Membership not found' });
     }
 
-    const newPaid = membership.amountPaid + (amount || 0);
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ message: 'Enter a valid amount' });
+    }
+    if (amount > membership.amountRemaining) {
+      return res.status(400).json({
+        message: `Amount exceeds the remaining balance of ${membership.amountRemaining}`
+      });
+    }
+
+    const newPaid = membership.amountPaid + amount;
     membership.amountPaid = newPaid;
     membership.amountRemaining = membership.totalAmount - newPaid;
     membership.paymentStatus = membership.amountRemaining <= 0 ? 'paid' : 'partial';
     membership.paymentMethod = method || membership.paymentMethod;
-    membership.renewals.push({ amount: amount || 0, method: method || 'cash', date: new Date() });
+    membership.renewals.push({ amount: amount, method: method || 'cash', date: new Date() });
 
     if (membership.status === 'pending' && membership.amountPaid > 0) {
       await Membership.updateMany(
@@ -344,6 +353,10 @@ const getAllTransactions = async (req, res) => {
           amount: r.amount,
           method: r.method || m.paymentMethod,
           membershipId: m._id,
+          totalAmount: m.totalAmount,
+          amountPaid: m.amountPaid,
+          amountRemaining: m.amountRemaining,
+          paymentStatus: m.paymentStatus,
           status: m.status
         });
       });
@@ -361,6 +374,10 @@ const getAllTransactions = async (req, res) => {
           amount: m.amountPaid || 0,
           method: m.paymentMethod,
           membershipId: m._id,
+          totalAmount: m.totalAmount,
+          amountPaid: m.amountPaid,
+          amountRemaining: m.amountRemaining,
+          paymentStatus: m.paymentStatus,
           status: m.status
         });
       }
