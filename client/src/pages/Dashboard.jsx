@@ -44,12 +44,20 @@ const Dashboard = () => {
               <h1 className="font-display text-4xl text-white">Hey, <span className="text-primary-500">{user?.name?.split(' ')[0]}</span> 👋</h1>
               <p className="text-gray-400 mt-1">Welcome to your FITHUB dashboard</p>
             </div>
-            <Link
-              to="/subscriptions"
-              className="px-6 py-2 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-semibold rounded-full hover:opacity-90"
-            >
-              Upgrade Plan
-            </Link>
+            <div className="flex gap-3">
+              <Link
+                to="/transactions"
+                className="px-6 py-2 bg-white/5 text-white font-semibold rounded-full hover:bg-white/10"
+              >
+                Transactions
+              </Link>
+              <Link
+                to="/subscriptions"
+                className="px-6 py-2 bg-gradient-to-r from-primary-600 to-neon-pink text-white font-semibold rounded-full hover:opacity-90"
+              >
+                Upgrade Plan
+              </Link>
+            </div>
           </div>
 
           {loading ? (

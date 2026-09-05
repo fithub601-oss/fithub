@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import api from '../../api';
 import { useAuth } from '../../context/AuthContext';
 import {
-  FaUsers, FaBoxOpen, FaTag, FaMoneyBillWave, FaUserPlus, FaImage, FaSignOutAlt, FaChartBar
+  FaUsers, FaBoxOpen, FaTag, FaMoneyBillWave, FaUserPlus, FaImage, FaSignOutAlt, FaChartBar, FaHistory
 } from 'react-icons/fa';
 
 const AdminDashboard = () => {
@@ -52,7 +52,8 @@ const AdminDashboard = () => {
     { to: '/admin/subscriptions', label: 'Subscriptions', icon: FaTag },
     { to: '/admin/products', label: 'Products', icon: FaBoxOpen },
     { to: '/admin/banners', label: 'Banners', icon: FaImage },
-    { to: '/admin/payments', label: 'Payments', icon: FaMoneyBillWave }
+    { to: '/admin/payments', label: 'Payments', icon: FaMoneyBillWave },
+    { to: '/admin/transactions', label: 'Transactions', icon: FaHistory }
   ];
 
   const cards = [

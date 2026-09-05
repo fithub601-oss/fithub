@@ -6,12 +6,14 @@ const {
   updateMember,
   deleteMember,
   assignMembership,
-  recordPayment
+  recordPayment,
+  getAllTransactions
 } = require('../controllers/memberController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
 router.get('/', protect, admin, getMembers);
 router.get('/me', protect, getMyMemberships);
+router.get('/all-transactions', protect, admin, getAllTransactions);
 router.get('/:id', protect, admin, getMember);
 router.put('/:id', protect, admin, updateMember);
 router.delete('/:id', protect, admin, deleteMember);

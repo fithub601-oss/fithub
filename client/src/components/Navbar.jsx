@@ -71,6 +71,15 @@ const Navbar = () => {
                     >
                       {isAdmin ? 'Admin Panel' : 'My Dashboard'}
                     </Link>
+                    {!isAdmin && (
+                      <Link
+                        to="/transactions"
+                        className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        My Transactions
+                      </Link>
+                    )}
                     <button
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-white/5"
@@ -135,6 +144,15 @@ const Navbar = () => {
                 >
                   {isAdmin ? 'Admin Panel' : 'My Dashboard'}
                 </Link>
+                {!isAdmin && (
+                  <Link
+                    to="/transactions"
+                    onClick={() => setMobileOpen(false)}
+                    className="text-sm text-gray-300"
+                  >
+                    My Transactions
+                  </Link>
+                )}
                 <button onClick={handleLogout} className="text-sm text-red-400 text-left">
                   Logout
                 </button>
