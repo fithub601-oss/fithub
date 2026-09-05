@@ -42,17 +42,31 @@ const sendViaBrevo = async (email, subject, html) => {
 
 const sendViaGmailOAuth = async (email, subject, html) => {
   try {
-    const { google } = require('googleapis');
     const CLIENT_ID = process.env.GMAIL_CLIENT_ID;
     const CLIENT_SECRET = process.env.GMAIL_CLIENT_SECRET;
     const REFRESH_TOKEN = process.env.GMAIL_REFRESH_TOKEN;
-    const REDIRECT_URI = 'http://localhost';
+    if (!CLIENT_ID || !CLIENT_SECRET || !REFRESH_TOKEN) return false;
 
-    const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
-    oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+    // Get access token from refresh token (plain HTTPS, no heavy SDK)
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        refresh_token: REFRESH_TOKEN,
+        grant_type: 'refresh_token'
+      })
+    });
+    if (!tokenRes.ok) {
+      const text = await tokenRes.text();
+      console.error('Gmail token error:', tokenRes.status, text.slice(0, 300));
+      return false;
+    }
+    const { access_token } = await tokenRes.json();
+    if (!access_token) return false;
 
-    const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
-
+    // Build raw MIME message and send via Gmail API
     const raw = Buffer.from(
       `To: ${email}\r\n` +
       `From: FITHUB <fithub601@gmail.com>\r\n` +
@@ -64,12 +78,21 @@ const sendViaGmailOAuth = async (email, subject, html) => {
       .replace(/\//g, '_')
       .replace(/=+$/, '');
 
-    const response = await gmail.users.messages.send({
-      userId: 'me',
-      requestBody: { raw }
+    const sendRes = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ raw })
     });
-
-    console.log('OTP email sent via Gmail OAuth:', response.data.id);
+    if (!sendRes.ok) {
+      const text = await sendRes.text();
+      console.error('Gmail send error:', sendRes.status, text.slice(0, 300));
+      return false;
+    }
+    const data = await sendRes.json();
+    console.log('OTP email sent via Gmail OAuth:', data.id);
     return true;
   } catch (error) {
     console.error('Gmail OAuth send error:', error.message);
