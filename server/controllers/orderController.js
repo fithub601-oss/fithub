@@ -2,6 +2,8 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const Order = require('../models/Order');
 const Product = require('../models/Product');
+const User = require('../models/User');
+const { sendReceiptEmail } = require('../utils/receiptEmail');
 
 let razorpay = null;
 if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
@@ -166,6 +168,32 @@ const verifyProductPayment = async (req, res) => {
       message: isOffline ? 'Order placed. Pay at the gym to confirm.' : 'Payment successful, order placed!',
       order
     });
+
+    // Send the buyer a receipt / order confirmation email
+    try {
+      const buyer = await User.findById(req.user?._id).select('email name');
+      if (buyer && buyer.email && !process.env.DISABLE_RECEIPT_EMAILS) {
+        await sendReceiptEmail({
+          email: buyer.email,
+          name: buyer.name,
+          heading: isOffline ? 'Order received — pay at the gym' : 'Payment received — order confirmed',
+          receiptNo: `ORD-${order._id.toString().slice(-6).toUpperCase()}`,
+          date: order.createdAt,
+          items: orderItems.map((i) => ({
+            label: `${i.name}${i.size ? ` (${i.size})` : ''}`,
+            qty: i.quantity,
+            amount: i.price * i.quantity
+          })),
+          amountPaid: isOffline ? 0 : order.totalAmount,
+          balanceDue: isOffline ? order.totalAmount : 0,
+          method: order.paymentMethod,
+          paid: !isOffline,
+          note: isOffline ? 'Pay at the gym to confirm your order — your items will be ready for pickup.' : ''
+        });
+      }
+    } catch (emailError) {
+      console.error('Order receipt email error:', emailError.message);
+    }
   } catch (error) {
     console.error('Order verify error:', error);
     res.status(500).json({ message: 'Failed to place order' });

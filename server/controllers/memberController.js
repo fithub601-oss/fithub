@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Membership = require('../models/Membership');
 const Subscription = require('../models/Subscription');
 const { getMembershipValidity } = require('../utils/membershipValidity');
+const { sendReceiptEmail } = require('../utils/receiptEmail');
 
 // @desc    Get current user's memberships
 // @route   GET /api/members/me
@@ -220,6 +221,32 @@ const assignMembership = async (req, res) => {
     });
 
     res.status(201).json(membership);
+
+    // If any amount was paid up front, email a receipt
+    if (paid > 0 && !process.env.DISABLE_RECEIPT_EMAILS) {
+      try {
+        const member = await User.findById(req.params.id).select('email name');
+        if (member && member.email) {
+          await sendReceiptEmail({
+            email: member.email,
+            name: member.name,
+            heading: 'Membership activated',
+            receiptNo: `MEM-${membership._id.toString().slice(-6).toUpperCase()}`,
+            date: membership.createdAt,
+            items: [{ label: subscription.name, qty: 1, amount: total }],
+            amountPaid: paid,
+            balanceDue: remaining,
+            method: paymentMethod || 'cash',
+            paid: true,
+            note: remaining > 0
+              ? `Balance of ${remaining} is payable at the gym.`
+              : 'This membership is fully paid. Thank you!'
+          });
+        }
+      } catch (emailError) {
+        console.error('Membership receipt email error:', emailError.message);
+      }
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -233,7 +260,7 @@ const recordPayment = async (req, res) => {
   try {
     const { membershipId, amount, method } = req.body;
 
-    const membership = await Membership.findById(membershipId);
+    const membership = await Membership.findById(membershipId).populate('subscription', 'name');
     if (!membership) {
       return res.status(404).json({ message: 'Membership not found' });
     }
@@ -256,6 +283,31 @@ const recordPayment = async (req, res) => {
     await membership.save();
 
     res.json(membership);
+
+    // Email a receipt for the installment just recorded
+    try {
+      const buyer = await User.findById(membership.user).select('email name');
+      const lastRenewal = membership.renewals[membership.renewals.length - 1];
+      if (buyer && buyer.email && (amount || 0) > 0 && !process.env.DISABLE_RECEIPT_EMAILS) {
+        await sendReceiptEmail({
+          email: buyer.email,
+          name: buyer.name,
+          heading: membership.amountRemaining <= 0 ? 'Membership fully paid' : 'Payment received',
+          receiptNo: `PAY-${(lastRenewal && lastRenewal._id ? lastRenewal._id : membership._id).toString().slice(-6).toUpperCase()}`,
+          date: lastRenewal && lastRenewal.date ? lastRenewal.date : new Date(),
+          items: [{ label: (membership.subscription && membership.subscription.name) || 'Membership fee', qty: 1, amount: amount || 0 }],
+          amountPaid: amount || 0,
+          balanceDue: membership.amountRemaining,
+          method: method || membership.paymentMethod || 'cash',
+          paid: true,
+          note: membership.amountRemaining > 0
+            ? `You still have ${membership.amountRemaining} pending against this membership.`
+            : 'This membership is now fully paid. Thank you!'
+        });
+      }
+    } catch (emailError) {
+      console.error('Payment receipt email error:', emailError.message);
+    }
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }

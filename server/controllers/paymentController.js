@@ -2,6 +2,8 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const Subscription = require('../models/Subscription');
 const Membership = require('../models/Membership');
+const User = require('../models/User');
+const { sendReceiptEmail } = require('../utils/receiptEmail');
 
 let razorpay = null;
 if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
@@ -140,6 +142,28 @@ const verifyPayment = async (req, res) => {
       message: isOffline ? 'Membership request submitted. Admin will confirm after payment.' : 'Payment verified, membership activated',
       membership
     });
+
+    // Send the buyer a receipt / order confirmation email
+    try {
+      const buyer = await User.findById(uid).select('email name');
+      if (buyer && buyer.email && !process.env.DISABLE_RECEIPT_EMAILS) {
+        await sendReceiptEmail({
+          email: buyer.email,
+          name: buyer.name,
+          heading: isOffline ? 'Membership request received' : 'Membership activated',
+          receiptNo: `MEM-${membership._id.toString().slice(-6).toUpperCase()}`,
+          date: membership.createdAt,
+          items: [{ label: subscription.name, qty: 1, amount: subscription.price }],
+          amountPaid: isOffline ? 0 : subscription.price,
+          balanceDue: isOffline ? subscription.price : 0,
+          method: isOffline ? 'cash' : 'razorpay',
+          paid: !isOffline,
+          note: isOffline ? 'Complete payment at the gym to activate your membership. See you soon!' : ''
+        });
+      }
+    } catch (emailError) {
+      console.error('Membership receipt email error:', emailError.message);
+    }
   } catch (error) {
     console.error('Payment verification error:', error);
     res.status(500).json({ message: 'Failed to verify payment' });
