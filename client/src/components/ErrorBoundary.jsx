@@ -4,11 +4,11 @@ import { FaExclamationTriangle, FaHome, FaRedo } from 'react-icons/fa';
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, message: '', stack: '' };
   }
 
-  static getDerivedStateFromError() {
-    return { hasError: true };
+  static getDerivedStateFromError(error) {
+    return { hasError: true, message: error?.message || String(error), stack: error?.stack || '' };
   }
 
   componentDidCatch(error, errorInfo) {
@@ -32,6 +32,10 @@ class ErrorBoundary extends Component {
             <p className="text-slate-500 text-sm mb-7">
               A section of this page hit an unexpected error. Reload to try again, or head back to the dashboard.
             </p>
+            <div className="mb-7 rounded-xl bg-slate-50 border border-slate-200 p-4 text-left">
+              <p className="text-xs font-bold text-red-600 uppercase tracking-wide mb-1.5">Error details</p>
+              <p className="text-xs text-slate-700 font-mono break-words">{this.state.message || 'Unknown error'}</p>
+            </div>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={this.handleReload}

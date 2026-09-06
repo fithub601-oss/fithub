@@ -162,7 +162,7 @@ const AdminPayments = () => {
                             <span className={`text-xs font-bold ${
                               m.paymentStatus === 'paid' ? 'text-neon-green' : m.paymentStatus === 'partial' ? 'text-neon-yellow' : 'text-red-400'
                             }`}>
-                              {m.paymentStatus.toUpperCase()}
+                              {(m.paymentStatus || 'pending').toUpperCase()}
                             </span>
                           </div>
                         </td>
