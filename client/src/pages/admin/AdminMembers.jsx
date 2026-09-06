@@ -343,7 +343,7 @@ const AdminMembers = () => {
                     <label className={modalLabel}>Membership Type (Plan)</label>
                     <select
                       className={modalInputs}
-                      value={showEditModal.editMembership?.subscriptionId || ''}
+                      value={showEditModal?.editMembership?.subscriptionId || ''}
                       onChange={(e) => setShowEditModal({
                         ...showEditModal,
                         editMembership: { ...showEditModal.editMembership, subscriptionId: e.target.value }
@@ -360,7 +360,7 @@ const AdminMembers = () => {
                     <input
                       type="date"
                       className={modalInputs}
-                      value={showEditModal.editMembership?.startDate || ''}
+                      value={showEditModal?.editMembership?.startDate || ''}
                       onChange={(e) => setShowEditModal({
                         ...showEditModal,
                         editMembership: { ...showEditModal.editMembership, startDate: e.target.value }
@@ -372,7 +372,7 @@ const AdminMembers = () => {
                     <input
                       type="date"
                       className={modalInputs}
-                      value={showEditModal.editMembership?.endDate || ''}
+                      value={showEditModal?.editMembership?.endDate || ''}
                       onChange={(e) => setShowEditModal({
                         ...showEditModal,
                         editMembership: { ...showEditModal.editMembership, endDate: e.target.value }
