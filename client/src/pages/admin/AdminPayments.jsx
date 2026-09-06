@@ -212,7 +212,7 @@ const AdminPayments = () => {
                 <input
                   type="number"
                   required
-                  max={showPaymentModal.amountRemaining}
+                  max={showPaymentModal?.amountRemaining}
                   className={modalInputs}
                   value={paymentForm.amount}
                   onChange={(e) => setPaymentForm({...paymentForm, amount: e.target.value})}

@@ -318,25 +318,25 @@ const AdminMembers = () => {
         <form onSubmit={handleEditMember} className="space-y-4">
               <div>
                 <label className={modalLabel}>Full Name</label>
-                <input type="text" className={modalInputs} value={showEditModal.name || ''} onChange={(e) => setShowEditModal({...showEditModal, name: e.target.value})} />
+                <input type="text" className={modalInputs} value={showEditModal?.name || ''} onChange={(e) => setShowEditModal({...showEditModal, name: e.target.value})} />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className={modalLabel}>Email</label>
-                  <input type="email" className={modalInputs} value={showEditModal.email || ''} onChange={(e) => setShowEditModal({...showEditModal, email: e.target.value})} />
+                  <input type="email" className={modalInputs} value={showEditModal?.email || ''} onChange={(e) => setShowEditModal({...showEditModal, email: e.target.value})} />
                 </div>
                 <div>
                   <label className={modalLabel}>Phone</label>
-                  <input type="tel" className={modalInputs} value={showEditModal.phone || ''} onChange={(e) => setShowEditModal({...showEditModal, phone: e.target.value})} />
+                  <input type="tel" className={modalInputs} value={showEditModal?.phone || ''} onChange={(e) => setShowEditModal({...showEditModal, phone: e.target.value})} />
                 </div>
               </div>
               <div>
                 <label className={modalLabel}>Address</label>
-                <input type="text" className={modalInputs} value={showEditModal.address || ''} onChange={(e) => setShowEditModal({...showEditModal, address: e.target.value})} />
+                <input type="text" className={modalInputs} value={showEditModal?.address || ''} onChange={(e) => setShowEditModal({...showEditModal, address: e.target.value})} />
               </div>
               <div className="border-t border-slate-100 pt-4 mt-1">
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">
-                  Membership Details {showEditModal.editMembership?.membershipId ? '' : '(no plan assigned yet)'}
+                  Membership Details {showEditModal?.editMembership?.membershipId ? '' : '(no plan assigned yet)'}
                 </p>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="col-span-2">
