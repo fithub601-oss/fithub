@@ -29,6 +29,7 @@ const toDateInput = (d) => {
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const APP_VERSION = 'v6.2 · dashboard';
 
   const [stats, setStats] = useState({ members: 0, products: 0, subscriptions: 0, banners: 0, revenue: 0 });
   const [recentMembers, setRecentMembers] = useState([]);
@@ -36,7 +37,13 @@ const AdminDashboard = () => {
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
   const [fetchError, setFetchError] = useState(false);
+  const [fetchErrorMessage, setFetchErrorMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  const safeGet = (path) => api.get(path).catch((err) => {
+    setFetchError(true);
+    setFetchErrorMessage(err.response?.data?.message || err.message || 'Request failed');
+    return { data: [] };
+  });
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [addSaving, setAddSaving] = useState(false);
@@ -53,12 +60,12 @@ const AdminDashboard = () => {
   const fetchAll = async () => {
     try {
       const [membersRes, productsRes, subsRes, bannersRes, txsRes, subscriptionsRes] = await Promise.all([
-        api.get('/members'),
-        api.get('/products/all'),
-        api.get('/subscriptions/all'),
-        api.get('/banners/all'),
-        api.get('/members/all-transactions'),
-        api.get('/subscriptions/all')
+        safeGet('/members'),
+        safeGet('/products/all'),
+        safeGet('/subscriptions/all'),
+        safeGet('/banners/all'),
+        safeGet('/members/all-transactions'),
+        safeGet('/subscriptions/all')
       ]);
 
       const membersArr = Array.isArray(membersRes.data) ? membersRes.data : [];
@@ -166,7 +173,10 @@ const AdminDashboard = () => {
             <h1 className="font-display text-4xl text-white">ADMIN <span className="text-primary-500">PANEL</span></h1>
             <p className="text-gray-400 mt-1">Welcome back, {user?.name}</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-center">
+            <span className="px-3 py-1.5 bg-white/60 text-slate-500 text-xs font-semibold rounded-full border border-slate-200">
+              Build {APP_VERSION}
+            </span>
             <button
               onClick={logout}
               className="flex items-center gap-2 px-4 py-2 bg-red-500/10 text-red-400 font-semibold rounded-full hover:bg-red-500/20"
@@ -180,6 +190,7 @@ const AdminDashboard = () => {
           <div className="mb-6 px-5 py-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-center justify-between gap-4">
             <p className="text-amber-800 text-sm">
               Some admin data failed to load. Showing what we have — try refreshing in a moment.
+              {fetchErrorMessage ? <span className="block mt-1 text-amber-700 text-xs">Details: {fetchErrorMessage}</span> : null}
             </p>
             <button onClick={fetchAll} className="px-4 py-2 bg-amber-500 text-white text-sm font-bold rounded-full hover:bg-amber-600 transition-colors shrink-0">
               Retry

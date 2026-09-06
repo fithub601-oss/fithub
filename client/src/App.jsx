@@ -27,6 +27,7 @@ import AdminTransactions from './pages/admin/AdminTransactions';
 import AdminReviews from './pages/admin/AdminReviews';
 import AdminProtected from './components/AdminProtected';
 import ErrorBoundary from './components/ErrorBoundary';
+import ErrorReporter from './components/ErrorReporter';
 
 const PublicLayout = () => (
   <>
@@ -115,6 +116,7 @@ function App() {
         <Route path="/admin/*" element={<AdminLayout />} />
         <Route path="/*" element={<PublicLayout />} />
       </Routes>
+      <ErrorReporter />
     </div>
   );
 }
