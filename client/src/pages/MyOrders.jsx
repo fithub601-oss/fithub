@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import { FaArrowLeft, FaShoppingBag, FaMapMarkerAlt, FaReceipt } from 'react-icons/fa';
 import Stickers from '../components/Stickers';
 import ReceiptModal from '../components/ReceiptModal';
+import { ORDER_STEPS, ORDER_STATUS_META, fmtStatusTime, currentStepIndex } from '../utils/orderStatus';
 
 const MyOrders = () => {
   const { user } = useAuth();
@@ -34,6 +35,69 @@ const MyOrders = () => {
     paid: 'bg-emerald-100 text-emerald-700',
     pending: 'bg-amber-100 text-amber-700',
     failed: 'bg-red-100 text-red-600'
+  };
+
+  const OrderTracker = ({ order }) => {
+    const meta = ORDER_STATUS_META[order.status] || ORDER_STATUS_META.placed;
+    const step = currentStepIndex(order.status);
+
+    if (order.status === 'cancelled') {
+      const cancelledAt = [...(order.statusHistory || [])].reverse().find(h => h.status === 'cancelled');
+      return (
+        <div className="mb-6 flex items-center gap-3 px-4 py-3 bg-red-50 border border-red-200 rounded-2xl">
+          <span className="text-2xl shrink-0">{meta.emoji}</span>
+          <div className="min-w-0">
+            <p className="text-red-700 font-bold text-sm">Order Cancelled</p>
+            <p className="text-red-500 text-xs truncate">
+              {cancelledAt?.note || 'No longer being fulfilled'}{cancelledAt?.at ? ` · ${fmtStatusTime(cancelledAt.at)}` : ''}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    if (step < 0) return null;
+
+    return (
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">Live Order Status</p>
+          <span className={`px-3 py-1 rounded-full text-xs font-bold ${meta.pill}`}>
+            {meta.emoji} {meta.label.toUpperCase()}
+          </span>
+        </div>
+        <div className="relative">
+          <div className="absolute left-2 right-2 top-4 h-1 bg-slate-100 rounded-full" />
+          <div
+            className="absolute left-2 top-4 h-1 rounded-full bg-gradient-to-r from-primary-500 to-neon-pink transition-all duration-500"
+            style={{ width: `calc(((100% - 1rem) * ${(step / (ORDER_STEPS.length - 1))}) )` }}
+          />
+          <div className="flex justify-between">
+            {ORDER_STEPS.map((s, i) => {
+              const sMeta = ORDER_STATUS_META[s];
+              const done = i <= step;
+              const hit = s === order.status;
+              const happened = [...(order.statusHistory || [])].reverse().find(h => h.status === s);
+              return (
+                <div key={s} className="relative z-10 flex flex-col items-center w-[20%]">
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-colors ${
+                      done ? 'bg-gradient-to-r from-primary-600 to-neon-pink text-white border-transparent' : 'bg-white text-slate-300 border-slate-200'
+                    }`}
+                  >
+                    {done ? '✓' : sMeta.emoji}
+                  </div>
+                  <p className={`mt-1.5 text-[10px] font-semibold text-center leading-tight ${done ? 'text-slate-800' : 'text-slate-400'}`}>
+                    {sMeta.label}
+                    {happened?.at ? <span className={`block text-[9px] font-medium ${hit ? 'text-primary-600' : 'text-slate-400'}`}>{fmtStatusTime(happened.at)}</span> : null}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -107,6 +171,7 @@ const MyOrders = () => {
                 </div>
 
                 <div className="p-6">
+                  <OrderTracker order={order} />
                   <div className="space-y-3">
                     {(order.items || []).map((item) => (
                       <div key={item._id || `${order._id}-${item.name}`} className="flex items-center gap-4">

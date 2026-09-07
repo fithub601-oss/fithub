@@ -161,7 +161,8 @@ const verifyProductPayment = async (req, res) => {
       razorpayOrderId: isOffline ? undefined : razorpay_order_id,
       razorpayPaymentId: isOffline ? undefined : razorpay_payment_id,
       shippingAddress: shippingAddress || undefined,
-      status: 'placed'
+      status: 'placed',
+      statusHistory: [{ status: 'placed', note: isOffline ? 'Order received — pay at the gym' : 'Order placed and payment received' }]
     });
 
     res.status(201).json({
@@ -229,9 +230,48 @@ const getAllOrders = async (req, res) => {
   }
 };
 
+// @desc    Update order fulfillment status (admin)
+// @route   PATCH /api/orders/:id/status
+// @access  Private/Admin
+const updateOrderStatus = async (req, res) => {
+  try {
+    const valid = ['placed', 'confirmed', 'shipped', 'out_for_delivery', 'delivered', 'cancelled'];
+    const { status, note } = req.body;
+
+    if (!valid.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status' });
+    }
+
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    if (order.status === 'cancelled') {
+      return res.status(400).json({ message: 'This order is already cancelled' });
+    }
+
+    order.status = status;
+    order.updatedAt = new Date();
+    order.statusHistory.push({ status, note: note || '' });
+
+    await order.save();
+
+    const updated = await Order.findById(order._id)
+      .populate('user', 'name email phone')
+      .populate('items.product', 'name price');
+
+    res.json({ message: `Order marked ${status.replace(/_/g, ' ')}`, order: updated });
+  } catch (error) {
+    console.error('Order status update error:', error);
+    res.status(500).json({ message: 'Failed to update order status' });
+  }
+};
+
 module.exports = {
   createProductOrder,
   verifyProductPayment,
   getMyOrders,
-  getAllOrders
+  getAllOrders,
+  updateOrderStatus
 };

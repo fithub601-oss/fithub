@@ -25,6 +25,7 @@ import AdminBanners from './pages/admin/AdminBanners';
 import AdminPayments from './pages/admin/AdminPayments';
 import AdminTransactions from './pages/admin/AdminTransactions';
 import AdminReviews from './pages/admin/AdminReviews';
+import AdminOrders from './pages/admin/AdminOrders';
 import AdminProtected from './components/AdminProtected';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorReporter from './components/ErrorReporter';
@@ -95,6 +96,7 @@ const AdminLayout = () => (
           <Route path="payments" element={<AdminPayments />} />
           <Route path="transactions" element={<AdminTransactions />} />
           <Route path="reviews" element={<AdminReviews />} />
+          <Route path="orders" element={<AdminOrders />} />
           <Route path="*" element={<AdminDashboard />} />
         </Routes>
         </RouteFade>

@@ -35,9 +35,19 @@ const orderSchema = new mongoose.Schema({
   razorpayPaymentId: String,
   status: {
     type: String,
-    enum: ['placed', 'confirmed', 'cancelled'],
+    enum: ['placed', 'confirmed', 'shipped', 'out_for_delivery', 'delivered', 'cancelled'],
     default: 'placed'
   },
+  statusHistory: [
+    {
+      status: {
+        type: String,
+        enum: ['placed', 'confirmed', 'shipped', 'out_for_delivery', 'delivered', 'cancelled']
+      },
+      note: String,
+      at: { type: Date, default: Date.now }
+    }
+  ],
   shippingAddress: {
     fullName: String,
     phone: String,
@@ -47,7 +57,8 @@ const orderSchema = new mongoose.Schema({
     pincode: String,
     landmark: String
   },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('Order', orderSchema);
