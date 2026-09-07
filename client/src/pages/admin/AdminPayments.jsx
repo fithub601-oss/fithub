@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import api from '../../api';
 import Modal from '../../components/Modal';
+import { popConfetti } from '../../utils/celebrate';
 import { FaMoneyBillWave } from 'react-icons/fa';
 
 const AdminPayments = () => {
@@ -35,6 +36,7 @@ const AdminPayments = () => {
         method: paymentForm.method
       });
       toast.success('Payment recorded!');
+      popConfetti();
       setShowPaymentModal(null);
       setPaymentForm({ amount: '', method: 'cash' });
       fetchData();

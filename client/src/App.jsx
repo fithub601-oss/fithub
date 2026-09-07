@@ -28,12 +28,14 @@ import AdminReviews from './pages/admin/AdminReviews';
 import AdminProtected from './components/AdminProtected';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorReporter from './components/ErrorReporter';
+import RouteFade from './components/RouteFade';
 
 const PublicLayout = () => (
   <>
     <Navbar />
     <ErrorBoundary>
       <main className="flex-grow">
+        <RouteFade>
         <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
@@ -71,6 +73,7 @@ const PublicLayout = () => (
         <Route path="/calendar" element={<Calendar />} />
         <Route path="*" element={<Home />} />
       </Routes>
+        </RouteFade>
     </main>
     </ErrorBoundary>
     <Footer />
@@ -82,6 +85,7 @@ const AdminLayout = () => (
     <Navbar />
     <ErrorBoundary>
       <main className="flex-grow">
+        <RouteFade>
         <Routes>
           <Route path="/" element={<AdminDashboard />} />
           <Route path="members" element={<AdminMembers />} />
@@ -93,6 +97,7 @@ const AdminLayout = () => (
           <Route path="reviews" element={<AdminReviews />} />
           <Route path="*" element={<AdminDashboard />} />
         </Routes>
+        </RouteFade>
       </main>
     </ErrorBoundary>
     <Footer />

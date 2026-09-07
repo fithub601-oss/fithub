@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import api from '../../api';
 import { useAuth } from '../../context/AuthContext';
 import Modal from '../../components/Modal';
+import { popConfetti } from '../../utils/celebrate';
 import {
   FaUsers, FaBoxOpen, FaTag, FaMoneyBillWave, FaUserPlus, FaImage, FaSignOutAlt, FaChartBar, FaHistory, FaStar, FaSearch, FaEdit, FaTrash
 } from 'react-icons/fa';
@@ -134,6 +135,7 @@ const AdminDashboard = () => {
           notes: membershipForm.notes
         });
         toast.success(`Member created & enrolled in a plan!`);
+        popConfetti();
       } else {
         toast.success(`Member ${newMember.name} created!`);
       }
@@ -198,6 +200,7 @@ const AdminDashboard = () => {
         method: payForm.method
       });
       toast.success('Payment recorded!');
+      popConfetti();
       setPayMember(null);
       fetchAll();
     } catch (error) {

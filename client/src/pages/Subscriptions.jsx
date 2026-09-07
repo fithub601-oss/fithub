@@ -5,6 +5,7 @@ import api from '../api';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Stickers from '../components/Stickers';
+import { bigCelebration } from '../utils/celebrate';
 
 const Subscriptions = () => {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -93,6 +94,7 @@ const Subscriptions = () => {
               userId: user._id
             });
             toast.success('Payment successful! Membership activated 🎉');
+            bigCelebration();
             setTimeout(() => navigate('/dashboard'), 1500);
           } catch (error) {
             toast.error(error.response?.data?.message || 'Payment verification failed');

@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Playful global touches: springy press on every button + floating stickers */
+button { transition: transform 0.15s ease; }
+button:active { transform: scale(0.94); }
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0) rotate(-8deg); }
+  50% { transform: translateY(-10px) rotate(8deg); }
+}
+.sticker-float { display: inline-block; animation: floaty 3.2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sticker-float { animation: none; }
+  button:active { transform: none; }
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @layer base {

@@ -7,6 +7,7 @@ import api from '../api';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import Stickers from '../components/Stickers';
+import { popConfetti, bigCelebration } from '../utils/celebrate';
 
 const Cart = () => {
   const { cart, cartTotal, updateQty, removeFromCart, clearCart } = useCart();
@@ -116,6 +117,7 @@ const Cart = () => {
           shippingAddress: address
         });
         toast.success('Order placed! Pay at the gym to confirm.');
+        popConfetti();
         clearCart();
         navigate('/products');
         return;
@@ -141,6 +143,7 @@ const Cart = () => {
               shippingAddress: address
             });
             toast.success('Payment successful! Order placed 🎉');
+            bigCelebration();
             clearCart();
             navigate('/products');
           } catch (error) {
