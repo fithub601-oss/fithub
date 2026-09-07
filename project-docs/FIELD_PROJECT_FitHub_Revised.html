@@ -1,0 +1,1213 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FIELD PROJECT — FitHub Gym Management Website Development (Revised)</title>
+<style>
+  body { font-family: Arial, Helvetica, sans-serif; background: #8a8a8a; margin: 0; color: #111; }
+  .page { width: 210mm; min-height: 276mm; background: #fff; border: 2px solid #000;
+          margin: 12px auto; padding: 15mm 14mm; box-sizing: border-box; }
+  h1.title { text-align: center; font-size: 30px; margin: 90px 0 10px; }
+  h2.subtitle { text-align: center; font-size: 24px; margin: 0 0 8px; }
+  h3.dept { text-align: center; font-weight: normal; font-size: 18px; margin: 0 0 60px; }
+  .members { margin-left: 60px; font-size: 17px; line-height: 2; font-weight: bold; }
+  .techline { text-align: center; font-size: 15px; margin-top: 70px; color: #333; }
+  .chapter { text-align: center; font-style: italic; font-size: 26px; margin: 6px 0 18px; }
+  .rule { border: none; border-top: 2px solid #1f4e79; margin: 14px 40px; }
+  h3.sec { color: #0aa14a; font-size: 18px; margin: 22px 0 8px; }
+  h4.sub { font-size: 16px; margin: 16px 0 6px; }
+  p { font-size: 15px; line-height: 1.55; text-align: justify; }
+  li { font-size: 15px; line-height: 1.55; margin-bottom: 6px; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0 16px; font-size: 14px; }
+  th { background: #d9e6f2; border: 1px solid #000; padding: 7px; text-align: left; }
+  td { border: 1px solid #000; padding: 7px; vertical-align: top; }
+  code { font-size: 13px; background: #f1f5f9; padding: 1px 5px; border-radius: 4px; }
+  svg.diagram { max-width: 100%; height: auto; display: block; margin: 10px auto; }
+  .fig { text-align: center; font-style: italic; font-size: 15px; margin: 6px 0 20px; }
+  @media print {
+    @page { size: A4; margin: 0; }
+    body { background: #fff; }
+    .page { margin: 0; page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= TITLE PAGE ================= -->
+<div class="page">
+  <h1 class="title">FIELD PROJECT</h1>
+  <h2 class="subtitle">FitHub — Gym Management Website Development</h2>
+  <h3 class="dept">Department of Information Technology</h3>
+  <div class="members">
+    MEMBERS :<br>
+    SHRADDHA MAHINDRAKAR&nbsp;&nbsp;&nbsp;177<br>
+    PRIYANKA MANE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;179<br>
+    SUMEET MORE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;184<br>
+    KHUSHI RAUT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;191
+  </div>
+  <p class="techline"><b>Technology:</b> MERN Stack — MongoDB · Express.js · React · Node.js<br>
+  <b>Live:</b> https://fithub-api-3wjz.onrender.com</p>
+</div>
+
+<!-- ================= CHAPTER 1 ================= -->
+<div class="page">
+  <hr class="rule">
+  <h2 class="chapter">CHAPTER 1 : INTRODUCTION</h2>
+  <hr class="rule">
+
+  <h3 class="sec">1.1 Background</h3>
+  <p>Most local gyms are still run using paper notebooks and messy registers, which makes tracking
+  memberships and daily operations a major headache and can easily lose the track of the gym.
+  We built FitHub to fix these problems by replacing chaotic paperwork with a single, simple web
+  platform. The system gives administrators complete control, allowing them to oversee the entire
+  facility, track member statuses, and handle payments all from one secure dashboard. By
+  bringing everything into one digital space, FitHub keeps the business organized.</p>
+
+  <h3 class="sec">1.2 Problem statements</h3>
+  <p>Running a gym with paper notebooks and registers is slow, messy, and leads to easy mistakes.
+  Owners constantly lose track of whose membership is expiring, who still owes money, etc.
+  Because all the information is scattered, it is almost impossible to quickly check monthly
+  income or see if the business is actually growing. This manual paperwork creates daily chaos
+  and makes it really hard to run the gym smoothly as more members join.</p>
+
+  <h3 class="sec">1.3 Purpose of project</h3>
+  <ul>
+    <li>Get rid of paper registers: The gym currently uses only paper notebooks and diaries,
+    which are messy, take up space, and can easily get lost or ruined.</li>
+    <li>Fix manual mistakes: Right now, the staff has to flip through pages by hand just to see
+    who paid, who is new, or whose membership is ending, which takes way too long.</li>
+    <li>Give the gym its very first online system: This gym has absolutely no digital platform right
+    now, so this project moves them from old-school paperwork to the internet for the first time.</li>
+    <li>Put everything in one place: Instead of checking different notebooks, the owner can now
+    see members and fees all on one simple computer screen.</li>
+    <li>Save time and effort: By stopping the boring paperwork, the gym staff can stop stressing
+    over daily records and focus on running a better fitness center.</li>
+  </ul>
+
+  <h3 class="sec">1.4 Objective of project</h3>
+  <ul>
+    <li>To build a simple web application called FitHub that replaces all physical registers and
+    paper notebooks with a digital system.</li>
+    <li>To create a central dashboard where the gym admin can view and manage members,
+    and payments all in one place.</li>
+    <li>To automate the tracking of membership expiration dates and pending fees so the staff
+    doesn't have to check records by hand.</li>
+    <li>To secure the gym's data by setting up proper login accounts for administrators and members.</li>
+    <li>To provide the gym with its very first online platform, moving their entire business from
+    manual files to the internet.</li>
+  </ul>
+</div>
+
+<div class="page">
+  <h3 class="sec">1.5 Scope of the Project</h3>
+  <p>The scope of this project is to build a web-based platform called FitHub specifically for a
+  local gym that currently uses manual paper registers. The system moves all member
+  records, membership packages, and transactions online. It provides secure login access for
+  both the administrator and gym members, allowing the gym to process digital payments and
+  communicate with members automatically, making daily operations entirely paperless.</p>
+
+  <h3 class="sec">1.5.1 Features:</h3>
+  <p>Secure login system for admins and gym members.</p>
+  <p>Digital registration forms to quickly sign up new members.</p>
+  <p>Dynamic package creation for different gym membership tiers.</p>
+  <p>Integrated secure online checkout for membership fees.</p>
+  <p>Instant email receipts sent automatically upon payment confirmation.</p>
+  <p>Automated text and email alerts for upcoming membership expiration dates.</p>
+  <p>Search bar to instantly find any member's details by name or phone number.</p>
+  <p>In-gym product store with cart, orders and order receipts.</p>
+  <p>Member progress tracking (weight and body measurements) with charts.</p>
+  <p>Member reviews and ratings with admin moderation.</p>
+  <p>Gym calendar for classes, events and holidays, plus homepage banners.</p>
+
+  <h3 class="sec">1.5.2 Exclusions</h3>
+  <p>Trainer Management: Registering gym trainers and assigning them to member schedules or slots.</p>
+  <p>Workout &amp; Diet Planners: Custom daily exercise and meal charts for members.</p>
+  <p>Mobile Application: Building dedicated Android or iOS apps for easier mobile access.</p>
+  <p>Biometric/ID Attendance: Linking fingerprint scanners or QR codes at the gym door to the software.</p>
+</div>
+
+<!-- ================= CHAPTER 2 ================= -->
+<div class="page">
+  <hr class="rule">
+  <h2 class="chapter">CHAPTER 2 : LITERATURE SURVEY</h2>
+  <hr class="rule">
+
+  <h3 class="sec">System Name : Cult for Corporates (by Cult.fit).</h3>
+  <h3 class="sec">Brief Description :</h3>
+  <p>It is an all-in-one, B2B digital and physical health platform designed to
+  transform traditional company wellness into a high-engagement fitness culture. Instead of
+  just offering basic gym memberships, it provides companies with customized fitness
+  programs, flexible gym network access, and analytics tools to track employee health, boost
+  morale, and increase productivity.</p>
+
+  <h3 class="sec">Feature List :</h3>
+  <ul>
+    <li>Premium Fitness Access (Cultpass): Employees get flexible access to over 2,000
+    physical gym facilities, Cult centers, and online home-workout formats.</li>
+    <li>Diverse Workout Formats: Access to structured group classes including Yoga, Dance
+    Fitness, Strength &amp; Conditioning (S&amp;C), HRX workouts, Boxing, and Pilates.</li>
+    <li>Exclusive HR Dashboard: A centralized tracking tool for corporate HR departments
+    to monitor overall employee participation, engagement levels, and health trends.</li>
+    <li>On-Campus / Onsite Solutions: Expert-led live health sessions, dance, or yoga
+    events organized directly inside the company's office space.</li>
+    <li>Corporate Gamification &amp; Challenges: Inter-company or intra-company sports
+    leagues (Cricket, Football, Badminton) and weight loss/fitness challenges to build
+    team spirit. Dietician &amp; Expert Consultations: One-on-one virtual or physical
+    guidance from certified nutritionists, physiotherapists, and mental health coaches.</li>
+    <li>Corporate Gifting &amp; Rewards: Customized reward programs and health vouchers to
+    recognize and appreciate active employees ("Workplace Heroes").</li>
+  </ul>
+
+  <h3 class="sec">Technology Overview:</h3>
+  <ul>
+    <li>Hardware Mobile &amp; Desktop Devices: Smartphones (iOS and Android) and
+    computers used by employees and HR admins to access the platform.</li>
+    <li>Smart Gym Infrastructure: Connected QR code scanners and biometric check-in
+    systems at physical Cult/partner centers to log attendance.</li>
+    <li>Wearable Integration: Capability to sync data from consumer fitness hardware (such
+    as smartwatches, fitness bands, and phone step-counters) to the mobile app.</li>
+    <li>Software Cult.fit Mobile App: The user-facing software where employees book class
+    slots, join virtual live streams, track personal health goals, and pause subscriptions.</li>
+    <li>HR Analytics Web Portal: A secure SaaS (Software-as-a-Service) dashboard built for
+    company administrators to download reports and view employee engagement ROI.</li>
+    <li>Cloud Infrastructure: Back-end servers and databases (often hosted on AWS or
+    similar cloud systems) that handle massive real-time booking traffic and securely
+    store user details.</li>
+    <li>Privacy &amp; Compliance Protocols: Strict enterprise data-security frameworks built to
+    satisfy data protection compliance standards (e.g., ISO 9001 and ISO 45001 certification).</li>
+    <li>Slot Booking &amp; Inventory Optimization Algorithms: Real-time scheduling
+    systems that fairly allocate gym and class capacities based on demand,
+    cancellations, and waiting lists.</li>
+    <li>Personalized Recommendation Engine: Machine learning algorithms within the app
+    that suggest workout routines, intensity levels, and diet plans based on an
+    employee's goals and past activity.</li>
+    <li>Engagement &amp; Analytical Aggregation: Algorithms that anonymize and group
+    employee health data to generate broad analytics for HR dashboards while strictly
+    protecting individual privacy.</li>
+  </ul>
+</div>
+
+<div class="page">
+  <h3 class="sec">System Name : GYM IT Fitness System.</h3>
+  <h3 class="sec">Brief Description :</h3>
+  <p>The GYM IT Fitness System is a data-driven fitness management platform.
+  It is built to automate gym operations across multiple branches. The platform connects gym
+  administration, personal trainers, and members into one unified ecosystem to track health progress.</p>
+
+  <h3 class="sec">Feature :</h3>
+  <ul>
+    <li>Multi-Branch Dashboard: Manages distinct gym locations from a single software interface.</li>
+    <li>Data-Driven Tracking: Records fitness metrics to map progress and establish future goals.</li>
+    <li>Integrated Lead Management: Captures customer inquiries through web contact forms.</li>
+    <li>Personalized Programs: Distributes specialized schedules for activities like Weight Loss, MMA, and Yoga.</li>
+    <li>Nutritional Guidance Portal: Integrates customized diet plans to complement daily workout routines.</li>
+    <li>Built-in BMI Calculator: Allows quick body mass index evaluations directly on the website.</li>
+    <li>Review Aggregator: Displays real-time Google Reviews to establish credibility and gather user feedback.</li>
+  </ul>
+
+  <h3 class="sec">Technological Overview:</h3>
+  <ul>
+    <li>Hardware Client Devices: Smartphones, tablets, and desktop computers used by members and staff.</li>
+    <li>Cloud Infrastructure: Remote physical servers that host the gym database and website files safely.</li>
+    <li>Software Front-End (User Interface): Built using standard HTML, CSS, JavaScript,
+    and Bootstrap frameworks to ensure the layout functions smoothly on both computers and phones.</li>
+    <li>Back-End (Logic): Programmed with languages like PHP or Node.js to securely
+    process member sign-ups, form submissions, and calculator operations.</li>
+    <li>Database Management: Uses MySQL or cloud databases to systematically store
+    member profiles, trainer allocations, and operational logs.</li>
+    <li>Mathematical Calculators: Employs algebraic logic to process user
+    weight and height measurements into a precise Body Mass Index score (BMI = weight / height²).</li>
+    <li>Data Analytics: Filters and tallies structural progress metrics over time, giving clear
+    visualization charts to spot health trends.</li>
+    <li>Review Sorting Logic: Employs rating algorithms to compute and display the aggregate score of the business.</li>
+  </ul>
+
+  <h3 class="sec">2.3 Comparative Analysis – Feature Gap Table</h3>
+</div>
+
+<div class="page">
+  <p>The table below compares the two existing systems studied above with the proposed FitHub
+  system, highlighting the feature gaps in each and how FitHub is designed to fill them.</p>
+  <table>
+    <tr><th>Feature Gap Identified</th><th>Cult for Corporates</th><th>GYM IT Fitness System</th><th>How FitHub Bridges the Gap</th></tr>
+    <tr><td>Online purchase &amp; renewal of individual membership plans</td>
+    <td>Not available – platform is B2B/corporate-only; no direct individual purchase flow</td>
+    <td>Not available – uses a contact/lead form instead of an online purchase flow</td>
+    <td>Provides a complete View → Compare → Buy/Renew Membership flow for individual users</td></tr>
+    <tr><td>Integrated online payment with receipt generation</td>
+    <td>No dedicated payment/receipt module described</td><td>Not available</td>
+    <td>Integrates online payment with instant confirmation and a downloadable receipt</td></tr>
+    <tr><td>Self-service account recovery (forgot/reset password)</td>
+    <td>Not documented</td><td>Not documented</td>
+    <td>Includes a secure, email-based forgot/reset password flow</td></tr>
+    <tr><td>Dedicated admin panel for payment approval &amp; member management</td>
+    <td>HR dashboard exists but is analytics-only, not payment/membership focused</td>
+    <td>No dedicated admin approval workflow</td>
+    <td>Gives admins a dashboard to manage members, approve payments, and send notifications</td></tr>
+    <tr><td>Membership &amp; payment history tracking for the user</td>
+    <td>Not focused on individual membership history</td><td>Not available</td>
+    <td>Lets users view their full membership and payment history anytime</td></tr>
+    <tr><td>Affordable, single-gym scale solution</td>
+    <td>Designed for large corporate clients; not cost-effective for a single gym</td>
+    <td>Enterprise, multi-branch focus; complex/overkill for one gym</td>
+    <td>Lightweight and purpose-built for a single gym's day-to-day operations</td></tr>
+  </table>
+
+  <hr class="rule">
+  <h2 class="chapter">CHAPTER 3 : SYSTEM REQUIREMENTS AND DESIGN</h2>
+  <hr class="rule">
+
+  <h3 class="sec">3.1 System Modules</h3>
+  <p>The FitHub system is divided into four major modules, each handling a distinct part of the
+  gym membership management process: the User Module, Membership Module, Payment
+  Module, and Admin Module — plus supporting modules for the store, progress tracking, reviews,
+  calendar and banners. Each module and its step-by-step working is explained below.</p>
+
+  <h3 class="sec">3.1.1 User Module</h3>
+  <p>This module handles everything related to a user's identity and account on the platform.</p>
+  <h4 class="sub">Registration:</h4>
+  <ul>
+    <li>The new user opens the FitHub registration page and enters details such as name,
+    email address, phone number and password (with confirm password).</li>
+    <li>The frontend validates the input fields (e.g., valid email format, 10-digit Indian mobile
+    number, minimum 8-character password, matching passwords, required fields).</li>
+    <li>On submission, the data is sent to the backend registration API (<code>POST /api/auth/register</code>).</li>
+    <li>The server checks whether the email is already registered. If it exists, an error is returned.</li>
+    <li>If the email is new, the password is hashed with bcrypt and the user record is stored in MongoDB.</li>
+    <li>An email OTP is issued for account verification, and the user is redirected to the Login page with a success message.</li>
+  </ul>
+  <h4 class="sub">Login:</h4>
+  <ul>
+    <li>The registered user enters their email and password on the login page.</li>
+    <li>The frontend checks that both fields are filled (empty fields trigger a "required" message).</li>
+    <li>Valid input is sent to the backend login API (<code>POST /api/auth/login</code>) as a JSON request.</li>
+    <li>The server verifies the credentials against the stored (hashed) password with bcrypt.</li>
+    <li>If valid, a signed JWT token is created and the user is redirected to the dashboard
+    (members) or admin panel (role = admin); if invalid, an error message is displayed.</li>
+  </ul>
+  <h4 class="sub">Forget Password:</h4>
+  <ul>
+    <li>The user clicks "Forgot Password" on the login page.</li>
+    <li>The user enters their registered email address.</li>
+    <li>The system generates a time-limited email OTP and sends it to the user's email.</li>
+    <li>The user enters the OTP and sets a new password.</li>
+    <li>The new password is validated and updated in the database (re-hashed with bcrypt).</li>
+  </ul>
+  <h4 class="sub">Profile Management:</h4>
+  <ul>
+    <li>The logged-in user navigates to the "My Profile" section.</li>
+    <li>Existing details (name, phone, date of birth, gender, address, emergency contact) are
+    fetched from the database and displayed.</li>
+    <li>The user edits the required fields and clicks "Save"/"Update".</li>
+    <li>The updated data is validated and saved back to the database.</li>
+  </ul>
+</div>
+
+<div class="page">
+  <h3 class="sec">3.1.2 Membership Module</h3>
+  <p>This module allows users to browse, purchase, and track gym membership plans.</p>
+  <h4 class="sub">View Membership Plans:</h4>
+  <ul>
+    <li>The user opens the "Membership Plans" page.</li>
+    <li>The system fetches all active plans (name, duration + unit, price, features, popular flag)
+    from the database (<code>GET /api/subscriptions/all</code>) and displays them as cards.</li>
+  </ul>
+  <h4 class="sub">Compare Plans:</h4>
+  <ul>
+    <li>The user selects two or more plans to compare.</li>
+    <li>The system displays a side-by-side table of features, duration, and price for easy comparison.</li>
+  </ul>
+  <h4 class="sub">Buy Membership:</h4>
+  <ul>
+    <li>The user selects a plan and clicks "Buy Membership".</li>
+    <li>The system checks whether the user is logged in; if not, the user is redirected to login first.</li>
+    <li>The user confirms the plan and chooses online payment (Razorpay Checkout) or pay-at-gym.</li>
+    <li>Once payment succeeds, a new membership record is created with start date, end date
+    (auto-calculated from duration), and "active" status (<code>POST /api/members/:id/membership</code>).</li>
+  </ul>
+  <h4 class="sub">Renew Membership:</h4>
+  <ul>
+    <li>An existing member opens "Renew Membership" from their dashboard, usually shown before/after expiry.</li>
+    <li>The user selects the same or a new plan and proceeds to payment.</li>
+    <li>On successful payment, the membership end date is extended and status is updated.</li>
+  </ul>
+  <h4 class="sub">Membership History:</h4>
+  <ul>
+    <li>The user opens "Membership History" / "Transactions" to view all past and current
+    memberships along with payment status, amounts paid/remaining and receipts.</li>
+  </ul>
+
+  <h3 class="sec">3.1.3 Payment Module</h3>
+  <p>This module manages the financial transactions of the platform.</p>
+  <h4 class="sub">Online Payment:</h4>
+  <ul>
+    <li>After selecting a plan, the user is directed to the payment page.</li>
+    <li>The user pays through Razorpay Checkout (card/UPI/net-banking) or chooses pay-at-gym.</li>
+    <li>The payment request is sent securely to the gateway/backend for processing and the
+    Razorpay signature is verified on the server (<code>POST /api/payment/verify</code>).</li>
+  </ul>
+  <h4 class="sub">Payment Confirmation:</h4>
+  <ul>
+    <li>The payment gateway/backend validates the transaction.</li>
+    <li>On success, the payment status is marked "paid" and linked to the corresponding membership.</li>
+    <li>On failure, the status is marked "failed" and the user is prompted to retry.</li>
+    <li>Partial / installment payments are supported: the admin records each installment and
+    the server rejects any amount exceeding the remaining balance (HTTP 400 overpay guard).</li>
+  </ul>
+  <h4 class="sub">Download Receipt:</h4>
+  <ul>
+    <li>Once payment is confirmed, the system generates a receipt containing transaction ID,
+    amount, date, method and plan details.</li>
+    <li>The user can view, print or download this receipt from their dashboard/history, and a
+    copy is emailed automatically on every purchase or recorded installment.</li>
+  </ul>
+</div>
+
+<div class="page">
+  <h3 class="sec">3.1.4 Admin Module</h3>
+  <p>This module gives the gym administrator control over users, plans, and payments.</p>
+  <h4 class="sub">Manage Members:</h4>
+  <ul>
+    <li>The admin logs into the Admin Dashboard and opens the "Members" section.</li>
+    <li>The admin can view all members with search, add new members (optionally enrolling them
+    in a plan in the same step), edit details, change/assign plans, or remove member accounts.</li>
+  </ul>
+  <h4 class="sub">Manage Membership Plans:</h4>
+  <ul>
+    <li>The admin opens "Manage Plans" to add a new plan (name, duration, price, features,
+    popular flag) or edit/deactivate an existing plan.</li>
+  </ul>
+  <h4 class="sub">Approve Payment:</h4>
+  <ul>
+    <li>The admin reviews paid/partial/pending memberships in the "Payments" section
+    (<code>GET /api/members</code> with payment totals).</li>
+    <li>The admin records cash/UPI/card installments per member (<code>POST /api/members/:id/payment</code>)
+    and the ledger updates instantly.</li>
+  </ul>
+  <h4 class="sub">Send Notification:</h4>
+  <ul>
+    <li>The system automatically emails a branded payment receipt on every purchase or installment.</li>
+    <li>A scheduled job (every 6 hours) emails members upcoming-expiry reminders and flags them so nobody is reminded twice.</li>
+  </ul>
+  <h4 class="sub">View Reports:</h4>
+  <ul>
+    <li>The admin opens the dashboard to view total members, revenue collected, active/expiring/expired
+    membership counts, and the full transaction ledger with per-record receipts.</li>
+  </ul>
+
+  <h3 class="sec">3.1.5 Supporting Modules</h3>
+  <ul>
+    <li><b>Store &amp; Orders</b> — product catalog with stock tracking, cart, checkout
+    (Razorpay/cash), order status and order receipts.</li>
+    <li><b>Progress Tracking</b> — members log weight and body measurements over time with charts.</li>
+    <li><b>Reviews</b> — members submit ratings/comments; admin approves or hides them.</li>
+    <li><b>Calendar &amp; Banners</b> — admin-published gym classes, events, holidays and homepage banners.</li>
+  </ul>
+
+  <h3 class="sec">Key REST Endpoints Used</h3>
+  <table>
+    <tr><th>Method &amp; Endpoint</th><th>Purpose</th></tr>
+    <tr><td><code>POST /api/auth/register</code></td><td>Register a new member (validated, bcrypt-hashed)</td></tr>
+    <tr><td><code>POST /api/auth/login</code></td><td>Login, returns signed JWT (rate-limited 15 / 15 min)</td></tr>
+    <tr><td><code>POST /api/auth/send-otp</code> · <code>POST /api/auth/reset-password</code></td><td>Email OTP issue and password reset</td></tr>
+    <tr><td><code>GET /api/subscriptions/all</code></td><td>List active membership plans</td></tr>
+    <tr><td><code>GET /api/members</code> (admin)</td><td>List members with membership + validity info</td></tr>
+    <tr><td><code>POST /api/members/:id/membership</code> (admin)</td><td>Assign / renew a membership plan</td></tr>
+    <tr><td><code>PUT /api/members/:id</code> · <code>DELETE /api/members/:id</code> (admin)</td><td>Edit / remove a member</td></tr>
+    <tr><td><code>POST /api/members/:id/payment</code> (admin)</td><td>Record an installment (overpay rejected: 400)</td></tr>
+    <tr><td><code>GET /api/members/all-transactions</code> (admin)</td><td>Full payment ledger with totals</td></tr>
+    <tr><td><code>POST /api/payment/verify</code></td><td>Verify Razorpay signature, activate membership</td></tr>
+    <tr><td><code>GET /api/orders</code> · <code>POST /api/orders</code></td><td>Store orders with payment tracking</td></tr>
+  </table>
+</div>
+
+<div class="page">
+  <h3 class="sec">3.2 Hardware and Software Requirements</h3>
+  <p>The requirements below reflect the technology stack actually used to build and host FitHub:
+  a React single-page frontend calling an Express REST API, with MongoDB Atlas as the cloud
+  database. The complete system is deployed as one service on Render, which serves both the
+  API and the production frontend build (live at https://fithub-api-3wjz.onrender.com).</p>
+
+  <h3 class="sec">3.2.1 Software Requirements</h3>
+  <h4 class="sub">Frontend</h4>
+  <table>
+    <tr><th>Component</th><th>Technology</th><th>Purpose</th></tr>
+    <tr><td>UI Library</td><td>React 18 (Create React App)</td><td>Component-based pages: home, plans, checkout, dashboard, admin panel</td></tr>
+    <tr><td>Routing</td><td>React Router v6</td><td>Client-side navigation with protected member/admin routes</td></tr>
+    <tr><td>Styling</td><td>Tailwind CSS 3 + custom CSS</td><td>Responsive layout, gym theme, print stylesheet for receipts</td></tr>
+    <tr><td>HTTP Client</td><td>Axios (JWT interceptor)</td><td>REST API calls with automatic auth header + 401 redirect</td></tr>
+    <tr><td>Animations</td><td>Framer Motion</td><td>Page/modal transitions and micro-interactions</td></tr>
+    <tr><td>Charts</td><td>Recharts</td><td>Progress graphs and admin visualizations</td></tr>
+    <tr><td>Notifications / Icons</td><td>react-hot-toast, react-icons, MUI icons</td><td>Toast feedback and iconography</td></tr>
+    <tr><td>Checkout SDK</td><td>Razorpay Checkout (checkout.js)</td><td>Secure in-browser online payment popup</td></tr>
+    <tr><td>Browser</td><td>Google Chrome / Microsoft Edge (latest)</td><td>Rendering and testing the application</td></tr>
+    <tr><td>Code Editor</td><td>Visual Studio Code</td><td>Writing and debugging code</td></tr>
+    <tr><td>Package Manager</td><td>npm</td><td>Dependency management (incl. qs security override)</td></tr>
+    <tr><td>Version Control</td><td>Git + GitHub</td><td>Source control and collaboration</td></tr>
+    <tr><td>Dev Proxy</td><td>CRA proxy → http://localhost:5000</td><td>Frontend-to-API calls during local development</td></tr>
+  </table>
+
+  <h4 class="sub">Backend</h4>
+  <table>
+    <tr><th>Component</th><th>Technology</th><th>Purpose</th></tr>
+    <tr><td>Runtime</td><td>Node.js (≥ 16)</td><td>Executing server-side JavaScript</td></tr>
+    <tr><td>Framework</td><td>Express.js 4</td><td>Building REST APIs (e.g., /api/auth/login)</td></tr>
+    <tr><td>Database</td><td>MongoDB Atlas (NoSQL cloud)</td><td>Storing users, memberships, payments, orders, products</td></tr>
+    <tr><td>ODM</td><td>Mongoose 8</td><td>Schemas, validation and population of references</td></tr>
+    <tr><td>Authentication</td><td>bcryptjs (hashing), jsonwebtoken (JWT)</td><td>Secure password storage and stateless session handling</td></tr>
+    <tr><td>OTP Verification</td><td>Email OTP with expiry (otps collection)</td><td>Account verification and password reset</td></tr>
+    <tr><td>Online Payments</td><td>Razorpay SDK (orders + signature verification)</td><td>Secure membership and store checkout</td></tr>
+    <tr><td>Email Delivery</td><td>Gmail OAuth2 → Brevo → SendGrid → Resend (failover chain)</td><td>Receipts, OTPs and expiry reminders</td></tr>
+    <tr><td>SMS Provider</td><td>Twilio SDK</td><td>Text-message notification channel</td></tr>
+    <tr><td>Security</td><td>Helmet (CSP), express-rate-limit, CORS allowlist, express-mongo-sanitize, hpp, 2&nbsp;MB body limit</td><td>Hardening against XSS, injection, abuse and DoS</td></tr>
+    <tr><td>Scheduler</td><td>Recurring background job (6-hour interval)</td><td>Membership-expiry email reminders</td></tr>
+    <tr><td>Hosting</td><td>Render (single web service)</td><td>Hosts API + serves production frontend build</td></tr>
+    <tr><td>API Testing</td><td>Postman + live endpoint verification</td><td>Testing backend endpoints during development</td></tr>
+  </table>
+</div>
+
+<div class="page">
+  <h3 class="sec">3.2.2 Hardware Requirements</h3>
+  <h4 class="sub">Minimum Hardware Configuration</h4>
+  <table>
+    <tr><th>Component</th><th>Client Machine</th><th>Server (Cloud)</th></tr>
+    <tr><td>Processor</td><td>Dual-core 1.6 GHz or higher</td><td>Managed by Render (shared CPU on starter tier)</td></tr>
+    <tr><td>RAM</td><td>4 GB</td><td>512 MB – 2 GB instance + MongoDB Atlas M0 shared cluster</td></tr>
+    <tr><td>Storage</td><td>20 GB free space</td><td>Ephemeral instance disk; persistent data lives in Atlas</td></tr>
+    <tr><td>Internet</td><td>Stable broadband connection</td><td>Stable broadband connection</td></tr>
+    <tr><td>Display</td><td>1366x768 resolution or higher</td><td>Not required (headless server)</td></tr>
+  </table>
+
+  <h3 class="sec">3.3 Planning and Scheduling</h3>
+  <p>FitHub was developed over a period of approximately one month (30 days). The project was
+  divided into seven phases. The Gantt chart below shows the planned schedule against the
+  actual schedule followed during development.</p>
+  <svg class="diagram" xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500" font-family="Arial, Helvetica, sans-serif">
+    <rect x="0" y="0" width="1000" height="500" fill="#ffffff"/>
+    <text x="500" y="28" font-size="16" font-weight="bold" fill="#111" text-anchor="middle">Gantt Chart: Planned vs Actual Schedule (FitHub - 1 Month)</text>
+    <rect x="800" y="40" width="16" height="12" fill="#4472c4"/><text x="822" y="51" font-size="13" fill="#111">Planned</text>
+    <rect x="895" y="40" width="16" height="12" fill="#ed7d31"/><text x="917" y="51" font-size="13" fill="#111">Actual</text>
+    <g font-size="12" fill="#111">
+      <text x="0" y="9" font-size="1" fill="#fff">.</text>
+    </g>
+    <g stroke="#d4d4d4" stroke-width="1">
+      <line x1="270" y1="60" x2="270" y2="470"/><line x1="990" y1="60" x2="990" y2="470"/>
+    </g>
+    <g font-size="12" fill="#111" text-anchor="middle">
+      <text x="270" y="488">0</text><text x="318" y="488">2</text><text x="366" y="488">4</text>
+      <text x="414" y="488">6</text><text x="462" y="488">8</text><text x="510" y="488">10</text>
+      <text x="558" y="488">12</text><text x="606" y="488">14</text><text x="654" y="488">16</text>
+      <text x="702" y="488">18</text><text x="750" y="488">20</text><text x="798" y="488">22</text>
+      <text x="846" y="488">24</text><text x="894" y="488">26</text><text x="942" y="488">28</text>
+      <text x="990" y="488">30</text>
+      <text x="630" y="502">Project Day</text>
+    </g>
+    <g font-size="12" fill="#111">
+      <text x="262" y="107" text-anchor="end">Requirement Analysis &amp; Planning</text>
+      <text x="262" y="163" text-anchor="end">System Design (ER, DFD, UI Wireframes)</text>
+      <text x="262" y="219" text-anchor="end">Frontend Development</text>
+      <text x="262" y="275" text-anchor="end">Backend Development (APIs, DB, Auth)</text>
+      <text x="262" y="331" text-anchor="end">Integration of Frontend &amp; Backend</text>
+      <text x="262" y="387" text-anchor="end">Testing &amp; Bug Fixing</text>
+      <text x="262" y="443" text-anchor="end">Deployment &amp; Documentation</text>
+    </g>
+    <g>
+      <rect x="294" y="92" width="72" height="15" fill="#4472c4"/><rect x="294" y="109" width="96" height="15" fill="#ed7d31"/>
+      <rect x="390" y="148" width="96" height="15" fill="#4472c4"/><rect x="414" y="165" width="120" height="15" fill="#ed7d31"/>
+      <rect x="486" y="204" width="168" height="15" fill="#4472c4"/><rect x="534" y="221" width="192" height="15" fill="#ed7d31"/>
+      <rect x="534" y="260" width="216" height="15" fill="#4472c4"/><rect x="558" y="277" width="264" height="15" fill="#ed7d31"/>
+      <rect x="702" y="316" width="120" height="15" fill="#4472c4"/><rect x="798" y="333" width="96" height="15" fill="#ed7d31"/>
+      <rect x="798" y="372" width="120" height="15" fill="#4472c4"/><rect x="870" y="389" width="96" height="15" fill="#ed7d31"/>
+      <rect x="918" y="428" width="72" height="15" fill="#4472c4"/><rect x="942" y="445" width="48" height="15" fill="#ed7d31"/>
+    </g>
+  </svg>
+  <p class="fig">Fig 3.3: Gantt Chart – Planned vs Actual Schedule</p>
+  <p>As seen in the chart, Backend Development and Testing &amp; Bug Fixing overran their planned
+  duration slightly, which is common when integration issues (such as CORS/origin errors
+  between the frontend and the hosted API) surface only during the integration phase.</p>
+
+  <h3 class="sec">3.4 Conceptual Module</h3>
+  <p>The conceptual design of FitHub is represented using an Entity-Relationship (ER) diagram,
+  showing the core entities and their relationships.</p>
+</div>
+
+<div class="page">
+  <svg class="diagram" xmlns="http://www.w3.org/2000/svg" width="1340" height="1340" viewBox="0 0 1340 1340" font-family="Arial, Helvetica, sans-serif">
+    <rect x="0" y="0" width="1340" height="1340" fill="#ffffff"/>
+    <text x="40" y="44" font-size="26" font-weight="bold" fill="#111827">FitHub — Entity-Relationship Diagram</text>
+    <g font-size="14" fill="#334155">
+      <rect x="950" y="12" width="360" height="52" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="966" y="34"><tspan font-weight="bold" fill="#dc2626">PK</tspan> = primary key (ObjectId)</text>
+      <text x="966" y="54"><tspan font-weight="bold" fill="#1d4ed8">FK</tspan> = reference to another collection</text>
+    </g>
+    <g>
+      <rect x="40" y="70" width="290" height="238" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+      <rect x="40" y="70" width="290" height="46" rx="10" fill="#1d4ed8"/>
+      <rect x="40" y="100" width="290" height="16" fill="#1d4ed8"/>
+      <text x="185" y="100" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">USER</text>
+      <g font-size="15" fill="#1e293b">
+        <text x="56" y="142">_id <tspan font-weight="bold" fill="#dc2626">PK</tspan></text>
+        <text x="56" y="168">name</text>
+        <text x="56" y="194">email (unique)</text>
+        <text x="56" y="220">phone</text>
+        <text x="56" y="246">password (hashed)</text>
+        <text x="56" y="272">role: member / admin</text>
+        <text x="56" y="298">currentMembership</text>
+      </g>
+    </g>
+    <line x1="330" y1="190" x2="340" y2="190" stroke="#334155" stroke-width="2.5"/>
+    <polygon points="330,155 440,190 330,225" fill="#fef3c7" stroke="#b45309" stroke-width="2.5"/>
+    <text x="385" y="195" font-size="14" font-weight="bold" fill="#92400e" text-anchor="middle">enrolls</text>
+    <line x1="440" y1="190" x2="450" y2="190" stroke="#334155" stroke-width="2.5"/>
+    <text x="322" y="192" font-size="14" font-weight="bold" fill="#334155" text-anchor="end">1</text>
+    <text x="458" y="192" font-size="14" font-weight="bold" fill="#334155">N</text>
+    <g>
+      <rect x="450" y="70" width="320" height="342" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+      <rect x="450" y="70" width="320" height="46" rx="10" fill="#1d4ed8"/>
+      <rect x="450" y="100" width="320" height="16" fill="#1d4ed8"/>
+      <text x="610" y="100" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">MEMBERSHIP</text>
+      <g font-size="15" fill="#1e293b">
+        <text x="466" y="142">_id <tspan font-weight="bold" fill="#dc2626">PK</tspan></text>
+        <text x="466" y="168">user <tspan font-weight="bold" fill="#1d4ed8">FK → users</tspan></text>
+        <text x="466" y="194">subscription <tspan font-weight="bold" fill="#1d4ed8">FK → plans</tspan></text>
+        <text x="466" y="220">startDate, endDate</text>
+        <text x="466" y="246">status: active / expired</text>
+        <text x="466" y="272">totalAmount</text>
+        <text x="466" y="298">amountPaid</text>
+        <text x="466" y="324">amountRemaining</text>
+        <text x="466" y="350">paymentStatus</text>
+        <text x="466" y="376">paymentMethod</text>
+        <text x="466" y="402">notes, remindersSent</text>
+      </g>
+    </g>
+    <line x1="770" y1="190" x2="780" y2="190" stroke="#334155" stroke-width="2.5"/>
+    <polygon points="770,155 880,190 770,225" fill="#fef3c7" stroke="#b45309" stroke-width="2.5"/>
+    <text x="825" y="195" font-size="14" font-weight="bold" fill="#92400e" text-anchor="middle">of plan</text>
+    <line x1="880" y1="190" x2="890" y2="190" stroke="#334155" stroke-width="2.5"/>
+    <text x="762" y="192" font-size="14" font-weight="bold" fill="#334155" text-anchor="end">N</text>
+    <text x="898" y="192" font-size="14" font-weight="bold" fill="#334155">1</text>
+    <g>
+      <rect x="890" y="70" width="290" height="264" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+      <rect x="890" y="70" width="290" height="46" rx="10" fill="#1d4ed8"/>
+      <rect x="890" y="100" width="290" height="16" fill="#1d4ed8"/>
+      <text x="1035" y="100" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">SUBSCRIPTION</text>
+      <g font-size="15" fill="#1e293b">
+        <text x="906" y="142">_id <tspan font-weight="bold" fill="#dc2626">PK</tspan></text>
+        <text x="906" y="168">name</text>
+        <text x="906" y="194">price</text>
+        <text x="906" y="220">duration, durationUnit</text>
+        <text x="906" y="246">features[]</text>
+        <text x="906" y="272">isActive, isPopular</text>
+        <text x="906" y="298">createdAt</text>
+      </g>
+    </g>
+    <g>
+      <rect x="40" y="450" width="290" height="238" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+      <rect x="40" y="450" width="290" height="46" rx="10" fill="#1d4ed8"/>
+      <rect x="40" y="480" width="290" height="16" fill="#1d4ed8"/>
+      <text x="185" y="480" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">PRODUCT</text>
+      <g font-size="15" fill="#1e293b">
+        <text x="56" y="522">_id <tspan font-weight="bold" fill="#dc2626">PK</tspan></text>
+        <text x="56" y="548">name</text>
+        <text x="56" y="574">price</text>
+        <text x="56" y="600">stockQuantity</text>
+        <text x="56" y="626">sizes[], image</text>
+        <text x="56" y="652">category</text>
+        <text x="56" y="678">isAvailable</text>
+      </g>
+    </g>
+    <line x1="330" y1="568" x2="340" y2="568" stroke="#334155" stroke-width="2.5"/>
+    <polygon points="340,533 440,568 340,603" fill="#fef3c7" stroke="#b45309" stroke-width="2.5"/>
+    <text x="390" y="573" font-size="13" font-weight="bold" fill="#92400e" text-anchor="middle">contains</text>
+    <line x1="440" y1="568" x2="450" y2="568" stroke="#334155" stroke-width="2.5"/>
+    <text x="322" y="570" font-size="14" font-weight="bold" fill="#334155" text-anchor="end">1</text>
+    <text x="458" y="570" font-size="14" font-weight="bold" fill="#334155">N</text>
+    <g>
+      <rect x="450" y="450" width="320" height="290" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+      <rect x="450" y="450" width="320" height="46" rx="10" fill="#1d4ed8"/>
+      <rect x="450" y="480" width="320" height="16" fill="#1d4ed8"/>
+      <text x="610" y="480" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">ORDER</text>
+      <g font-size="15" fill="#1e293b">
+        <text x="466" y="522">_id <tspan font-weight="bold" fill="#dc2626">PK</tspan></text>
+        <text x="466" y="548">user <tspan font-weight="bold" fill="#1d4ed8">FK → users</tspan></text>
+        <text x="466" y="574">product <tspan font-weight="bold" fill="#1d4ed8">FK → products</tspan></text>
+        <text x="466" y="600">quantity</text>
+        <text x="466" y="626">totalAmount</text>
+        <text x="466" y="652">paymentMethod</text>
+        <text x="466" y="678">paymentStatus</text>
+        <text x="466" y="704">status, address</text>
+        <text x="466" y="730">createdAt</text>
+      </g>
+    </g>
+    <path d="M600,450 L600,425 L185,425 L185,308" fill="none" stroke="#334155" stroke-width="2.5"/>
+    <polygon points="185,325 230,360 185,395 140,360" fill="#fef3c7" stroke="#b45309" stroke-width="2.5"/>
+    <text x="185" y="365" font-size="13" font-weight="bold" fill="#92400e" text-anchor="middle">places</text>
+    <text x="614" y="444" font-size="14" font-weight="bold" fill="#334155">N</text>
+    <text x="185" y="320" font-size="14" font-weight="bold" fill="#334155" text-anchor="middle">1</text>
+    <line x1="770" y1="240" x2="780" y2="240" stroke="#334155" stroke-width="2.5"/>
+    <polygon points="775,205 885,240 775,275" fill="#fef3c7" stroke="#b45309" stroke-width="2.5"/>
+    <text x="830" y="245" font-size="13" font-weight="bold" fill="#92400e" text-anchor="middle">generates</text>
+    <line x1="885" y1="240" x2="890" y2="240" stroke="#334155" stroke-width="2.5"/>
+    <text x="762" y="242" font-size="14" font-weight="bold" fill="#334155" text-anchor="end">1</text>
+    <text x="898" y="242" font-size="14" font-weight="bold" fill="#334155">N</text>
+    <g>
+      <rect x="890" y="450" width="300" height="212" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+      <rect x="890" y="450" width="300" height="46" rx="10" fill="#1d4ed8"/>
+      <rect x="890" y="480" width="300" height="16" fill="#1d4ed8"/>
+      <text x="1040" y="480" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">TRANSACTION</text>
+      <g font-size="15" fill="#1e293b">
+        <text x="906" y="522">membership <tspan font-weight="bold" fill="#1d4ed8">FK</tspan></text>
+        <text x="906" y="548">amount</text>
+        <text x="906" y="574">date</text>
+        <text x="906" y="600">method</text>
+        <text x="906" y="626">notes, receiptNo</text>
+      </g>
+    </g>
+    <g>
+      <rect x="40" y="790" width="290" height="212" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+      <rect x="40" y="790" width="290" height="46" rx="10" fill="#1d4ed8"/>
+      <rect x="40" y="820" width="290" height="16" fill="#1d4ed8"/>
+      <text x="185" y="820" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">REVIEW</text>
+      <g font-size="15" fill="#1e293b">
+        <text x="56" y="862">_id <tspan font-weight="bold" fill="#dc2626">PK</tspan></text>
+        <text x="56" y="888">user <tspan font-weight="bold" fill="#1d4ed8">FK → users</tspan></text>
+        <text x="56" y="914">name, rating</text>
+        <text x="56" y="940">comment</text>
+        <text x="56" y="966">status, createdAt</text>
+      </g>
+    </g>
+    <path d="M40,250 L20,250 L20,730 L55,730" fill="none" stroke="#334155" stroke-width="2.5"/>
+    <polygon points="55,695 145,730 55,765" fill="#fef3c7" stroke="#b45309" stroke-width="2.5"/>
+    <text x="100" y="726" font-size="12" font-weight="bold" fill="#92400e" text-anchor="middle">written</text>
+    <text x="100" y="740" font-size="12" font-weight="bold" fill="#92400e" text-anchor="middle">by</text>
+    <line x1="145" y1="730" x2="145" y2="790" stroke="#334155" stroke-width="2.5"/>
+    <text x="14" y="266" font-size="14" font-weight="bold" fill="#334155">1</text>
+    <text x="153" y="784" font-size="14" font-weight="bold" fill="#334155">N</text>
+    <g>
+      <rect x="890" y="790" width="300" height="290" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+      <rect x="890" y="790" width="300" height="46" rx="10" fill="#1d4ed8"/>
+      <rect x="890" y="820" width="300" height="16" fill="#1d4ed8"/>
+      <text x="1040" y="820" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">PROGRESS</text>
+      <g font-size="15" fill="#1e293b">
+        <text x="906" y="862">_id <tspan font-weight="bold" fill="#dc2626">PK</tspan></text>
+        <text x="906" y="888">user <tspan font-weight="bold" fill="#1d4ed8">FK → users</tspan></text>
+        <text x="906" y="914">date</text>
+        <text x="906" y="940">weight</text>
+        <text x="906" y="966">chest, waist</text>
+        <text x="906" y="992">biceps, thighs</text>
+        <text x="906" y="1018">note</text>
+        <text x="906" y="1044">createdAt</text>
+      </g>
+    </g>
+    <path d="M300,308 L300,440 L592,440 A8,8 0 0 0 608,440 L820,440 L820,900 L890,900" fill="none" stroke="#334155" stroke-width="2.5"/>
+    <polygon points="775,625 865,660 775,695" fill="#fef3c7" stroke="#b45309" stroke-width="2.5"/>
+    <text x="820" y="665" font-size="13" font-weight="bold" fill="#92400e" text-anchor="middle">logs</text>
+    <text x="300" y="324" font-size="14" font-weight="bold" fill="#334155" text-anchor="middle">1</text>
+    <text x="880" y="904" font-size="14" font-weight="bold" fill="#334155" text-anchor="end">N</text>
+    <g>
+      <rect x="40" y="1050" width="290" height="212" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+      <rect x="40" y="1050" width="290" height="46" rx="10" fill="#1d4ed8"/>
+      <rect x="40" y="1080" width="290" height="16" fill="#1d4ed8"/>
+      <text x="185" y="1080" font-size="19" font-weight="bold" fill="#ffffff" text-anchor="middle">CALENDAR EVENT</text>
+      <g font-size="15" fill="#1e293b">
+        <text x="56" y="1122">_id <tspan font-weight="bold" fill="#dc2626">PK</tspan></text>
+        <text x="56" y="1148">title, date, type</text>
+        <text x="56" y="1174">color, description</text>
+        <text x="56" y="1200">createdBy <tspan font-weight="bold" fill="#1d4ed8">FK → users</tspan></text>
+        <text x="56" y="1228" font-size="13" font-style="italic" fill="#64748b">created by Admin (role = admin)</text>
+      </g>
+    </g>
+    <g>
+      <rect x="450" y="1050" width="320" height="238" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+      <rect x="450" y="1050" width="320" height="46" rx="10" fill="#1d4ed8"/>
+      <rect x="450" y="1080" width="320" height="16" fill="#1d4ed8"/>
+      <text x="610" y="1080" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">BANNER</text>
+      <g font-size="15" fill="#1e293b">
+        <text x="466" y="1122">_id <tspan font-weight="bold" fill="#dc2626">PK</tspan></text>
+        <text x="466" y="1148">title, image</text>
+        <text x="466" y="1174">buttonText, buttonLink</text>
+        <text x="466" y="1200">position, isActive</text>
+        <text x="466" y="1228">createdAt</text>
+        <text x="466" y="1256" font-size="13" font-style="italic" fill="#64748b">published by Admin (role = admin)</text>
+      </g>
+    </g>
+    <g>
+      <rect x="890" y="1050" width="300" height="186" rx="10" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5"/>
+      <rect x="890" y="1050" width="300" height="46" rx="10" fill="#1d4ed8"/>
+      <rect x="890" y="1080" width="300" height="16" fill="#1d4ed8"/>
+      <text x="1040" y="1080" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">OTP</text>
+      <g font-size="15" fill="#1e293b">
+        <text x="906" y="1122">email / phone</text>
+        <text x="906" y="1148">otp, purpose</text>
+        <text x="906" y="1174">expiresAt, createdAt</text>
+        <text x="906" y="1202" font-size="13" font-style="italic" fill="#64748b">issued for a User (login / reset)</text>
+      </g>
+    </g>
+  </svg>
+  <p class="fig">Fig 3.4: Entity-Relationship (ER) Diagram of FitHub</p>
+
+  <h3 class="sec">3.4.1 Data Dictionary</h3>
+  <p>The data dictionary below lists the metadata (fields, data types, and descriptions) for each
+  entity shown in the ER diagram above. FitHub uses MongoDB, so keys are ObjectId values
+  generated by the database and references between collections.</p>
+
+  <h4 class="sub">Table: User (collection: users — members and admins, told apart by role)</h4>
+  <table>
+    <tr><th>Field Name</th><th>Data Type</th><th>Key</th><th>Description</th></tr>
+    <tr><td>_id</td><td>ObjectId</td><td>PK</td><td>Unique identifier for each user</td></tr>
+    <tr><td>name</td><td>String</td><td>-</td><td>Full name of the user</td></tr>
+    <tr><td>email</td><td>String</td><td>Unique</td><td>Login identifier / contact email</td></tr>
+    <tr><td>password</td><td>String (bcrypt hash)</td><td>-</td><td>Hashed password, never stored in plain text</td></tr>
+    <tr><td>phone</td><td>String</td><td>-</td><td>10-digit contact number</td></tr>
+    <tr><td>role</td><td>String</td><td>-</td><td>member or admin (admin owns the panel)</td></tr>
+    <tr><td>isVerified</td><td>Boolean</td><td>-</td><td>Email OTP verification flag</td></tr>
+    <tr><td>profileImage</td><td>String</td><td>-</td><td>Path/URL to profile picture</td></tr>
+    <tr><td>address</td><td>String</td><td>-</td><td>Residential address</td></tr>
+    <tr><td>dateOfBirth</td><td>Date</td><td>-</td><td>Date of birth</td></tr>
+    <tr><td>gender</td><td>String</td><td>-</td><td>Gender</td></tr>
+    <tr><td>emergencyContact</td><td>String</td><td>-</td><td>Emergency contact number</td></tr>
+    <tr><td>currentMembership</td><td>Embedded object</td><td>-</td><td>Snapshot of the active membership for fast reads</td></tr>
+    <tr><td>createdAt</td><td>Date</td><td>-</td><td>Account creation timestamp</td></tr>
+  </table>
+</div>
+
+<div class="page">
+  <h4 class="sub">Table: Subscription (collection: subscriptions — membership plans)</h4>
+  <table>
+    <tr><th>Field Name</th><th>Data Type</th><th>Key</th><th>Description</th></tr>
+    <tr><td>_id</td><td>ObjectId</td><td>PK</td><td>Unique identifier for each plan</td></tr>
+    <tr><td>name</td><td>String</td><td>-</td><td>Name of the plan (e.g., Basic, Premium)</td></tr>
+    <tr><td>description</td><td>String</td><td>-</td><td>Plan summary shown on the plans page</td></tr>
+    <tr><td>duration</td><td>Number</td><td>-</td><td>Validity length of the plan</td></tr>
+    <tr><td>durationUnit</td><td>String</td><td>-</td><td>Unit of duration (days / months)</td></tr>
+    <tr><td>price</td><td>Number</td><td>-</td><td>Price of the plan in rupees</td></tr>
+    <tr><td>features</td><td>Array of Strings</td><td>-</td><td>Features included in the plan</td></tr>
+    <tr><td>isActive</td><td>Boolean</td><td>-</td><td>Whether the plan is on sale</td></tr>
+    <tr><td>isPopular</td><td>Boolean</td><td>-</td><td>Highlights the plan as "Most Popular"</td></tr>
+    <tr><td>createdAt</td><td>Date</td><td>-</td><td>Plan creation timestamp</td></tr>
+  </table>
+
+  <h4 class="sub">Table: Membership (collection: memberships)</h4>
+  <table>
+    <tr><th>Field Name</th><th>Data Type</th><th>Key</th><th>Description</th></tr>
+    <tr><td>_id</td><td>ObjectId</td><td>PK</td><td>Unique identifier for each membership record</td></tr>
+    <tr><td>user</td><td>ObjectId</td><td>FK → users._id</td><td>Member who owns the membership</td></tr>
+    <tr><td>subscription</td><td>ObjectId</td><td>FK → subscriptions._id</td><td>Plan purchased</td></tr>
+    <tr><td>startDate</td><td>Date</td><td>-</td><td>Membership start date</td></tr>
+    <tr><td>endDate</td><td>Date</td><td>-</td><td>Membership expiry date (auto-calculated)</td></tr>
+    <tr><td>status</td><td>String</td><td>-</td><td>active / expired / renewed</td></tr>
+    <tr><td>totalAmount</td><td>Number</td><td>-</td><td>Full price of the plan</td></tr>
+    <tr><td>amountPaid</td><td>Number</td><td>-</td><td>Total paid so far (supports installments)</td></tr>
+    <tr><td>amountRemaining</td><td>Number</td><td>-</td><td>Balance still due</td></tr>
+    <tr><td>paymentStatus</td><td>String</td><td>-</td><td>paid / partial / pending</td></tr>
+    <tr><td>paymentMethod</td><td>String</td><td>-</td><td>razorpay / cash / upi / card</td></tr>
+    <tr><td>notes</td><td>String</td><td>-</td><td>Admin notes (e.g., renewal remarks)</td></tr>
+    <tr><td>emailRemindersSent</td><td>Number</td><td>-</td><td>Count of expiry reminders already emailed</td></tr>
+    <tr><td>createdAt</td><td>Date</td><td>-</td><td>Record creation timestamp</td></tr>
+  </table>
+
+  <h4 class="sub">Table: Transaction (payment ledger entry per membership)</h4>
+  <table>
+    <tr><th>Field Name</th><th>Data Type</th><th>Key</th><th>Description</th></tr>
+    <tr><td>membership</td><td>ObjectId</td><td>FK → memberships._id</td><td>Membership this payment belongs to</td></tr>
+    <tr><td>amount</td><td>Number</td><td>-</td><td>Amount paid in this transaction</td></tr>
+    <tr><td>date</td><td>Date</td><td>-</td><td>Date and time of payment</td></tr>
+    <tr><td>method</td><td>String</td><td>-</td><td>razorpay / cash / UPI / card</td></tr>
+    <tr><td>notes</td><td>String</td><td>-</td><td>Remarks recorded with the payment</td></tr>
+    <tr><td>receiptNo</td><td>String</td><td>-</td><td>Unique receipt number on the receipt</td></tr>
+  </table>
+</div>
+
+<div class="page">
+  <h4 class="sub">Table: Product (collection: products — gym store)</h4>
+  <table>
+    <tr><th>Field Name</th><th>Data Type</th><th>Key</th><th>Description</th></tr>
+    <tr><td>_id</td><td>ObjectId</td><td>PK</td><td>Unique identifier for each product</td></tr>
+    <tr><td>name</td><td>String</td><td>-</td><td>Product name</td></tr>
+    <tr><td>description</td><td>String</td><td>-</td><td>Product details</td></tr>
+    <tr><td>price</td><td>Number</td><td>-</td><td>Selling price in rupees</td></tr>
+    <tr><td>stockQuantity</td><td>Number</td><td>-</td><td>Units available in stock</td></tr>
+    <tr><td>category</td><td>String</td><td>-</td><td>Product category</td></tr>
+    <tr><td>image</td><td>String</td><td>-</td><td>Path/URL of product image</td></tr>
+    <tr><td>sizes</td><td>Array of Strings</td><td>-</td><td>Available sizes (e.g., S, M, L, XL)</td></tr>
+    <tr><td>isAvailable</td><td>Boolean</td><td>-</td><td>Whether the product can be ordered</td></tr>
+    <tr><td>createdAt</td><td>Date</td><td>-</td><td>Product creation timestamp</td></tr>
+  </table>
+
+  <h4 class="sub">Table: Order (collection: orders)</h4>
+  <table>
+    <tr><th>Field Name</th><th>Data Type</th><th>Key</th><th>Description</th></tr>
+    <tr><td>_id</td><td>ObjectId</td><td>PK</td><td>Unique identifier for each order</td></tr>
+    <tr><td>user</td><td>ObjectId</td><td>FK → users._id</td><td>Member who placed the order</td></tr>
+    <tr><td>product</td><td>ObjectId</td><td>FK → products._id</td><td>Product ordered</td></tr>
+    <tr><td>quantity</td><td>Number</td><td>-</td><td>Units ordered</td></tr>
+    <tr><td>totalAmount</td><td>Number</td><td>-</td><td>Order total in rupees</td></tr>
+    <tr><td>paymentMethod</td><td>String</td><td>-</td><td>razorpay / cash / UPI / card</td></tr>
+    <tr><td>paymentStatus</td><td>String</td><td>-</td><td>paid / pending / failed</td></tr>
+    <tr><td>status</td><td>String</td><td>-</td><td>Order fulfilment status</td></tr>
+    <tr><td>shippingAddress</td><td>String</td><td>-</td><td>Delivery address</td></tr>
+    <tr><td>createdAt</td><td>Date</td><td>-</td><td>Order placement timestamp</td></tr>
+  </table>
+
+  <h4 class="sub">Table: Review (collection: reviews)</h4>
+  <table>
+    <tr><th>Field Name</th><th>Data Type</th><th>Key</th><th>Description</th></tr>
+    <tr><td>_id</td><td>ObjectId</td><td>PK</td><td>Unique identifier for each review</td></tr>
+    <tr><td>user</td><td>ObjectId</td><td>FK → users._id</td><td>Member who wrote the review</td></tr>
+    <tr><td>name</td><td>String</td><td>-</td><td>Display name on the review</td></tr>
+    <tr><td>rating</td><td>Number (1–5)</td><td>-</td><td>Star rating</td></tr>
+    <tr><td>comment</td><td>String</td><td>-</td><td>Review text</td></tr>
+    <tr><td>status</td><td>String</td><td>-</td><td>approved / hidden (admin moderation)</td></tr>
+    <tr><td>createdAt</td><td>Date</td><td>-</td><td>Review submission timestamp</td></tr>
+  </table>
+
+  <h4 class="sub">Table: Progress (collection: progress — body measurements)</h4>
+  <table>
+    <tr><th>Field Name</th><th>Data Type</th><th>Key</th><th>Description</th></tr>
+    <tr><td>_id</td><td>ObjectId</td><td>PK</td><td>Unique identifier for each log entry</td></tr>
+    <tr><td>user</td><td>ObjectId</td><td>FK → users._id</td><td>Member logging progress</td></tr>
+    <tr><td>date</td><td>Date</td><td>-</td><td>Measurement date</td></tr>
+    <tr><td>weight</td><td>Number</td><td>-</td><td>Body weight in kg</td></tr>
+    <tr><td>chest / waist / biceps / thighs</td><td>Number</td><td>-</td><td>Body measurements in inches</td></tr>
+    <tr><td>note</td><td>String</td><td>-</td><td>Optional remarks</td></tr>
+    <tr><td>createdAt</td><td>Date</td><td>-</td><td>Log creation timestamp</td></tr>
+  </table>
+</div>
+
+<div class="page">
+  <h4 class="sub">Table: CalendarEvent (collection: calendarevents)</h4>
+  <table>
+    <tr><th>Field Name</th><th>Data Type</th><th>Key</th><th>Description</th></tr>
+    <tr><td>_id</td><td>ObjectId</td><td>PK</td><td>Unique identifier for each event</td></tr>
+    <tr><td>title</td><td>String</td><td>-</td><td>Event / class name</td></tr>
+    <tr><td>description</td><td>String</td><td>-</td><td>Event details</td></tr>
+    <tr><td>date</td><td>Date</td><td>-</td><td>Event date</td></tr>
+    <tr><td>type</td><td>String</td><td>-</td><td>event / class / holiday / other</td></tr>
+    <tr><td>color</td><td>String</td><td>-</td><td>Calendar display color</td></tr>
+    <tr><td>createdBy</td><td>ObjectId</td><td>FK → users._id</td><td>Admin who published the event</td></tr>
+  </table>
+
+  <h4 class="sub">Table: Banner (collection: banners)</h4>
+  <table>
+    <tr><th>Field Name</th><th>Data Type</th><th>Key</th><th>Description</th></tr>
+    <tr><td>_id</td><td>ObjectId</td><td>PK</td><td>Unique identifier for each banner</td></tr>
+    <tr><td>title</td><td>String</td><td>-</td><td>Banner headline</td></tr>
+    <tr><td>description</td><td>String</td><td>-</td><td>Banner sub-text</td></tr>
+    <tr><td>image</td><td>String</td><td>-</td><td>Path/URL of banner image</td></tr>
+    <tr><td>buttonText / buttonLink</td><td>String</td><td>-</td><td>Call-to-action label and target</td></tr>
+    <tr><td>position</td><td>String</td><td>-</td><td>Placement slot on the site</td></tr>
+    <tr><td>isActive</td><td>Boolean</td><td>-</td><td>Whether the banner is shown</td></tr>
+    <tr><td>createdAt</td><td>Date</td><td>-</td><td>Banner creation timestamp</td></tr>
+  </table>
+
+  <h4 class="sub">Table: OTP (collection: otps — one-time passwords)</h4>
+  <table>
+    <tr><th>Field Name</th><th>Data Type</th><th>Key</th><th>Description</th></tr>
+    <tr><td>email / phone</td><td>String</td><td>-</td><td>Account the OTP was issued for</td></tr>
+    <tr><td>otp</td><td>String</td><td>-</td><td>The one-time code</td></tr>
+    <tr><td>purpose</td><td>String</td><td>-</td><td>verify-account / reset-password</td></tr>
+    <tr><td>expiresAt</td><td>Date</td><td>-</td><td>Expiry time of the code</td></tr>
+    <tr><td>createdAt</td><td>Date</td><td>-</td><td>Issuance timestamp</td></tr>
+  </table>
+  <p><b>Note:</b> the administrator is not a separate table — admin access is a <code>role = "admin"</code>
+  value on the User collection. Email notifications (receipts, OTPs, expiry reminders) are generated
+  from Membership/Transaction records by the backend and delivered through the email failover chain,
+  so no separate notification table is stored.</p>
+
+  <h3 class="sec">3.4.3 DFD (Data Flow Diagram)</h3>
+  <p>Level 0 (Context Diagram): shows FitHub as a single process interacting with the User and Admin.</p>
+  <svg class="diagram" xmlns="http://www.w3.org/2000/svg" width="1100" height="460" viewBox="0 0 1100 460" font-family="Arial, Helvetica, sans-serif">
+    <defs>
+      <marker id="a0" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+        <path d="M0,0 L8,3 L0,6 Z" fill="#111"/>
+      </marker>
+    </defs>
+    <rect x="0" y="0" width="1100" height="460" fill="#ffffff"/>
+    <rect x="60" y="180" width="120" height="100" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+    <text x="120" y="238" font-size="20" font-weight="bold" fill="#111" text-anchor="middle">User</text>
+    <circle cx="550" cy="230" r="95" fill="#fef3c7" stroke="#111" stroke-width="2.5"/>
+    <text x="550" y="200" font-size="20" font-weight="bold" fill="#111" text-anchor="middle">0</text>
+    <text x="550" y="230" font-size="20" font-weight="bold" fill="#111" text-anchor="middle">FitHub</text>
+    <text x="550" y="258" font-size="20" font-weight="bold" fill="#111" text-anchor="middle">System</text>
+    <rect x="920" y="180" width="120" height="100" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+    <text x="980" y="238" font-size="20" font-weight="bold" fill="#111" text-anchor="middle">Admin</text>
+    <line x1="180" y1="200" x2="448" y2="200" stroke="#111" stroke-width="2.5" marker-end="url(#a0)"/>
+    <text x="314" y="160" font-size="15" fill="#111" text-anchor="middle">Registration / Login details,</text>
+    <text x="314" y="180" font-size="15" fill="#111" text-anchor="middle">Membership request, Payment details</text>
+    <line x1="652" y1="200" x2="912" y2="200" stroke="#111" stroke-width="2.5" marker-end="url(#a0)"/>
+    <text x="782" y="170" font-size="15" fill="#111" text-anchor="middle">Reports, Member list,</text>
+    <text x="782" y="190" font-size="15" fill="#111" text-anchor="middle">Payment records</text>
+    <path d="M480,312 Q330,400 188,296" fill="none" stroke="#111" stroke-width="2.5" marker-end="url(#a0)"/>
+    <text x="330" y="356" font-size="15" fill="#111" text-anchor="middle">Confirmation, Membership status,</text>
+    <text x="330" y="376" font-size="15" fill="#111" text-anchor="middle">Receipt, Email reminders</text>
+    <path d="M972,280 Q830,400 622,312" fill="none" stroke="#111" stroke-width="2.5" marker-end="url(#a0)"/>
+    <text x="800" y="356" font-size="15" fill="#111" text-anchor="middle">Plan updates,</text>
+    <text x="800" y="376" font-size="15" fill="#111" text-anchor="middle">Payment approvals</text>
+  </svg>
+  <p class="fig">Fig 3.4.3(a): DFD Level 0 – Context Diagram</p>
+  <p>Level 1: breaks the system down into its four core processes and the data stores each one reads from or writes to.</p>
+</div>
+
+<div class="page">
+  <svg class="diagram" xmlns="http://www.w3.org/2000/svg" width="1300" height="720" viewBox="0 0 1300 720" font-family="Arial, Helvetica, sans-serif">
+    <defs>
+      <marker id="a1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+        <path d="M0,0 L8,3 L0,6 Z" fill="#111"/>
+      </marker>
+      <marker id="a1b" markerWidth="10" markerHeight="10" refX="2" refY="3" orient="auto">
+        <path d="M8,0 L0,3 L8,6 Z" fill="#111"/>
+      </marker>
+    </defs>
+    <rect x="0" y="0" width="1300" height="720" fill="#ffffff"/>
+    <rect x="30" y="300" width="110" height="90" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+    <text x="85" y="352" font-size="19" font-weight="bold" fill="#111" text-anchor="middle">User</text>
+    <rect x="30" y="70" width="110" height="90" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+    <text x="85" y="122" font-size="19" font-weight="bold" fill="#111" text-anchor="middle">Admin</text>
+    <circle cx="340" cy="345" r="62" fill="#fef3c7" stroke="#111" stroke-width="2.5"/>
+    <text x="340" y="332" font-size="15" font-weight="bold" fill="#111" text-anchor="middle">1.0</text>
+    <text x="340" y="352" font-size="15" font-weight="bold" fill="#111" text-anchor="middle">Auth &amp;</text>
+    <text x="340" y="372" font-size="15" font-weight="bold" fill="#111" text-anchor="middle">Accounts</text>
+    <g>
+      <line x1="290" y1="520" x2="420" y2="520" stroke="#111" stroke-width="2.5"/>
+      <line x1="290" y1="574" x2="420" y2="574" stroke="#111" stroke-width="2.5"/>
+      <line x1="290" y1="520" x2="290" y2="574" stroke="#111" stroke-width="2.5"/>
+      <text x="355" y="552" font-size="14" font-weight="bold" fill="#111" text-anchor="middle">D1 | Users</text>
+    </g>
+    <circle cx="660" cy="220" r="62" fill="#fef3c7" stroke="#111" stroke-width="2.5"/>
+    <text x="660" y="207" font-size="15" font-weight="bold" fill="#111" text-anchor="middle">2.0</text>
+    <text x="660" y="227" font-size="15" font-weight="bold" fill="#111" text-anchor="middle">Manage</text>
+    <text x="660" y="247" font-size="15" font-weight="bold" fill="#111" text-anchor="middle">Memberships</text>
+    <g>
+      <line x1="600" y1="55" x2="740" y2="55" stroke="#111" stroke-width="2.5"/>
+      <line x1="600" y1="105" x2="740" y2="105" stroke="#111" stroke-width="2.5"/>
+      <line x1="600" y1="55" x2="600" y2="105" stroke="#111" stroke-width="2.5"/>
+      <text x="670" y="87" font-size="14" font-weight="bold" fill="#111" text-anchor="middle">D2 | Plans</text>
+    </g>
+    <circle cx="660" cy="470" r="62" fill="#fef3c7" stroke="#111" stroke-width="2.5"/>
+    <text x="660" y="457" font-size="15" font-weight="bold" fill="#111" text-anchor="middle">3.0</text>
+    <text x="660" y="477" font-size="15" font-weight="bold" fill="#111" text-anchor="middle">Process</text>
+    <text x="660" y="497" font-size="15" font-weight="bold" fill="#111" text-anchor="middle">Payments</text>
+    <g>
+      <line x1="850" y1="340" x2="1000" y2="340" stroke="#111" stroke-width="2.5"/>
+      <line x1="850" y1="394" x2="1000" y2="394" stroke="#111" stroke-width="2.5"/>
+      <line x1="850" y1="340" x2="850" y2="394" stroke="#111" stroke-width="2.5"/>
+      <text x="925" y="372" font-size="14" font-weight="bold" fill="#111" text-anchor="middle">D3 | Memberships</text>
+    </g>
+    <g>
+      <line x1="600" y1="625" x2="750" y2="625" stroke="#111" stroke-width="2.5"/>
+      <line x1="600" y1="675" x2="750" y2="675" stroke="#111" stroke-width="2.5"/>
+      <line x1="600" y1="625" x2="600" y2="675" stroke="#111" stroke-width="2.5"/>
+      <text x="675" y="657" font-size="14" font-weight="bold" fill="#111" text-anchor="middle">D4 | Transactions</text>
+    </g>
+    <circle cx="1070" cy="345" r="62" fill="#fef3c7" stroke="#111" stroke-width="2.5"/>
+    <text x="1070" y="332" font-size="15" font-weight="bold" fill="#111" text-anchor="middle">4.0</text>
+    <text x="1070" y="352" font-size="15" font-weight="bold" fill="#111" text-anchor="middle">Admin</text>
+    <text x="1070" y="372" font-size="15" font-weight="bold" fill="#111" text-anchor="middle">Console</text>
+    <rect x="1090" y="105" width="150" height="64" fill="#e0e7ff" stroke="#111" stroke-width="2.5"/>
+    <text x="1165" y="132" font-size="14" font-weight="bold" fill="#111" text-anchor="middle">Razorpay</text>
+    <text x="1165" y="152" font-size="14" font-weight="bold" fill="#111" text-anchor="middle">Gateway</text>
+    <rect x="1090" y="565" width="150" height="64" fill="#e0e7ff" stroke="#111" stroke-width="2.5"/>
+    <text x="1165" y="592" font-size="14" font-weight="bold" fill="#111" text-anchor="middle">Email</text>
+    <text x="1165" y="612" font-size="14" font-weight="bold" fill="#111" text-anchor="middle">Service</text>
+    <g stroke="#111" stroke-width="2" font-size="13" fill="#111">
+      <line x1="140" y1="330" x2="272" y2="340" marker-end="url(#a1)"/>
+      <text x="200" y="318">login, register, OTP</text>
+      <line x1="300" y1="292" x2="140" y2="312" marker-end="url(#a1)"/>
+      <text x="200" y="282">JWT token</text>
+      <line x1="340" y1="407" x2="355" y2="514" marker-end="url(#a1)" marker-start="url(#a1b)"/>
+      <text x="368" y="470">read / write</text>
+      <path d="M140,300 L140,240 L596,240" fill="none" marker-end="url(#a1)"/>
+      <text x="330" y="230">plan selection</text>
+      <line x1="660" y1="158" x2="670" y2="111" marker-end="url(#a1)" marker-start="url(#a1b)"/>
+      <text x="688" y="140">read plans</text>
+      <line x1="712" y1="252" x2="872" y2="336" marker-end="url(#a1)" marker-start="url(#a1b)"/>
+      <text x="760" y="280">create / update</text>
+      <line x1="660" y1="282" x2="660" y2="402" marker-end="url(#a1)"/>
+      <text x="672" y="348">payment request</text>
+      <line x1="722" y1="470" x2="1084" y2="152" marker-end="url(#a1)" marker-start="url(#a1b)"/>
+      <text x="880" y="330">create order / verify</text>
+      <line x1="660" y1="532" x2="675" y2="619" marker-end="url(#a1)"/>
+      <text x="690" y="582">store receipt</text>
+      <line x1="706" y1="432" x2="856" y2="392" marker-end="url(#a1)"/>
+      <text x="730" y="404">update status</text>
+      <line x1="706" y1="512" x2="1084" y2="572" marker-end="url(#a1)"/>
+      <text x="860" y="532">receipt / reminders</text>
+      <path d="M1090,597 L85,597 L85,390" fill="none" marker-end="url(#a1)"/>
+      <text x="480" y="588">email receipt &amp; reminders</text>
+      <path d="M140,115 L1070,115 L1070,277" fill="none" marker-end="url(#a1)"/>
+      <text x="560" y="106">manage / view reports</text>
+      <line x1="1032" y1="392" x2="984" y2="342" marker-end="url(#a1)"/>
+      <text x="1000" y="420">approvals</text>
+      <path d="M1052,407 L1052,560 L426,560" fill="none" marker-end="url(#a1)"/>
+      <text x="880" y="552">manage users</text>
+    </g>
+  </svg>
+  <p class="fig">Fig 3.4.3(b): DFD Level 1</p>
+  <p>Admin Console (4.0) reads and writes all data stores D1–D4; cash/UPI payments collected at
+  the gym are approved and recorded here.</p>
+
+  <h3 class="sec">3.4.4 Use Case Diagram</h3>
+  <p>The use case diagram below identifies two actors — User and Admin — and an external
+  Payment Gateway, along with the actions each actor can perform on the system.</p>
+  <svg class="diagram" xmlns="http://www.w3.org/2000/svg" width="1100" height="880" viewBox="0 0 1100 880" font-family="Arial, Helvetica, sans-serif">
+    <defs>
+      <marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+        <path d="M0,0 L8,3 L0,6 Z" fill="#111"/>
+      </marker>
+    </defs>
+    <rect x="0" y="0" width="1100" height="880" fill="#ffffff"/>
+    <rect x="250" y="40" width="800" height="720" fill="none" stroke="#111" stroke-width="2"/>
+    <text x="650" y="66" font-size="16" font-weight="bold" fill="#111" text-anchor="middle">FitHub System</text>
+    <g stroke="#111" stroke-width="2.5" fill="none">
+      <circle cx="80" cy="290" r="13"/>
+      <line x1="80" y1="303" x2="80" y2="350"/><line x1="58" y1="318" x2="102" y2="318"/>
+      <line x1="80" y1="350" x2="62" y2="384"/><line x1="80" y1="350" x2="98" y2="384"/>
+      <circle cx="80" cy="600" r="13"/>
+      <line x1="80" y1="613" x2="80" y2="660"/><line x1="58" y1="628" x2="102" y2="628"/>
+      <line x1="80" y1="660" x2="62" y2="694"/><line x1="80" y1="660" x2="98" y2="694"/>
+    </g>
+    <text x="80" y="404" font-size="16" font-weight="bold" fill="#111" text-anchor="middle">User</text>
+    <text x="80" y="714" font-size="16" font-weight="bold" fill="#111" text-anchor="middle">Admin</text>
+    <g font-size="14" fill="#111">
+      <ellipse cx="450" cy="120" rx="110" ry="27" fill="#fef3c7" stroke="#111" stroke-width="2"/>
+      <text x="450" y="125" text-anchor="middle">Register</text>
+      <ellipse cx="450" cy="182" rx="110" ry="27" fill="#fef3c7" stroke="#111" stroke-width="2"/>
+      <text x="450" y="187" text-anchor="middle">Login</text>
+      <ellipse cx="450" cy="244" rx="115" ry="27" fill="#fef3c7" stroke="#111" stroke-width="2"/>
+      <text x="450" y="249" text-anchor="middle">Reset Password via OTP</text>
+      <ellipse cx="450" cy="310" rx="115" ry="27" fill="#fef3c7" stroke="#111" stroke-width="2"/>
+      <text x="450" y="315" text-anchor="middle">View Membership Plans</text>
+      <ellipse cx="450" cy="376" rx="115" ry="27" fill="#fef3c7" stroke="#111" stroke-width="2"/>
+      <text x="450" y="381" text-anchor="middle">Buy / Renew Membership</text>
+      <ellipse cx="450" cy="442" rx="110" ry="27" fill="#fef3c7" stroke="#111" stroke-width="2"/>
+      <text x="450" y="447" text-anchor="middle">Make Payment</text>
+      <ellipse cx="450" cy="508" rx="125" ry="27" fill="#fef3c7" stroke="#111" stroke-width="2"/>
+      <text x="450" y="513" text-anchor="middle">View Transactions &amp; Receipts</text>
+      <ellipse cx="450" cy="574" rx="110" ry="27" fill="#fef3c7" stroke="#111" stroke-width="2"/>
+      <text x="450" y="579" text-anchor="middle">Track Progress</text>
+      <ellipse cx="450" cy="640" rx="110" ry="27" fill="#fef3c7" stroke="#111" stroke-width="2"/>
+      <text x="450" y="645" text-anchor="middle">Submit Review</text>
+      <ellipse cx="830" cy="150" rx="115" ry="27" fill="#d1fae5" stroke="#111" stroke-width="2"/>
+      <text x="830" y="155" text-anchor="middle">Manage Members</text>
+      <ellipse cx="830" cy="220" rx="115" ry="27" fill="#d1fae5" stroke="#111" stroke-width="2"/>
+      <text x="830" y="225" text-anchor="middle">Manage Plans</text>
+      <ellipse cx="830" cy="290" rx="120" ry="27" fill="#d1fae5" stroke="#111" stroke-width="2"/>
+      <text x="830" y="295" text-anchor="middle">Record / Approve Payments</text>
+      <ellipse cx="830" cy="360" rx="115" ry="27" fill="#d1fae5" stroke="#111" stroke-width="2"/>
+      <text x="830" y="365" text-anchor="middle">Manage Store &amp; Orders</text>
+      <ellipse cx="830" cy="430" rx="125" ry="27" fill="#d1fae5" stroke="#111" stroke-width="2"/>
+      <text x="830" y="435" text-anchor="middle">Banners, Reviews &amp; Calendar</text>
+      <ellipse cx="830" cy="500" rx="115" ry="27" fill="#d1fae5" stroke="#111" stroke-width="2"/>
+      <text x="830" y="505" text-anchor="middle">View Reports</text>
+    </g>
+    <g stroke="#111" stroke-width="1.8">
+      <line x1="102" y1="322" x2="336" y2="150"/><line x1="102" y1="326" x2="336" y2="196"/>
+      <line x1="102" y1="330" x2="330" y2="248"/><line x1="102" y1="334" x2="330" y2="308"/>
+      <line x1="102" y1="338" x2="330" y2="372"/><line x1="102" y1="342" x2="336" y2="436"/>
+      <line x1="102" y1="346" x2="320" y2="502"/><line x1="102" y1="350" x2="336" y2="568"/>
+      <line x1="102" y1="354" x2="336" y2="634"/>
+      <line x1="102" y1="606" x2="710" y2="162"/><line x1="102" y1="612" x2="710" y2="226"/>
+      <line x1="102" y1="618" x2="704" y2="290"/><line x1="102" y1="624" x2="710" y2="356"/>
+      <line x1="102" y1="630" x2="700" y2="426"/><line x1="102" y1="636" x2="710" y2="494"/>
+    </g>
+    <line x1="450" y1="403" x2="450" y2="415" stroke="#111" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#a2)"/>
+    <text x="580" y="414" font-size="13" font-style="italic" fill="#111">&lt;&lt;include&gt;&gt;</text>
+    <line x1="565" y1="442" x2="622" y2="790" stroke="#111" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#a2)"/>
+    <text x="640" y="640" font-size="13" font-style="italic" fill="#111">&lt;&lt;external&gt;&gt;</text>
+    <rect x="520" y="790" width="200" height="54" fill="#e0e7ff" stroke="#111" stroke-width="2"/>
+    <text x="620" y="812" font-size="14" font-weight="bold" fill="#111" text-anchor="middle">Razorpay Gateway</text>
+    <text x="620" y="832" font-size="13" fill="#111" text-anchor="middle">(external system)</text>
+  </svg>
+  <p class="fig">Fig 3.4.4: Use Case Diagram of FitHub</p>
+</div>
+
+<div class="page">
+  <h3 class="sec">3.4.5 Activity Diagram</h3>
+  <p>The activity diagram below illustrates the flow of the "Buy Membership" process, from plan
+  selection through payment to receipt generation, including the decision points for login
+  status and payment validation.</p>
+  <svg class="diagram" xmlns="http://www.w3.org/2000/svg" width="860" height="1060" viewBox="0 0 860 1060" font-family="Arial, Helvetica, sans-serif">
+    <defs>
+      <marker id="a3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+        <path d="M0,0 L8,3 L0,6 Z" fill="#111"/>
+      </marker>
+    </defs>
+    <rect x="0" y="0" width="860" height="1060" fill="#ffffff"/>
+    <g font-size="15" fill="#111">
+      <circle cx="430" cy="28" r="11" fill="#111"/>
+      <line x1="430" y1="39" x2="430" y2="56" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <rect x="305" y="56" width="250" height="56" rx="14" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+      <text x="430" y="90" text-anchor="middle">Open FitHub &amp; view plans</text>
+      <line x1="430" y1="112" x2="430" y2="130" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <rect x="305" y="130" width="250" height="56" rx="14" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+      <text x="430" y="164" text-anchor="middle">Select plan → Buy / Renew</text>
+      <line x1="430" y1="186" x2="430" y2="200" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <polygon points="430,200 535,250 430,300 325,250" fill="#fef3c7" stroke="#111" stroke-width="2.5"/>
+      <text x="430" y="255" text-anchor="middle">Logged in?</text>
+      <line x1="535" y1="250" x2="580" y2="250" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <text x="560" y="240" font-size="13" font-style="italic">No</text>
+      <rect x="580" y="222" width="230" height="56" rx="14" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+      <text x="695" y="246" text-anchor="middle">Login / Register</text>
+      <text x="695" y="266" text-anchor="middle">+ OTP verify</text>
+      <path d="M580,278 L580,360 L350,360 L350,186" fill="none" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <text x="440" y="350" font-size="13" font-style="italic">back to plans</text>
+      <line x1="430" y1="300" x2="430" y2="330" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <text x="444" y="320" font-size="13" font-style="italic">Yes</text>
+      <rect x="305" y="330" width="250" height="56" rx="14" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+      <text x="430" y="364" text-anchor="middle">Choose payment method</text>
+      <line x1="430" y1="386" x2="430" y2="420" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <polygon points="430,420 535,470 430,520 325,470" fill="#fef3c7" stroke="#111" stroke-width="2.5"/>
+      <text x="430" y="475" text-anchor="middle">Method?</text>
+      <line x1="325" y1="470" x2="290" y2="470" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <text x="296" y="460" font-size="13" font-style="italic">Online</text>
+      <line x1="535" y1="470" x2="580" y2="470" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <text x="560" y="460" font-size="13" font-style="italic">Cash / UPI</text>
+      <rect x="60" y="442" width="230" height="56" rx="14" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+      <text x="175" y="466" text-anchor="middle">Pay via Razorpay</text>
+      <text x="175" y="486" text-anchor="middle">Checkout</text>
+      <rect x="580" y="442" width="230" height="56" rx="14" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+      <text x="695" y="466" text-anchor="middle">Pay at gym</text>
+      <text x="695" y="486" text-anchor="middle">(cash / UPI)</text>
+      <line x1="175" y1="498" x2="175" y2="540" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <rect x="60" y="540" width="230" height="56" rx="14" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+      <text x="175" y="564" text-anchor="middle">Server verifies</text>
+      <text x="175" y="584" text-anchor="middle">signature</text>
+      <line x1="695" y1="498" x2="695" y2="540" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <rect x="580" y="540" width="230" height="56" rx="14" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+      <text x="695" y="564" text-anchor="middle">Admin records</text>
+      <text x="695" y="584" text-anchor="middle">payment</text>
+      <line x1="175" y1="596" x2="175" y2="610" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <polygon points="175,610 280,660 175,710 70,660" fill="#fef3c7" stroke="#111" stroke-width="2.5"/>
+      <text x="175" y="656" text-anchor="middle">Verified?</text>
+      <text x="188" y="624" font-size="13" font-style="italic">Yes</text>
+      <line x1="280" y1="660" x2="320" y2="660" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <text x="300" y="650" font-size="13" font-style="italic">No</text>
+      <rect x="320" y="632" width="200" height="56" rx="14" fill="#fecaca" stroke="#111" stroke-width="2.5"/>
+      <text x="420" y="656" text-anchor="middle">Show payment</text>
+      <text x="420" y="676" text-anchor="middle">failed message</text>
+      <polygon points="620,625 695,660 620,695 545,660" fill="#fef3c7" stroke="#111" stroke-width="2.5"/>
+      <text x="620" y="665" text-anchor="middle">Retry?</text>
+      <line x1="520" y1="660" x2="545" y2="660" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <path d="M620,625 L620,560 L60,560 L60,498" fill="none" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <text x="632" y="640" font-size="13" font-style="italic">Yes</text>
+      <line x1="620" y1="695" x2="620" y2="1000" stroke="#111" stroke-width="2.5"/>
+      <text x="632" y="710" font-size="13" font-style="italic">No</text>
+      <path d="M175,710 L175,740 L305,740" fill="none" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <rect x="305" y="740" width="250" height="56" rx="14" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+      <text x="430" y="764" text-anchor="middle">Create / update Membership</text>
+      <text x="430" y="784" text-anchor="middle">+ generate receipt</text>
+      <line x1="430" y1="796" x2="430" y2="820" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <rect x="305" y="820" width="250" height="56" rx="14" fill="#dbeafe" stroke="#111" stroke-width="2.5"/>
+      <text x="430" y="854" text-anchor="middle">Email receipt to member</text>
+      <path d="M720,596 L720,848 L555,848" fill="none" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <line x1="430" y1="876" x2="430" y2="986" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+      <circle cx="430" cy="1000" r="13" fill="#111"/>
+      <circle cx="430" cy="1000" r="5" fill="#fff"/>
+      <line x1="620" y1="1000" x2="443" y2="1000" stroke="#111" stroke-width="2.5" marker-end="url(#a3)"/>
+    </g>
+  </svg>
+  <p class="fig">Fig 3.4.5: Activity Diagram – Buy Membership &amp; Payment</p>
+</div>
+
+</body>
+</html>

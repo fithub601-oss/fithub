@@ -22,11 +22,30 @@ const Subscriptions = () => {
 
   const loadRazorpay = () => {
     return new Promise((resolve) => {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      let attempts = 0;
+      const tryLoad = () => {
+        attempts += 1;
+        const stale = document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]');
+        if (stale) stale.remove();
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        script.onload = () => resolve(!!window.Razorpay);
+        script.onerror = () => {
+          if (script.parentNode) script.parentNode.removeChild(script);
+          if (attempts < 2) {
+            setTimeout(tryLoad, 1500);
+          } else {
+            resolve(false);
+          }
+        };
+        document.body.appendChild(script);
+      };
+      tryLoad();
     });
   };
 
@@ -41,7 +60,7 @@ const Subscriptions = () => {
     try {
       const scriptLoaded = await loadRazorpay();
       if (!scriptLoaded) {
-        toast.error('Payment gateway failed to load');
+        toast.error('Payment gateway failed to load. Check your internet connection and turn off any ad-blocker for this site, then try again.');
         return;
       }
 
