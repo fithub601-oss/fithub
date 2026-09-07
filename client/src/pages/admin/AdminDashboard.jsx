@@ -7,7 +7,7 @@ import { useAuth } from '../../context/AuthContext';
 import Modal from '../../components/Modal';
 import { popConfetti } from '../../utils/celebrate';
 import {
-  FaUsers, FaBoxOpen, FaTag, FaMoneyBillWave, FaUserPlus, FaImage, FaSignOutAlt, FaChartBar, FaHistory, FaStar, FaSearch, FaEdit, FaTrash
+  FaUsers, FaBoxOpen, FaTag, FaMoneyBillWave, FaUserPlus, FaImage, FaSignOutAlt, FaChartBar, FaHistory, FaStar, FaSearch, FaEdit, FaTrash, FaTruck
 } from 'react-icons/fa';
 import Stickers from '../../components/Stickers';
 
@@ -89,7 +89,9 @@ const AdminDashboard = () => {
       const txsArr = Array.isArray(txsRes.data) ? txsRes.data : [];
       const subsForForm = Array.isArray(subscriptionsRes.data) ? subscriptionsRes.data : [];
 
-      const revenue = membersArr.reduce((sum, m) => sum + (Number(m.currentMembership?.amountPaid) || 0), 0);
+      // Revenue = total money actually collected across ALL recorded payments/installments
+      // (not just the latest membership's amountPaid, which misses older-plan payments).
+      const revenue = txsArr.reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
 
       const counts = membersArr.reduce((acc, m) => {
         const v = m.membershipValidity || getValidity(m.currentMembership);
@@ -226,6 +228,7 @@ const AdminDashboard = () => {
     { to: '/admin/members', label: 'Members', icon: FaUsers },
     { to: '/admin/subscriptions', label: 'Subscriptions', icon: FaTag },
     { to: '/admin/products', label: 'Products', icon: FaBoxOpen },
+    { to: '/admin/orders', label: 'Orders', icon: FaTruck },
     { to: '/admin/banners', label: 'Banners', icon: FaImage },
     { to: '/admin/reviews', label: 'Reviews', icon: FaStar },
     { to: '/admin/payments', label: 'Payments', icon: FaMoneyBillWave },
@@ -246,6 +249,7 @@ const AdminDashboard = () => {
   };
 
   const totalsCollected = recentTransactions.reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+  const fullCollected = stats.revenue;
 
   const filteredMembers = members.filter(m =>
     (m.name || '').toLowerCase().includes(searchMembers.toLowerCase()) ||
@@ -476,7 +480,7 @@ const AdminDashboard = () => {
             <div>
               <h2 className="text-white font-bold">PAYMENTS &amp; TRANSACTIONS</h2>
               <p className="text-gray-500 text-xs mt-0.5">
-                Recent settlements · ₹{(Number(totalsCollected) || 0).toLocaleString('en-IN')} collected across latest {recentTransactions.length} record(s)
+                Recent settlements · ₹{(Number(fullCollected) || 0).toLocaleString('en-IN')} collected to date
               </p>
             </div>
             <Link to="/admin/transactions" className="text-primary-400 text-sm hover:underline">View all →</Link>
