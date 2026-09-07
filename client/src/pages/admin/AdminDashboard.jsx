@@ -78,7 +78,7 @@ const AdminDashboard = () => {
         safeGet('/products/all'),
         safeGet('/subscriptions/all'),
         safeGet('/banners/all'),
-        safeGet('/members/all-transactions'),
+        safeGet('/ledger'),
         safeGet('/subscriptions/all')
       ]);
 

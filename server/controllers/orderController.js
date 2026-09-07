@@ -4,6 +4,7 @@ const Order = require('../models/Order');
 const Product = require('../models/Product');
 const User = require('../models/User');
 const { sendReceiptEmail } = require('../utils/receiptEmail');
+const { buildMembershipTransactions } = require('./memberController');
 
 let razorpay = null;
 if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
@@ -268,10 +269,51 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
+// @desc    Combined revenue ledger: membership settlements + paid store orders
+// @route   GET /api/ledger
+// @access  Private/Admin
+const getCombinedLedger = async (req, res) => {
+  try {
+    const [membershipTx, orders] = await Promise.all([
+      buildMembershipTransactions(),
+      Order.find({ paymentStatus: 'paid', status: { $ne: 'cancelled' } })
+        .populate('user', 'name email phone')
+        .populate('items.product', 'name price')
+        .sort('-createdAt')
+    ]);
+
+    const orderTx = orders.map((o) => ({
+      _id: `ORD-${o._id.toString().slice(-6).toUpperCase()}`,
+      kind: 'order',
+      memberId: o.user?._id,
+      memberName: o.user?.name || 'Store customer',
+      memberEmail: o.user?.email || '',
+      memberPhone: o.user?.phone || '',
+      plan: (o.items || []).map((i) => `${i.quantity}× ${i.name}${i.size ? ` (${i.size})` : ''}`).join(', ') || 'Store order',
+      date: o.createdAt,
+      amount: o.totalAmount,
+      method: o.paymentMethod || 'razorpay',
+      status: o.status,
+      order: o
+    }));
+
+    const ledger = [
+      ...membershipTx.map((t) => ({ ...t, kind: t.kind || 'membership' })),
+      ...orderTx
+    ].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    res.json(ledger);
+  } catch (error) {
+    console.error('Ledger error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 module.exports = {
   createProductOrder,
   verifyProductPayment,
   getMyOrders,
   getAllOrders,
-  updateOrderStatus
+  updateOrderStatus,
+  getCombinedLedger
 };

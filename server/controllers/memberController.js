@@ -322,69 +322,75 @@ const recordPayment = async (req, res) => {
   }
 };
 
+// Build the flat list of membership settlement records (used by the ledger)
+const buildMembershipTransactions = async () => {
+  const memberships = await Membership.find()
+    .populate('user', 'name email phone')
+    .populate('subscription', 'name')
+    .sort('-createdAt');
+
+  const transactions = [];
+
+  memberships.forEach((m) => {
+    const planName = m.subscription?.name || 'Plan';
+    const memberName = m.user?.name || 'Unknown';
+    const memberEmail = m.user?.email || '';
+    const memberPhone = m.user?.phone || '';
+
+    // Base purchase / initial seed transaction (if any paid up front)
+    (m.renewals || []).forEach((r) => {
+      transactions.push({
+        _id: r._id,
+        memberId: m.user?._id,
+        memberName,
+        memberEmail,
+        memberPhone,
+        plan: planName,
+        date: r.date,
+        amount: r.amount,
+        method: r.method || m.paymentMethod,
+        membershipId: m._id,
+        totalAmount: m.totalAmount,
+        amountPaid: m.amountPaid,
+        amountRemaining: m.amountRemaining,
+        paymentStatus: m.paymentStatus,
+        status: m.status
+      });
+    });
+
+    // If nothing was ever recorded but there's money accounted, still useful:
+    if (!m.renewals || m.renewals.length === 0) {
+      transactions.push({
+        _id: m._id,
+        memberId: m.user?._id,
+        memberName,
+        memberEmail,
+        memberPhone,
+        plan: planName,
+        date: m.createdAt,
+        amount: m.amountPaid || 0,
+        method: m.paymentMethod,
+        membershipId: m._id,
+        totalAmount: m.totalAmount,
+        amountPaid: m.amountPaid,
+        amountRemaining: m.amountRemaining,
+        paymentStatus: m.paymentStatus,
+        status: m.status
+      });
+    }
+  });
+
+  transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  return transactions;
+};
+
 // @desc    Get all settlement/transaction records across all members
 // @route   GET /api/members/all-transactions
 // @access  Private/Admin
 const getAllTransactions = async (req, res) => {
   try {
-    const memberships = await Membership.find()
-      .populate('user', 'name email phone')
-      .populate('subscription', 'name')
-      .sort('-createdAt');
-
-    const transactions = [];
-
-    memberships.forEach((m) => {
-      const planName = m.subscription?.name || 'Plan';
-      const memberName = m.user?.name || 'Unknown';
-      const memberEmail = m.user?.email || '';
-      const memberPhone = m.user?.phone || '';
-
-      // Base purchase / initial seed transaction (if any paid up front)
-      (m.renewals || []).forEach((r) => {
-        transactions.push({
-          _id: r._id,
-          memberId: m.user?._id,
-          memberName,
-          memberEmail,
-          memberPhone,
-          plan: planName,
-          date: r.date,
-          amount: r.amount,
-          method: r.method || m.paymentMethod,
-          membershipId: m._id,
-          totalAmount: m.totalAmount,
-          amountPaid: m.amountPaid,
-          amountRemaining: m.amountRemaining,
-          paymentStatus: m.paymentStatus,
-          status: m.status
-        });
-      });
-
-      // If nothing was ever recorded but there's money accounted, still useful:
-      if (!m.renewals || m.renewals.length === 0) {
-        transactions.push({
-          _id: m._id,
-          memberId: m.user?._id,
-          memberName,
-          memberEmail,
-          memberPhone,
-          plan: planName,
-          date: m.createdAt,
-          amount: m.amountPaid || 0,
-          method: m.paymentMethod,
-          membershipId: m._id,
-          totalAmount: m.totalAmount,
-          amountPaid: m.amountPaid,
-          amountRemaining: m.amountRemaining,
-          paymentStatus: m.paymentStatus,
-          status: m.status
-        });
-      }
-    });
-
-    transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
-
+    const transactions = await buildMembershipTransactions();
     res.json(transactions);
   } catch (error) {
     console.error(error);
@@ -400,5 +406,6 @@ module.exports = {
   deleteMember,
   assignMembership,
   recordPayment,
-  getAllTransactions
+  getAllTransactions,
+  buildMembershipTransactions
 };

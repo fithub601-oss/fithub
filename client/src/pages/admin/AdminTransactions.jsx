@@ -17,7 +17,7 @@ const AdminTransactions = () => {
 
   const fetchData = async () => {
     try {
-      const res = await api.get('/members/all-transactions');
+      const res = await api.get('/ledger');
       setTransactions(res.data || []);
     } catch (error) {
       toast.error('Failed to load transactions');
@@ -56,7 +56,7 @@ const AdminTransactions = () => {
           <h1 className="font-display text-4xl text-white">
             TRANSACTIONS <span className="text-neon-green">LEDGER</span>
           </h1>
-          <p className="text-gray-400">Every settlement made by every member</p>
+          <p className="text-gray-400">Every membership settlement and paid store order</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
@@ -145,7 +145,14 @@ const AdminTransactions = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-gray-300 text-sm">{t.plan}</td>
+                      <td className="px-6 py-4">
+                        <span className="text-gray-300 text-sm">
+                          {t.kind === 'order' && (
+                            <span className="mr-1.5 px-2 py-0.5 bg-neon-pink/15 text-pink-600 text-[10px] font-bold rounded-full uppercase align-middle">Store</span>
+                          )}
+                          {t.plan}
+                        </span>
+                      </td>
                       <td className="px-6 py-4">
                         <span className="px-2.5 py-1 bg-white/10 text-gray-300 text-xs font-semibold rounded-full uppercase">
                           {methodLabel(t.method)}
@@ -173,8 +180,8 @@ const AdminTransactions = () => {
       <ReceiptModal
         open={!!receiptTx}
         onClose={() => setReceiptTx(null)}
-        type="membership"
-        data={receiptTx}
+        type={receiptTx?.kind === 'order' ? 'order' : 'membership'}
+        data={receiptTx?.kind === 'order' ? receiptTx.order : receiptTx}
         user={receiptTx ? { name: receiptTx.memberName, email: receiptTx.memberEmail, phone: receiptTx.memberPhone } : null}
       />
     </div>
